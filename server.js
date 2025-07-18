@@ -15,6 +15,7 @@ app.get('/', (req, res) => {
   res.send('API is running. Use /api or /test endpoints.');
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+const testRoute = require('./routes/test');
+app.use('/test', testRoute);
+
 
