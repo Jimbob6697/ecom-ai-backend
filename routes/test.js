@@ -1,29 +1,24 @@
+// routes/test.js
 const express = require('express');
 const router = express.Router();
+const { Configuration, OpenAI } = require('openai');
 
-router.get('/', (req, res) => {
-  const openAiKey = process.env.OPENAI_API_KEY;
-  const sendGridKey = process.env.SENDGRID_API_KEY;
-
-  if (!openAiKey || !sendGridKey) {
-    return res.status(500).json({
-      success: false,
-      message: 'Missing one or more required environment variables.',
-      keys: {
-        OPENAI_API_KEY: !!openAiKey,
-        SENDGRID_API_KEY: !!sendGridKey
-      }
+router.get('/', async (req, res) => {
+  try {
+    const openai = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
     });
-  }
 
-  res.json({
-    success: true,
-    message: 'All environment variables are loaded correctly.',
-    keys: {
-      OPENAI_API_KEY: true,
-      SENDGRID_API_KEY: true
-    }
-  });
+    const chatCompletion = await openai.chat.completions.create({
+      model: 'gpt-4',
+      messages: [{ role: 'user', content: 'Say hello from the test route!' }],
+    });
+
+    res.json({ success: true, response: chatCompletion.choices[0].message.content });
+  } catch (error) {
+    console.error('OpenAI test failed:', error.message);
+    res.status(500).json({ success: false, error: error.message });
+  }
 });
 
 module.exports = router;
