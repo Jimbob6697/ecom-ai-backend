@@ -3330,6 +3330,10 @@ a.review-summary:hover .review-summary__text {
   }
 }
 
+.password .art__icon {
+  display: none;
+}
+
 /* 6. Product ------------------------------------------------------------- */
 .product {
   padding-top: clamp(20px, 3vw, 48px);
