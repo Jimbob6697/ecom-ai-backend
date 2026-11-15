@@ -4,7 +4,7 @@
       <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
     {%- endif -%}
     {%- if section.settings.heading != blank -%}
-      <h2 class="rich-text__heading" data-reveal>{{ section.settings.heading | escape }}</h2>
+      <h2 class="rich-text__heading" data-reveal data-split>{{ section.settings.heading | escape }}</h2>
     {%- endif -%}
     {%- if section.settings.text != blank -%}
       <div class="rich-text__text rte" data-reveal>{{ section.settings.text }}</div>

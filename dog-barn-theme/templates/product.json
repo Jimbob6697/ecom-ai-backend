@@ -3,10 +3,38 @@
     "main": {
       "type": "main-product",
       "blocks": {
-        "delivery": { "type": "badge", "settings": { "icon": "truck", "title": "Free UK delivery", "text": "On accessory orders over £50" } },
-        "express": { "type": "badge", "settings": { "icon": "gift", "title": "Tracked Express", "text": "Order by 1pm, Mon to Fri" } },
-        "sizing": { "type": "badge", "settings": { "icon": "ruler", "title": "Sizing help", "text": "Email or message us" } },
-        "award": { "type": "badge", "settings": { "icon": "award", "title": "2026 finalist", "text": "Best Pet Business" } },
+        "delivery": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free UK delivery",
+            "text": "On accessory orders over £50"
+          }
+        },
+        "express": {
+          "type": "badge",
+          "settings": {
+            "icon": "gift",
+            "title": "Tracked Express",
+            "text": "Order by 1pm, Mon to Fri"
+          }
+        },
+        "sizing": {
+          "type": "badge",
+          "settings": {
+            "icon": "ruler",
+            "title": "Sizing help",
+            "text": "Email or message us"
+          }
+        },
+        "award": {
+          "type": "badge",
+          "settings": {
+            "icon": "award",
+            "title": "2026 finalist",
+            "text": "Best Pet Business"
+          }
+        },
         "shipping": {
           "type": "collapsible",
           "settings": {
@@ -22,43 +50,138 @@
           }
         }
       },
-      "block_order": ["delivery", "express", "sizing", "award", "shipping", "care"],
+      "block_order": [
+        "delivery",
+        "express",
+        "sizing",
+        "award",
+        "shipping",
+        "care"
+      ],
       "settings": {}
     },
     "videos": {
       "type": "ugc-videos",
       "blocks": {
-        "v1": { "type": "video", "settings": {} },
-        "v2": { "type": "video", "settings": {} },
-        "v3": { "type": "video", "settings": {} },
-        "v4": { "type": "video", "settings": {} },
-        "v5": { "type": "video", "settings": {} }
+        "v1": {
+          "type": "video",
+          "settings": {}
+        },
+        "v2": {
+          "type": "video",
+          "settings": {}
+        },
+        "v3": {
+          "type": "video",
+          "settings": {}
+        },
+        "v4": {
+          "type": "video",
+          "settings": {}
+        },
+        "v5": {
+          "type": "video",
+          "settings": {}
+        }
       },
-      "block_order": ["v1", "v2", "v3", "v4", "v5"],
-      "settings": { "eyebrow": "@dogbarn.yorkshire", "heading": "See it on the walk", "text": "Real dogs, real adventures. Tag us to be featured.", "scheme": "surface" }
+      "block_order": [
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5"
+      ],
+      "settings": {
+        "eyebrow": "@dogbarn.yorkshire",
+        "heading": "See it on the walk",
+        "text": "Real dogs, real adventures. Tag us to be featured.",
+        "scheme": "surface"
+      }
     },
     "reviews": {
       "type": "reviews",
       "blocks": {
-        "r1": { "type": "review", "settings": {} },
-        "r2": { "type": "review", "settings": {} },
-        "r3": { "type": "review", "settings": {} }
+        "r1": {
+          "type": "review",
+          "settings": {}
+        },
+        "r2": {
+          "type": "review",
+          "settings": {}
+        },
+        "r3": {
+          "type": "review",
+          "settings": {}
+        }
       },
-      "block_order": ["r1", "r2", "r3"],
-      "settings": { "scheme": "light" }
+      "block_order": [
+        "r1",
+        "r2",
+        "r3"
+      ],
+      "settings": {
+        "scheme": "dark"
+      }
     },
-    "recommendations": { "type": "product-recommendations", "settings": { "heading": "Complete the look", "subheading": "" } },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "Complete the look",
+        "subheading": ""
+      }
+    },
     "trust": {
       "type": "trust-bar",
       "blocks": {
-        "a": { "type": "badge", "settings": { "icon": "truck", "title": "Free UK delivery", "text": "On accessory orders over £50" } },
-        "b": { "type": "badge", "settings": { "icon": "star", "title": "4.9 Excellent", "text": "Customer review score" } },
-        "c": { "type": "badge", "settings": { "icon": "award", "title": "2026 finalist", "text": "UK Small Business Awards" } },
-        "d": { "type": "badge", "settings": { "icon": "lock", "title": "Secure checkout", "text": "Sent with Royal Mail" } }
+        "a": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free UK delivery",
+            "text": "On accessory orders over £50"
+          }
+        },
+        "b": {
+          "type": "badge",
+          "settings": {
+            "icon": "star",
+            "title": "4.9 Excellent",
+            "text": "Customer review score"
+          }
+        },
+        "c": {
+          "type": "badge",
+          "settings": {
+            "icon": "award",
+            "title": "2026 finalist",
+            "text": "UK Small Business Awards"
+          }
+        },
+        "d": {
+          "type": "badge",
+          "settings": {
+            "icon": "lock",
+            "title": "Secure checkout",
+            "text": "Sent with Royal Mail"
+          }
+        }
       },
-      "block_order": ["a", "b", "c", "d"],
-      "settings": { "scheme": "dark" }
+      "block_order": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "settings": {
+        "scheme": "surface"
+      }
     }
   },
-  "order": ["main", "videos", "reviews", "recommendations", "trust"]
+  "order": [
+    "main",
+    "videos",
+    "reviews",
+    "recommendations",
+    "trust"
+  ]
 }

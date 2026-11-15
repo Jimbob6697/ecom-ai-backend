@@ -1,7 +1,7 @@
 <section class="section features{% if section.settings.surface %} section--surface{% endif %}">
   <div class="page-width">
     {%- if section.settings.heading != blank -%}
-      <h2 class="section-heading" data-reveal>
+      <h2 class="section-heading" data-reveal data-split>
         {{ section.settings.heading | escape }}
         {%- if section.settings.subheading != blank %} <span>{{ section.settings.subheading | escape }}</span>{% endif -%}
       </h2>

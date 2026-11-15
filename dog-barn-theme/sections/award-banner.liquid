@@ -14,7 +14,7 @@
     {%- if section.settings.eyebrow != blank -%}
       <p class="eyebrow" data-reveal style="--i: 1">{{ section.settings.eyebrow | escape }}</p>
     {%- endif -%}
-    <h2 class="award__heading" data-reveal style="--i: 2">{{ section.settings.heading | escape }}</h2>
+    <h2 class="award__heading" data-reveal data-split>{{ section.settings.heading | escape }}</h2>
     {%- if section.settings.text != blank -%}
       <div class="award__text rte" data-reveal style="--i: 3">{{ section.settings.text }}</div>
     {%- endif -%}

@@ -1,7 +1,7 @@
 <section class="section image-with-text{% if section.settings.surface %} section--surface{% endif %}{% if section.settings.flip %} image-with-text--flip{% endif %}">
   <div class="page-width image-with-text__grid">
     <div class="image-with-text__media" data-reveal="curtain">
-      <div class="image-with-text__frame" data-parallax>
+      <div class="image-with-text__frame image-with-text__frame--{{ section.settings.shape }}" data-parallax>
         {%- if section.settings.image != blank -%}
           {{ section.settings.image | image_url: width: 2000 | image_tag: widths: '600, 900, 1200, 1600, 2000', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: section.settings.image.alt }}
         {%- else -%}
@@ -13,7 +13,7 @@
       {%- if section.settings.eyebrow != blank -%}
         <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
       {%- endif -%}
-      <h2 class="image-with-text__heading" data-reveal style="--i: 1">{{ section.settings.heading | escape }}</h2>
+      <h2 class="image-with-text__heading" data-reveal data-split>{{ section.settings.heading | escape }}</h2>
       {%- if section.settings.text != blank -%}
         <div class="rte" data-reveal style="--i: 2">{{ section.settings.text }}</div>
       {%- endif -%}
@@ -36,6 +36,16 @@
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Luxurious dog apparel for any adventure, whether you're strolling through a countryside village or running through muddy woods.</p>" },
     { "type": "text", "id": "link_label", "label": "Link label", "default": "Learn more" },
     { "type": "url", "id": "link", "label": "Link" },
+    {
+      "type": "select",
+      "id": "shape",
+      "label": "Image shape",
+      "options": [
+        { "value": "arch", "label": "Arch" },
+        { "value": "rect", "label": "Rectangle" }
+      ],
+      "default": "arch"
+    },
     { "type": "checkbox", "id": "flip", "label": "Image on the right", "default": false },
     { "type": "checkbox", "id": "surface", "label": "Stone background", "default": false }
   ],

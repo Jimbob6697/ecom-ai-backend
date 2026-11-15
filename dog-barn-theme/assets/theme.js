@@ -34,12 +34,45 @@
         )
       : null;
 
+  // Wraps each word of a headline so the words can rise into place in turn.
+  function splitHeading(element) {
+    if (element.dataset.splitDone) return;
+    element.dataset.splitDone = 'true';
+    let count = 0;
+    const walk = (node) => {
+      Array.from(node.childNodes).forEach((child) => {
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          walk(child);
+          return;
+        }
+        if (child.nodeType !== Node.TEXT_NODE) return;
+        const fragment = document.createDocumentFragment();
+        child.textContent.split(' ').forEach((raw) => {
+          const word = raw.trim();
+          if (!word) return;
+          const outer = document.createElement('span');
+          const inner = document.createElement('span');
+          outer.className = 'split';
+          inner.textContent = word;
+          inner.style.setProperty('--w', count);
+          count += 1;
+          outer.append(inner);
+          fragment.append(outer, ' ');
+        });
+        child.replaceWith(fragment);
+      });
+    };
+    walk(element);
+  }
+
   function initReveal(root = document) {
     const elements = $$('[data-reveal]', root);
     const animate = document.body.classList.contains('has-reveal') && revealObserver && !reduceMotion && !designMode;
     elements.forEach((element) => {
-      if (animate) revealObserver.observe(element);
-      else element.classList.add('is-visible');
+      if (animate) {
+        if (element.hasAttribute('data-split')) splitHeading(element);
+        revealObserver.observe(element);
+      } else element.classList.add('is-visible');
     });
   }
 
@@ -83,9 +116,16 @@
     if (header) {
       const y = window.scrollY;
       header.classList.toggle('is-scrolled', y > 4);
-      // Tuck the navigation row away on the way down; bring it back on the way up.
+      // Slide the header away on the way down; bring it back on the way up.
       if (y < 140 || y < lastScrollY - 6) header.classList.remove('is-compact');
-      else if (y > 260 && y > lastScrollY + 6 && !header.classList.contains('is-open')) header.classList.add('is-compact');
+      else if (
+        y > 260 &&
+        y > lastScrollY + 6 &&
+        !header.classList.contains('is-open') &&
+        !$('[data-mobile-menu]:not([hidden])', header)
+      ) {
+        header.classList.add('is-compact');
+      }
       lastScrollY = y;
     }
     if (reduceMotion) return;

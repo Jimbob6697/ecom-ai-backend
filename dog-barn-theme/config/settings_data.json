@@ -1,16 +1,16 @@
 {
   "current": {
-    "color_background": "#fbf9f5",
-    "color_surface": "#f1ece2",
-    "color_text": "#26333c",
-    "color_muted": "#5f6c74",
-    "color_accent": "#33434f",
-    "color_dark": "#425563",
-    "color_on_dark": "#f3ecdd",
-    "color_brass": "#a67c45",
+    "color_background": "#f7f3ec",
+    "color_surface": "#ece5d8",
+    "color_text": "#1b201d",
+    "color_muted": "#6a6f69",
+    "color_accent": "#1b201d",
+    "color_dark": "#1f2e26",
+    "color_on_dark": "#f4eee2",
+    "color_brass": "#a98652",
     "color_sale": "#9b3d2e",
-    "page_width": 1320,
-    "card_radius": 4,
+    "page_width": 1400,
+    "card_radius": 2,
     "animations_reveal": true,
     "animations_page": true,
     "animations_hover": true,
@@ -25,6 +25,7 @@
     "cart_note": false,
     "free_shipping_threshold": 50,
     "social_instagram": "https://www.instagram.com/dogbarn.yorkshire",
-    "social_tiktok": "https://www.tiktok.com/@dogbarnyorkshire"
+    "social_tiktok": "https://www.tiktok.com/@dogbarnyorkshire",
+    "type_builtin": true
   }
 }

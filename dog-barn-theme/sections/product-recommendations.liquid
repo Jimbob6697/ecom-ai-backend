@@ -6,7 +6,7 @@
   {%- if recommendations.performed and recommendations.products_count > 0 -%}
     <section class="section product-shelf">
       <div class="page-width product-shelf__header">
-        <h2 class="section-heading">
+        <h2 class="section-heading" data-reveal data-split>
           {{ section.settings.heading | escape }}
           {%- if section.settings.subheading != blank %} <span>{{ section.settings.subheading | escape }}</span>{% endif -%}
         </h2>

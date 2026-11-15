@@ -4,16 +4,18 @@
       "type": "hero",
       "settings": {
         "eyebrow": "Luxury country wear for dogs",
-        "heading": "For the stylish &\nadventurous pup",
+        "heading": "For the stylish &",
+        "heading_accent": "adventurous pup",
         "subheading": "Fleeces, jackets and accessories made for countryside strolls and muddy woods alike.",
-        "button_label": "Shop all",
+        "button_label": "Shop the collection",
         "button_link": "shopify://collections/all",
         "link_label": "Shop Dachshund",
         "link_link": "shopify://collections/dachshund-collections",
         "show_reviews": true,
-        "image": "shopify://shop_images/Bnner10.png",
-        "height": "full",
-        "position": "left"
+        "image": "shopify://shop_images/Yorkshire_Dog_in_Chestnut_Fleece.png",
+        "image_2": "shopify://shop_images/7d560008-7d4b-4eb0-99ae-fadd26779fc0.jpg",
+        "seal_text": "Finalist · Best Pet Business · UK Small Business Awards 2026 ·",
+        "seal_icon": "award"
       }
     },
     "trust": {
@@ -70,7 +72,7 @@
           "settings": {
             "collection": "fleeces",
             "title": "Fleeces",
-            "image": "shopify://shop_images/Yorkshire_Dog_in_Chestnut_Fleece.png"
+            "image": "shopify://shop_images/3B1E1A86-9786-4BE2-8D0B-D9CF698CBB9F.jpg"
           }
         },
         "t1": {
@@ -152,7 +154,7 @@
         "collection": "sherpa-jacket",
         "limit": 8,
         "show_view_all": true,
-        "surface": true
+        "surface": false
       }
     },
     "dachshund": {
@@ -165,7 +167,8 @@
         "link_label": "Shop Dachshund",
         "link": "shopify://collections/dachshund-collections",
         "flip": false,
-        "surface": false
+        "surface": true,
+        "shape": "arch"
       }
     },
     "marquee": {
@@ -197,7 +200,7 @@
       ],
       "settings": {
         "speed": 40,
-        "scheme": "dark"
+        "scheme": "light"
       }
     },
     "videos": {
@@ -290,9 +293,9 @@
       ],
       "settings": {
         "eyebrow": "Loved by dogs, trusted by owners",
-        "heading": "What our",
-        "subheading": "customers say",
-        "scheme": "surface"
+        "heading": "Kind words from",
+        "subheading": "the pack",
+        "scheme": "dark"
       }
     },
     "best": {
@@ -315,7 +318,7 @@
         "eyebrow": "The UK Small Business Awards",
         "heading": "We're officially a 2026 finalist",
         "text": "<p>We're incredibly proud to announce that Dog Barn Yorkshire has been shortlisted for <strong>Best Pet Business</strong> at The UK Small Business Awards 2026.</p>",
-        "scheme": "dark"
+        "scheme": "surface"
       }
     },
     "colourways": {
@@ -436,7 +439,7 @@
         "eyebrow": "Named after the countryside",
         "heading": "Shop by",
         "subheading": "colourway",
-        "surface": true
+        "surface": false
       }
     },
     "details": {
@@ -449,7 +452,8 @@
         "link_label": "Shop fleeces",
         "link": "shopify://collections/fleeces",
         "flip": true,
-        "surface": false
+        "surface": false,
+        "shape": "rect"
       }
     },
     "story": {
@@ -462,7 +466,8 @@
         "link_label": "Read our story",
         "link": "shopify://pages/our-story",
         "flip": false,
-        "surface": true
+        "surface": false,
+        "shape": "arch"
       }
     },
     "faq": {
@@ -529,15 +534,15 @@
     "hero",
     "trust",
     "tiles",
+    "marquee",
     "new",
     "dachshund",
-    "marquee",
     "videos",
     "reviews",
     "best",
-    "award",
-    "colourways",
     "details",
+    "colourways",
+    "award",
     "story",
     "faq",
     "newsletter"

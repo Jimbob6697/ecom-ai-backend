@@ -14,7 +14,7 @@
       {%- if s.eyebrow != blank -%}
         <p class="eyebrow" data-reveal>{{ s.eyebrow | escape }}</p>
       {%- endif -%}
-      <h2 class="section-heading" data-reveal>
+      <h2 class="section-heading" data-reveal data-split>
         {{ s.heading | escape }}
         {%- if s.subheading != blank %} <span>{{ s.subheading | escape }}</span>{% endif -%}
       </h2>

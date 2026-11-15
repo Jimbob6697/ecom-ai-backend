@@ -1,7 +1,7 @@
 <section class="section faq{% if section.settings.surface %} section--surface{% endif %}">
   <div class="page-width page-width--narrow">
     {%- if section.settings.heading != blank -%}
-      <h2 class="section-heading section-heading--center" data-reveal>{{ section.settings.heading | escape }}</h2>
+      <h2 class="section-heading section-heading--center" data-reveal data-split>{{ section.settings.heading | escape }}</h2>
     {%- endif -%}
     <div class="accordion" data-reveal>
       {%- for block in section.blocks -%}

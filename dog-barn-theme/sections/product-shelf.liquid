@@ -8,7 +8,7 @@
       {%- if section.settings.eyebrow != blank -%}
         <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
       {%- endif -%}
-      <h2 class="section-heading" data-reveal>
+      <h2 class="section-heading" data-reveal data-split>
         {{ section.settings.heading | escape }}
         {%- if section.settings.subheading != blank %} <span>{{ section.settings.subheading | escape }}</span>{% endif -%}
       </h2>

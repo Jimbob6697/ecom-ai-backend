@@ -1,6 +1,6 @@
 <section class="section newsletter newsletter--{{ section.settings.scheme }}">
   <div class="page-width page-width--narrow newsletter__inner" data-reveal>
-    <h2 class="newsletter__heading">{{ section.settings.heading | escape }}</h2>
+    <h2 class="newsletter__heading" data-reveal data-split>{{ section.settings.heading | escape }}</h2>
     {%- if section.settings.text != blank -%}
       <p class="newsletter__text">{{ section.settings.text | escape }}</p>
     {%- endif -%}

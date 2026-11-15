@@ -4,13 +4,13 @@
       {%- if section.settings.eyebrow != blank -%}
         <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
       {%- endif -%}
-      <h2 class="section-heading" data-reveal>
+      <h2 class="section-heading" data-reveal data-split>
         {{ section.settings.heading | escape }}
         {%- if section.settings.subheading != blank %} <span>{{ section.settings.subheading | escape }}</span>{% endif -%}
       </h2>
     </div>
   </div>
-  <div class="scroller scroller--grid-desktop" data-scroller>
+  <div class="scroller" data-scroller>
     <ul class="scroller__track collection-tiles__track" role="list" data-scroller-track>
       {%- for block in section.blocks -%}
         {%- liquid
@@ -23,14 +23,14 @@
           <a class="collection-tile" href="{{ tile_url }}">
             <div class="collection-tile__media">
               {%- if tile_image != blank -%}
-                {{ tile_image | image_url: width: 1000 | image_tag: widths: '300, 450, 600, 800, 1000', sizes: '(min-width: 990px) 25vw, 60vw', loading: 'lazy', alt: '' }}
+                {{ tile_image | image_url: width: 1000 | image_tag: widths: '300, 450, 600, 800, 1000', sizes: '(min-width: 990px) 22vw, 60vw', loading: 'lazy', alt: '' }}
               {%- else -%}
                 {% render 'art', index: forloop.index, icon: 'paw' %}
               {%- endif -%}
             </div>
             <span class="collection-tile__label">
               <span class="collection-tile__title">{{ tile_title | escape }}</span>
-              <span class="collection-tile__cta">Shop now{% render 'icon', name: 'arrow-right' %}</span>
+              <span class="collection-tile__cta">{% render 'icon', name: 'arrow-right' %}</span>
             </span>
           </a>
         </li>

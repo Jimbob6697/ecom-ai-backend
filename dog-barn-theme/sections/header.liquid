@@ -1,6 +1,10 @@
 {%- liquid
   assign menu = section.settings.menu
   assign logo_style = 'height: ' | append: section.settings.logo_height | append: 'px; width: auto;'
+  assign logo_class = 'site-header__logo-image'
+  if section.settings.logo_dark
+    assign logo_class = 'site-header__logo-image site-header__logo-image--dark'
+  endif
 -%}
 <header class="site-header{% if section.settings.sticky %} site-header--sticky{% endif %}" data-header>
   <div class="site-header__bar page-width">
@@ -15,6 +19,40 @@
       >
         <span class="burger" aria-hidden="true"><span></span><span></span></span>
       </button>
+      <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+        {%- if section.settings.logo != blank -%}
+          {{
+            section.settings.logo
+            | image_url: width: 500
+            | image_tag: class: logo_class, loading: 'eager', style: logo_style, alt: shop.name
+          }}
+        {%- else -%}
+          <span class="site-header__wordmark">{{ shop.name }}</span>
+        {%- endif -%}
+      </a>
+    </div>
+
+    <nav class="site-nav" aria-label="Main" data-nav-row>
+      <ul class="site-nav__list" role="list">
+        {%- for link in menu.links -%}
+          <li class="site-nav__item">
+            <a
+              class="site-nav__link{% if link.active or link.child_active %} is-active{% endif %}"
+              href="{{ link.url }}"
+              {% if link.links.size > 0 %}
+                data-flyout-trigger="flyout-{{ forloop.index }}"
+                aria-haspopup="true"
+                aria-expanded="false"
+              {% endif %}
+            >
+              {{- link.title -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="site-header__side site-header__side--end">
       <button
         class="site-header__icon site-header__search"
         type="button"
@@ -24,23 +62,7 @@
         data-flyout-click
       >
         {% render 'icon', name: 'search' %}
-        <span class="site-header__icon-label">{{ 'general.search' | t }}</span>
       </button>
-    </div>
-
-    <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
-      {%- if section.settings.logo != blank -%}
-        {{
-          section.settings.logo
-          | image_url: width: 500
-          | image_tag: class: 'site-header__logo-image', loading: 'eager', style: logo_style, alt: shop.name
-        }}
-      {%- else -%}
-        <span class="site-header__wordmark">{{ shop.name }}</span>
-      {%- endif -%}
-    </a>
-
-    <div class="site-header__side site-header__side--end">
       {%- if shop.customer_accounts_enabled -%}
         <a class="site-header__icon site-header__account" href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t }}">
           {% render 'icon', name: 'account' %}
@@ -52,26 +74,6 @@
       </a>
     </div>
   </div>
-
-  <nav class="site-nav" aria-label="Main" data-nav-row>
-    <ul class="site-nav__list page-width" role="list">
-      {%- for link in menu.links -%}
-        <li class="site-nav__item">
-          <a
-            class="site-nav__link{% if link.active or link.child_active %} is-active{% endif %}"
-            href="{{ link.url }}"
-            {% if link.links.size > 0 %}
-              data-flyout-trigger="flyout-{{ forloop.index }}"
-              aria-haspopup="true"
-              aria-expanded="false"
-            {% endif %}
-          >
-            {{- link.title -}}
-          </a>
-        </li>
-      {%- endfor -%}
-    </ul>
-  </nav>
 
   <div class="flyout" data-flyout>
     <div class="flyout__inner">
@@ -189,8 +191,9 @@
   "name": "Header",
   "class": "section-header",
   "settings": [
-    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Use the light (cream) version — the header sits on your dark brand colour." },
-    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 28, "max": 80, "step": 2, "unit": "px", "default": 52 },
+    { "type": "image_picker", "id": "logo", "label": "Logo" },
+    { "type": "checkbox", "id": "logo_dark", "label": "Show a light logo in dark ink", "info": "The header is light. Tick this if your logo file is cream or white so it stays visible.", "default": true },
+    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 28, "max": 80, "step": 2, "unit": "px", "default": 46 },
     { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu", "info": "Items with nested links open a full-width dropdown." },
     { "type": "link_list", "id": "search_menu", "label": "Search suggestions menu", "default": "main-menu" },
     { "type": "checkbox", "id": "sticky", "label": "Stick to top while scrolling", "default": true }
