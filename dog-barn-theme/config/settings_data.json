@@ -1,0 +1,30 @@
+{
+  "current": {
+    "color_background": "#fbf9f5",
+    "color_surface": "#f1ece2",
+    "color_text": "#26333c",
+    "color_muted": "#5f6c74",
+    "color_accent": "#33434f",
+    "color_dark": "#425563",
+    "color_on_dark": "#f3ecdd",
+    "color_brass": "#a67c45",
+    "color_sale": "#9b3d2e",
+    "page_width": 1320,
+    "card_radius": 4,
+    "animations_reveal": true,
+    "animations_page": true,
+    "animations_hover": true,
+    "review_score": "4.9",
+    "review_label": "Excellent",
+    "review_source": "Trustpilot",
+    "pay_later_text": "Pay in 3 interest-free payments with Klarna.",
+    "card_second_image": true,
+    "card_show_type": true,
+    "card_ratio": "0.8",
+    "cart_type": "drawer",
+    "cart_note": false,
+    "free_shipping_threshold": 50,
+    "social_instagram": "https://www.instagram.com/dogbarn.yorkshire",
+    "social_tiktok": "https://www.tiktok.com/@dogbarnyorkshire"
+  }
+}

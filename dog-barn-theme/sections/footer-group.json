@@ -1,0 +1,33 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": { "heading": "Shop", "menu": "main-menu", "limit": 10 }
+        },
+        "help": {
+          "type": "menu",
+          "settings": { "heading": "Help & information", "menu": "footer", "limit": 8 }
+        },
+        "sizing": {
+          "type": "text",
+          "settings": {
+            "heading": "Need a hand with sizing?",
+            "text": "<p>Every dog is different. Email <a href=\"mailto:info@dogbarnyorkshire.com\">info@dogbarnyorkshire.com</a> or message @dogbarn.yorkshire on Instagram and we'll help you find the right fit.</p>"
+          }
+        }
+      },
+      "block_order": ["shop", "help", "sizing"],
+      "settings": {
+        "logo": "shopify://shop_images/Dog_Barn_-_Logo_Suite_Watermarks-32.png",
+        "tagline": "For the stylish & adventurous pup.",
+        "show_payment": true
+      }
+    }
+  },
+  "order": ["footer"]
+}

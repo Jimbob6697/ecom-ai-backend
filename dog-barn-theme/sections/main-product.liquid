@@ -1,0 +1,292 @@
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign form_id = 'product-form-' | append: section.id
+  assign now_s = 'now' | date: '%s' | plus: 0
+  assign published_s = product.published_at | date: '%s' | plus: 0
+  assign age_days = now_s | minus: published_s | divided_by: 86400
+  assign size_guide = section.settings.size_guide
+-%}
+<section class="section product" data-product>
+  <div class="page-width product__grid">
+    <div class="product__gallery" data-gallery>
+      <div class="product__stage" data-gallery-track>
+        {%- for media in product.media -%}
+          <div class="product__slide" data-media-id="{{ media.id }}">
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- liquid
+                  assign loading = 'lazy'
+                  if forloop.first
+                    assign loading = 'eager'
+                  endif
+                -%}
+                {{
+                  media
+                  | image_url: width: 2000
+                  | image_tag: widths: '500, 800, 1100, 1500, 2000', sizes: '(min-width: 990px) 55vw, 100vw', loading: loading, alt: media.alt
+                }}
+              {%- when 'video' -%}
+                {{ media | video_tag: controls: true, image_size: '1500x' }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag: loading: 'lazy' }}
+              {%- when 'model' -%}
+                {{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}
+            {%- endcase -%}
+          </div>
+        {%- else -%}
+          <div class="product__slide">{% render 'art', index: 1, icon: 'paw' %}</div>
+        {%- endfor -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="product__thumbs" role="tablist" aria-label="Gallery">
+          {%- for media in product.media -%}
+            <button
+              class="product__thumb{% if forloop.first %} is-active{% endif %}"
+              type="button"
+              role="tab"
+              aria-label="{{ 'products.view' | t }} {{ forloop.index }}"
+              data-gallery-thumb="{{ forloop.index0 }}"
+            >
+              {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product__info">
+      <div class="product__top" data-reveal>
+        <p class="eyebrow">
+          {%- if age_days < 30 -%}
+            <span class="eyebrow--accent">{{ 'products.new' | t }}</span> ·
+          {%- endif -%}
+          {{ product.type | default: product.vendor }}
+        </p>
+        {%- if section.settings.show_reviews -%}
+          {% render 'review-summary' %}
+        {%- endif -%}
+      </div>
+      <h1 class="product__title" data-reveal style="--i: 1">{{ product.title }}</h1>
+      <div class="product__price" data-product-price data-reveal style="--i: 2">
+        {% render 'price', product: product, variant: current %}
+      </div>
+      {%- if settings.pay_later_text != blank -%}
+        <p class="product__note" data-reveal style="--i: 2">{{ settings.pay_later_text | escape }}</p>
+      {%- endif -%}
+
+      {%- unless product.has_only_default_variant -%}
+        <div class="product__options" data-reveal style="--i: 3">
+          {%- for option in product.options_with_values -%}
+            <fieldset class="option" data-option-position="{{ option.position }}">
+              <legend class="option__legend">
+                <span>{{ option.name }}: <strong data-option-current>{{ option.selected_value }}</strong></span>
+                {%- if size_guide != blank and forloop.first -%}
+                  <button class="option__guide" type="button" data-drawer-open="size-guide-{{ section.id }}">
+                    {% render 'icon', name: 'ruler' %}Size guide
+                  </button>
+                {%- endif -%}
+              </legend>
+              <div class="option__values">
+                {%- for value in option.values -%}
+                  <label class="option__tile">
+                    <input
+                      type="radio"
+                      name="{{ section.id }}-option-{{ option.position }}"
+                      value="{{ value | escape }}"
+                      {% if option.selected_value == value %}
+                        checked
+                      {% endif %}
+                      data-option-input
+                    >
+                    <span>{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+
+      {%- form 'product', product, id: form_id, class: 'product__form', novalidate: 'novalidate', data-product-form: '' -%}
+        <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
+        <div class="product__buy" data-reveal style="--i: 4">
+          {%- if section.settings.show_quantity -%}
+            <div class="quantity" data-quantity>
+              <button type="button" aria-label="Decrease quantity" data-quantity-minus>{% render 'icon', name: 'minus' %}</button>
+              <input type="number" name="quantity" value="1" min="1" aria-label="{{ 'products.quantity' | t }}" inputmode="numeric">
+              <button type="button" aria-label="Increase quantity" data-quantity-plus>{% render 'icon', name: 'plus' %}</button>
+            </div>
+          {%- endif -%}
+          <button class="button button--large product__add" type="submit" data-add-button {% unless current.available %}disabled{% endunless %}>
+            <span data-add-label>
+              {%- if current.available -%}
+                {{ 'products.add_to_bag' | t }}
+              {%- else -%}
+                {{ 'products.sold_out' | t }}
+              {%- endif -%}
+            </span>
+            <span class="button__spinner" aria-hidden="true"></span>
+          </button>
+        </div>
+        <p class="form-message form-message--error" data-form-error hidden role="alert"></p>
+        {%- if section.settings.show_dynamic_checkout -%}
+          <div class="product__dynamic" data-reveal style="--i: 5">{{ form | payment_button }}</div>
+        {%- endif -%}
+      {%- endform -%}
+
+      <ul class="product__badges" role="list" data-reveal style="--i: 5">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'badge' -%}
+            <li class="trust-badge trust-badge--compact" {{ block.shopify_attributes }}>
+              <span class="trust-badge__icon">{% render 'icon', name: block.settings.icon %}</span>
+              <span class="trust-badge__text">
+                <strong>{{ block.settings.title | escape }}</strong>
+                {%- if block.settings.text != blank -%}
+                  <span>{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+              </span>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- if section.settings.show_payment_icons -%}
+        <div class="product__secure" data-reveal style="--i: 6">
+          <p>{% render 'icon', name: 'lock' %}Secure checkout</p>
+          <ul role="list" aria-label="Payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}
+          <div class="product__app">{% render block %}</div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <div class="accordion product__accordion" data-reveal style="--i: 7">
+        {%- if product.description != blank -%}
+          <details class="accordion__item" open>
+            <summary class="accordion__summary">Details{% render 'icon', name: 'plus' %}</summary>
+            <div class="accordion__content rte">{{ product.description }}</div>
+          </details>
+        {%- endif -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'collapsible' -%}
+            <details class="accordion__item" {{ block.shopify_attributes }}>
+              <summary class="accordion__summary">{{ block.settings.heading | escape }}{% render 'icon', name: 'plus' %}</summary>
+              <div class="accordion__content rte">
+                {{ block.settings.text }}
+                {{ block.settings.page.content }}
+              </div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="buy-bar" data-buy-bar aria-hidden="true">
+    <div class="page-width buy-bar__inner">
+      <p class="buy-bar__title">{{ product.title }}</p>
+      <div class="buy-bar__price" data-product-price>{% render 'price', product: product, variant: current %}</div>
+      <button class="button" type="submit" form="{{ form_id }}" tabindex="-1" data-add-button {% unless current.available %}disabled{% endunless %}>
+        <span data-add-label>
+          {%- if current.available -%}
+            {{ 'products.add_to_bag' | t }}
+          {%- else -%}
+            {{ 'products.sold_out' | t }}
+          {%- endif -%}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  {%- if size_guide != blank -%}
+    <aside class="drawer drawer--wide" id="size-guide-{{ section.id }}" role="dialog" aria-modal="true" aria-label="{{ size_guide.title | escape }}" tabindex="-1" data-drawer inert>
+      <div class="drawer__header">
+        <h2 class="drawer__title">{{ size_guide.title }}</h2>
+        <button class="drawer__close" type="button" aria-label="{{ 'general.close' | t }}" data-drawer-close>{% render 'icon', name: 'close' %}</button>
+      </div>
+      <div class="drawer__scroll rte">{{ size_guide.content }}</div>
+    </aside>
+  {%- endif -%}
+
+  {%- unless product.has_only_default_variant -%}
+    <script type="application/json" data-variants>
+      [
+        {%- for variant in product.variants -%}
+          {%- capture price_html -%}
+            {% render 'price', product: product, variant: variant %}
+          {%- endcapture -%}
+          {
+            "id": {{ variant.id }},
+            "options": {{ variant.options | json }},
+            "available": {{ variant.available | json }},
+            "media": {{ variant.featured_media.id | json }},
+            "price": {{ price_html | strip | json }}
+          }
+          {%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      ]
+    </script>
+  {%- endunless -%}
+
+  <script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "checkbox", "id": "show_reviews", "label": "Show review score", "default": true },
+    { "type": "page", "id": "size_guide", "label": "Size guide page", "info": "Opens in a slide-out panel from a “Size guide” link beside the size options." },
+    { "type": "checkbox", "id": "show_quantity", "label": "Show quantity selector", "default": true },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout button", "info": "Shop Pay, Apple Pay and similar express options.", "default": true },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show secure checkout and payment icons", "default": true }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "badge",
+      "name": "Trust badge",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Delivery" },
+            { "value": "return", "label": "Returns" },
+            { "value": "star", "label": "Star" },
+            { "value": "award", "label": "Award" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "lock", "label": "Secure" },
+            { "value": "paw", "label": "Paw" },
+            { "value": "ruler", "label": "Sizing" },
+            { "value": "chat", "label": "Chat" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free UK delivery" },
+        { "type": "text", "id": "text", "label": "Text", "default": "On orders over £50" }
+      ]
+    },
+    {
+      "type": "collapsible",
+      "name": "Collapsible row",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Delivery & returns" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "page", "id": "page", "label": "Or show content from a page" }
+      ]
+    }
+  ]
+}
+{% endschema %}

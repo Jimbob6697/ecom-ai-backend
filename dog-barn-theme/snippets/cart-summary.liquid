@@ -1,0 +1,50 @@
+{%- comment -%}
+  Free-delivery progress, subtotal and checkout button.
+  Usage: {% render 'cart-summary', cart: cart, context: 'drawer' | 'page' %}
+{%- endcomment -%}
+{%- liquid
+  assign threshold = settings.free_shipping_threshold | times: 100
+  assign remaining = threshold | minus: cart.total_price
+  assign progress = 100
+  if threshold > 0 and remaining > 0
+    assign progress = cart.total_price | times: 100 | divided_by: threshold
+  endif
+-%}
+{%- if threshold > 0 -%}
+  <div class="shipping-meter">
+    <p>
+      {%- if remaining > 0 -%}
+        {%- assign remaining_money = remaining | money -%}
+        {{ 'cart.free_shipping_remaining' | t: amount: remaining_money }}
+      {%- else -%}
+        {% render 'icon', name: 'check' %}
+        {{ 'cart.free_shipping_reached' | t }}
+      {%- endif -%}
+    </p>
+    <div class="shipping-meter__bar" role="presentation"><span style="width: {{ progress }}%"></span></div>
+  </div>
+{%- endif -%}
+
+{%- for discount in cart.cart_level_discount_applications -%}
+  <p class="cart-summary__row cart-summary__row--discount">
+    <span>{{ discount.title }}</span>
+    <span>&minus;{{ discount.total_allocated_amount | money }}</span>
+  </p>
+{%- endfor -%}
+<p class="cart-summary__row cart-summary__row--total">
+  <span>{{ 'cart.subtotal' | t }}</span>
+  <span>{{ cart.total_price | money }}</span>
+</p>
+<p class="cart-summary__note">{{ 'cart.taxes' | t }}</p>
+
+{%- if settings.cart_note and context == 'page' -%}
+  <label class="field">
+    <span>{{ 'cart.note' | t }}</span>
+    <textarea name="note" rows="3">{{ cart.note }}</textarea>
+  </label>
+{%- endif -%}
+
+<button class="button button--large button--full" type="submit" name="checkout">{{ 'cart.checkout' | t }}</button>
+{%- if context == 'drawer' -%}
+  <a class="link-arrow cart-summary__link" href="{{ routes.cart_url }}">{{ 'cart.view_bag' | t }}</a>
+{%- endif -%}

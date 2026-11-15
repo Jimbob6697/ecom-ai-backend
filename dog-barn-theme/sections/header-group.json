@@ -1,0 +1,42 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "blocks": {
+        "delivery": {
+          "type": "message",
+          "settings": {
+            "text": "Free UK delivery on all orders over £50 (dog accessories only)",
+            "link": "shopify://pages/delivery-returns"
+          }
+        },
+        "award": {
+          "type": "message",
+          "settings": { "text": "Finalist · Best Pet Business · UK Small Business Awards 2026" }
+        },
+        "express": {
+          "type": "message",
+          "settings": {
+            "text": "Order by 1pm Monday to Friday for UK Tracked Express",
+            "link": "shopify://pages/delivery-returns"
+          }
+        }
+      },
+      "block_order": ["delivery", "award", "express"],
+      "settings": { "show_reviews": true }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo": "shopify://shop_images/Dog_Barn_-_Logo_Suite_Watermarks-32.png",
+        "logo_height": 52,
+        "menu": "main-menu",
+        "search_menu": "main-menu",
+        "sticky": true
+      }
+    }
+  },
+  "order": ["announcement", "header"]
+}

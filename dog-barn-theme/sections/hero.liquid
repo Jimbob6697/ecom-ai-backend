@@ -1,0 +1,95 @@
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="hero hero--{{ s.height }} hero--align-{{ s.position }}" data-scroll-fx>
+  <div class="hero__media">
+    {%- if s.video != blank -%}
+      {{ s.video | video_tag: image_size: '1920x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'hero__video' }}
+    {%- elsif s.image != blank -%}
+      <picture>
+        {%- if s.image_mobile != blank -%}
+          <source media="(max-width: 749px)" srcset="{{ s.image_mobile | image_url: width: 900 }} 900w, {{ s.image_mobile | image_url: width: 1400 }} 1400w" sizes="100vw">
+        {%- endif -%}
+        {{
+          s.image
+          | image_url: width: 3000
+          | image_tag: widths: '750, 1100, 1500, 2000, 2600, 3000', sizes: '100vw', loading: 'eager', fetchpriority: 'high', class: 'hero__image', alt: s.image.alt
+        }}
+      </picture>
+    {%- else -%}
+      {% render 'art', index: 2, icon: 'paw' %}
+    {%- endif -%}
+  </div>
+
+  <div class="hero__content page-width">
+    <div class="hero__inner">
+      {%- if s.eyebrow != blank -%}
+        <p class="eyebrow hero__eyebrow" data-hero-line style="--i: 0">{{ s.eyebrow | escape }}</p>
+      {%- endif -%}
+      {%- if s.heading != blank -%}
+        <h1 class="hero__heading" data-hero-line style="--i: 1">{{ s.heading | escape | newline_to_br }}</h1>
+      {%- endif -%}
+      {%- if s.subheading != blank -%}
+        <p class="hero__subheading" data-hero-line style="--i: 2">{{ s.subheading | escape }}</p>
+      {%- endif -%}
+      {%- if s.button_label != blank or s.link_label != blank -%}
+        <div class="hero__actions" data-hero-line style="--i: 3">
+          {%- if s.button_label != blank -%}
+            <a class="button button--light" href="{{ s.button_link | default: routes.all_products_collection_url }}">{{ s.button_label | escape }}</a>
+          {%- endif -%}
+          {%- if s.link_label != blank -%}
+            <a class="button button--ghost" href="{{ s.link_link | default: routes.collections_url }}">{{ s.link_label | escape }}</a>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+      {%- if s.show_reviews -%}
+        <div class="hero__reviews" data-hero-line style="--i: 4">{% render 'review-summary' %}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "div",
+  "class": "section-hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Luxury country wear for dogs" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "For the stylish & adventurous pup" },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Fleeces, jackets and accessories made for countryside walks and muddy woods." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop all" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "link_label", "label": "Second button label" },
+    { "type": "url", "id": "link_link", "label": "Second button link" },
+    { "type": "checkbox", "id": "show_reviews", "label": "Show review score", "default": true },
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Landscape, at least 2400px wide. Keep the dog to the right so the text stays readable on the left." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image", "info": "Portrait crop for phones." },
+    { "type": "video", "id": "video", "label": "Video", "info": "Plays muted on a loop and replaces the image." },
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "options": [
+        { "value": "full", "label": "Full screen" },
+        { "value": "large", "label": "Large" },
+        { "value": "medium", "label": "Medium" }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Text position",
+      "options": [
+        { "value": "left", "label": "Bottom left" },
+        { "value": "center", "label": "Centre" }
+      ],
+      "default": "left"
+    }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

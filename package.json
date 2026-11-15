@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "theme:zip": "mkdir -p dist && rm -f dist/voltline-theme.zip && cd shopify-theme && zip -rq ../dist/voltline-theme.zip assets config layout locales sections snippets templates"
+    "theme:zip": "mkdir -p dist && rm -f dist/voltline-theme.zip && cd shopify-theme && zip -rq ../dist/voltline-theme.zip assets config layout locales sections snippets templates",
+    "theme:zip:dogbarn": "mkdir -p dist && rm -f dist/dog-barn-yorkshire-theme.zip && cd dog-barn-theme && zip -rq ../dist/dog-barn-yorkshire-theme.zip assets config layout locales sections snippets templates"
   },
   "author": "InHouseYork",
   "license": "MIT",

@@ -1,0 +1,59 @@
+{%- comment -%}
+  Line items shared by the cart drawer and the cart page.
+  Usage: {% render 'cart-items', cart: cart %}
+{%- endcomment -%}
+<ul class="cart-items" role="list">
+  {%- for item in cart.items -%}
+    <li class="cart-item" data-cart-item data-line="{{ forloop.index }}">
+      <a class="cart-item__media" href="{{ item.url }}" tabindex="-1" aria-hidden="true">
+        {%- if item.image -%}
+          {{ item.image | image_url: width: 300 | image_tag: loading: 'lazy', alt: '' }}
+        {%- else -%}
+          {% render 'art', index: forloop.index %}
+        {%- endif -%}
+      </a>
+      <div class="cart-item__details">
+        <div class="cart-item__top">
+          <a class="cart-item__title" href="{{ item.url }}">{{ item.product.title }}</a>
+          <p class="cart-item__price">
+            {%- if item.original_line_price != item.final_line_price -%}
+              <s>{{ item.original_line_price | money }}</s>
+            {%- endif -%}
+            {{ item.final_line_price | money }}
+          </p>
+        </div>
+        {%- unless item.product.has_only_default_variant -%}
+          <p class="cart-item__meta">{{ item.variant.title }}</p>
+        {%- endunless -%}
+        {%- if item.selling_plan_allocation -%}
+          <p class="cart-item__meta">{{ item.selling_plan_allocation.selling_plan.name }}</p>
+        {%- endif -%}
+        {%- for property in item.properties -%}
+          {%- assign first_char = property.first | slice: 0 -%}
+          {%- if property.last != blank and first_char != '_' -%}
+            <p class="cart-item__meta">{{ property.first }}: {{ property.last }}</p>
+          {%- endif -%}
+        {%- endfor -%}
+        {%- for discount in item.line_level_discount_allocations -%}
+          <p class="cart-item__meta cart-item__meta--discount">{{ discount.discount_application.title }}</p>
+        {%- endfor -%}
+        <div class="cart-item__bottom">
+          <div class="quantity quantity--small" data-quantity>
+            <button type="button" aria-label="Decrease quantity" data-quantity-minus>{% render 'icon', name: 'minus' %}</button>
+            <input
+              type="number"
+              name="updates[]"
+              value="{{ item.quantity }}"
+              min="0"
+              aria-label="{{ 'products.quantity' | t }}"
+              inputmode="numeric"
+              data-cart-quantity
+            >
+            <button type="button" aria-label="Increase quantity" data-quantity-plus>{% render 'icon', name: 'plus' %}</button>
+          </div>
+          <a class="cart-item__remove" href="{{ item.url_to_remove }}" data-cart-remove>{{ 'cart.remove' | t }}</a>
+        </div>
+      </div>
+    </li>
+  {%- endfor -%}
+</ul>

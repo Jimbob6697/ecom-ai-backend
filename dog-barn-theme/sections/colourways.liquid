@@ -1,0 +1,63 @@
+<section class="section section--tight colourways{% if section.settings.surface %} section--surface{% endif %}">
+  <div class="page-width">
+    <div class="section-intro section-intro--center">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="section-heading section-heading--center" data-reveal>
+        {{ section.settings.heading | escape }}
+        {%- if section.settings.subheading != blank %} <span>{{ section.settings.subheading | escape }}</span>{% endif -%}
+      </h2>
+    </div>
+    <ul class="colourways__list" role="list">
+      {%- for block in section.blocks -%}
+        {%- liquid
+          assign way_collection = block.settings.collection
+          assign way_url = block.settings.link | default: way_collection.url | default: routes.collections_url
+        -%}
+        <li data-reveal style="--i: {{ forloop.index0 | modulo: 8 }}" {{ block.shopify_attributes }}>
+          <a class="colourway" href="{{ way_url }}">
+            <span class="colourway__swatch" style="--swatch: {{ block.settings.colour }}">
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 240 | image_tag: loading: 'lazy', alt: '' }}
+              {%- endif -%}
+            </span>
+            <span class="colourway__name">{{ block.settings.title | default: way_collection.title | escape }}</span>
+          </a>
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Shop by colourway",
+  "max_blocks": 20,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Named after the countryside" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Shop by colourway" },
+    { "type": "text", "id": "subheading", "label": "Heading (italic part)" },
+    { "type": "checkbox", "id": "surface", "label": "Stone background", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "colourway",
+      "name": "Colourway",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Name", "default": "Chestnut Trail" },
+        { "type": "color", "id": "colour", "label": "Swatch colour", "default": "#6f4e37" },
+        { "type": "image_picker", "id": "image", "label": "Fabric photo", "info": "Optional close-up that replaces the flat colour." },
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "url", "id": "link", "label": "Link", "info": "Overrides the collection link." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop by colourway",
+      "blocks": [{ "type": "colourway" }, { "type": "colourway", "settings": { "title": "Forest Glade", "colour": "#5c6b52" } }]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,17 @@
+{%- comment -%}
+  Five-star rating row. Partial stars are drawn with a clipped overlay.
+  Usage: {% render 'stars', rating: 4.9 %}
+{%- endcomment -%}
+{%- liquid
+  assign star_rating = rating | default: 5 | times: 1.0
+  assign star_width = star_rating | times: 20 | at_most: 100 | at_least: 0
+-%}
+{%- capture star_row -%}
+  {%- for i in (1..5) -%}
+    <svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true" focusable="false"><path d="m10 1.6 2.6 5.4 5.9.8-4.3 4.1 1 5.9L10 15l-5.2 2.8 1-5.9L1.5 7.8l5.9-.8L10 1.6Z" fill="currentColor"/></svg>
+  {%- endfor -%}
+{%- endcapture -%}
+<span class="stars" role="img" aria-label="{{ star_rating | round: 1 }} out of 5 stars">
+  <span class="stars__base">{{ star_row }}</span>
+  <span class="stars__fill" style="width: {{ star_width }}%">{{ star_row }}</span>
+</span>

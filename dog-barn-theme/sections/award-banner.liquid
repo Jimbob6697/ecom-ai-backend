@@ -1,0 +1,53 @@
+<section class="section award award--{{ section.settings.scheme }}">
+  <div class="page-width page-width--narrow award__inner">
+    <div class="award__emblem" data-reveal="scale">
+      {%- if section.settings.image != blank -%}
+        {{ section.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', alt: section.settings.image.alt }}
+      {%- else -%}
+        <span class="award__laurel">
+          {% render 'icon', name: 'laurel' %}
+          <span class="award__year">{{ section.settings.year | escape }}</span>
+          <span class="award__status">{{ section.settings.status | escape }}</span>
+        </span>
+      {%- endif -%}
+    </div>
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="eyebrow" data-reveal style="--i: 1">{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <h2 class="award__heading" data-reveal style="--i: 2">{{ section.settings.heading | escape }}</h2>
+    {%- if section.settings.text != blank -%}
+      <div class="award__text rte" data-reveal style="--i: 3">{{ section.settings.text }}</div>
+    {%- endif -%}
+    {%- if section.settings.link_label != blank and section.settings.link != blank -%}
+      <a class="link-arrow" href="{{ section.settings.link }}" data-reveal style="--i: 4">{{ section.settings.link_label | escape }}</a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Award",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Award logo", "info": "Leave empty to show a laurel emblem with the year below." },
+    { "type": "text", "id": "year", "label": "Emblem year", "default": "2026" },
+    { "type": "text", "id": "status", "label": "Emblem label", "default": "Finalist" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The UK Small Business Awards" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "We're officially a 2026 finalist" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>We're incredibly proud to announce that Dog Barn Yorkshire has been shortlisted for <strong>Best Pet Business</strong> at The UK Small Business Awards 2026.</p>" },
+    { "type": "text", "id": "link_label", "label": "Link label" },
+    { "type": "url", "id": "link", "label": "Link" },
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour scheme",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "surface", "label": "Stone" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "dark"
+    }
+  ],
+  "presets": [{ "name": "Award" }]
+}
+{% endschema %}

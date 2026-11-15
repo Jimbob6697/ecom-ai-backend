@@ -1,0 +1,545 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "Luxury country wear for dogs",
+        "heading": "For the stylish &\nadventurous pup",
+        "subheading": "Fleeces, jackets and accessories made for countryside strolls and muddy woods alike.",
+        "button_label": "Shop all",
+        "button_link": "shopify://collections/all",
+        "link_label": "Shop Dachshund",
+        "link_link": "shopify://collections/dachshund-collections",
+        "show_reviews": true,
+        "image": "shopify://shop_images/Bnner10.png",
+        "height": "full",
+        "position": "left"
+      }
+    },
+    "trust": {
+      "type": "trust-bar",
+      "blocks": {
+        "a": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free UK delivery",
+            "text": "On accessory orders over £50"
+          }
+        },
+        "b": {
+          "type": "badge",
+          "settings": {
+            "icon": "star",
+            "title": "4.9 Excellent",
+            "text": "Customer review score"
+          }
+        },
+        "c": {
+          "type": "badge",
+          "settings": {
+            "icon": "award",
+            "title": "2026 finalist",
+            "text": "UK Small Business Awards"
+          }
+        },
+        "d": {
+          "type": "badge",
+          "settings": {
+            "icon": "gift",
+            "title": "Tracked Express",
+            "text": "Order by 1pm, Mon to Fri"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b",
+        "c",
+        "d"
+      ],
+      "settings": {
+        "scheme": "light"
+      }
+    },
+    "tiles": {
+      "type": "collection-tiles",
+      "blocks": {
+        "t0": {
+          "type": "collection",
+          "settings": {
+            "collection": "fleeces",
+            "title": "Fleeces",
+            "image": "shopify://shop_images/Yorkshire_Dog_in_Chestnut_Fleece.png"
+          }
+        },
+        "t1": {
+          "type": "collection",
+          "settings": {
+            "collection": "sherpa-jacket",
+            "title": "Sherpa jackets",
+            "image": "shopify://shop_images/IMG-2613.png"
+          }
+        },
+        "t2": {
+          "type": "collection",
+          "settings": {
+            "collection": "rain-jacket",
+            "title": "Rain jackets",
+            "image": "shopify://shop_images/C02092E0-BF74-48CC-98D1-DA4AF1486855.jpg"
+          }
+        },
+        "t3": {
+          "type": "collection",
+          "settings": {
+            "collection": "dachshund-collections",
+            "title": "Dachshund",
+            "image": "shopify://shop_images/930A3466-67C8-4838-AA64-6892B7C07D06.jpg"
+          }
+        },
+        "t4": {
+          "type": "collection",
+          "settings": {
+            "collection": "adventurer-harness",
+            "title": "Harnesses"
+          }
+        },
+        "t5": {
+          "type": "collection",
+          "settings": {
+            "collection": "leather-collection",
+            "title": "Leather"
+          }
+        },
+        "t6": {
+          "type": "collection",
+          "settings": {
+            "collection": "collars",
+            "title": "Collars & leads"
+          }
+        },
+        "t7": {
+          "type": "collection",
+          "settings": {
+            "collection": "bundles",
+            "title": "Bundles"
+          }
+        }
+      },
+      "block_order": [
+        "t0",
+        "t1",
+        "t2",
+        "t3",
+        "t4",
+        "t5",
+        "t6",
+        "t7"
+      ],
+      "settings": {
+        "eyebrow": "The collections",
+        "heading": "Shop by",
+        "subheading": "category",
+        "surface": false
+      }
+    },
+    "new": {
+      "type": "product-shelf",
+      "settings": {
+        "eyebrow": "New collection",
+        "heading": "Sherpa fleece",
+        "subheading": "jackets",
+        "collection": "sherpa-jacket",
+        "limit": 8,
+        "show_view_all": true,
+        "surface": true
+      }
+    },
+    "dachshund": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/930A3466-67C8-4838-AA64-6892B7C07D06.jpg",
+        "eyebrow": "The Dachshund collection",
+        "heading": "Made for little legs that love adventure",
+        "text": "<p>Fleeces, harnesses, rain jackets and drying robes shaped for dachshunds — from crisp morning strolls to woodland wanders.</p>",
+        "link_label": "Shop Dachshund",
+        "link": "shopify://collections/dachshund-collections",
+        "flip": false,
+        "surface": false
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "blocks": {
+        "m1": {
+          "type": "text",
+          "settings": {
+            "text": "For the stylish & adventurous pup"
+          }
+        },
+        "m2": {
+          "type": "text",
+          "settings": {
+            "text": "Elegant yet adventurous"
+          }
+        },
+        "m3": {
+          "type": "text",
+          "settings": {
+            "text": "From the barn, in Yorkshire"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3"
+      ],
+      "settings": {
+        "speed": 40,
+        "scheme": "dark"
+      }
+    },
+    "videos": {
+      "type": "ugc-videos",
+      "blocks": {
+        "v0": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/0F73F928-EF02-4BD7-AAA5-527B060A9720.jpg",
+            "handle": "@dogbarn.yorkshire"
+          }
+        },
+        "v1": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/739206f9-f712-48a3-860b-c1fcb25f2488.jpg",
+            "handle": "@dogbarn.yorkshire"
+          }
+        },
+        "v2": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/3B1E1A86-9786-4BE2-8D0B-D9CF698CBB9F.jpg",
+            "handle": "@dogbarn.yorkshire"
+          }
+        },
+        "v3": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/IMG-4254.jpg",
+            "handle": "@dogbarn.yorkshire"
+          }
+        },
+        "v4": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/C02092E0-BF74-48CC-98D1-DA4AF1486855.jpg",
+            "handle": "@dogbarn.yorkshire"
+          }
+        },
+        "v5": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/IMG-2613.png",
+            "handle": "@dogbarn.yorkshire"
+          }
+        }
+      },
+      "block_order": [
+        "v0",
+        "v1",
+        "v2",
+        "v3",
+        "v4",
+        "v5"
+      ],
+      "settings": {
+        "eyebrow": "@dogbarn.yorkshire",
+        "heading": "Spotted on",
+        "subheading": "the walk",
+        "text": "Real dogs, real adventures. Tag us on Instagram or TikTok to be featured.",
+        "scheme": "light"
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "blocks": {
+        "r1": {
+          "type": "review",
+          "settings": {}
+        },
+        "r2": {
+          "type": "review",
+          "settings": {}
+        },
+        "r3": {
+          "type": "review",
+          "settings": {}
+        },
+        "r4": {
+          "type": "review",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3",
+        "r4"
+      ],
+      "settings": {
+        "eyebrow": "Loved by dogs, trusted by owners",
+        "heading": "What our",
+        "subheading": "customers say",
+        "scheme": "surface"
+      }
+    },
+    "best": {
+      "type": "product-shelf",
+      "settings": {
+        "eyebrow": "Most loved",
+        "heading": "Best",
+        "subheading": "sellers",
+        "collection": "best-sellers",
+        "limit": 8,
+        "show_view_all": true,
+        "surface": false
+      }
+    },
+    "award": {
+      "type": "award-banner",
+      "settings": {
+        "year": "2026",
+        "status": "Finalist",
+        "eyebrow": "The UK Small Business Awards",
+        "heading": "We're officially a 2026 finalist",
+        "text": "<p>We're incredibly proud to announce that Dog Barn Yorkshire has been shortlisted for <strong>Best Pet Business</strong> at The UK Small Business Awards 2026.</p>",
+        "scheme": "dark"
+      }
+    },
+    "colourways": {
+      "type": "colourways",
+      "blocks": {
+        "c0": {
+          "type": "colourway",
+          "settings": {
+            "title": "Chestnut Trail",
+            "colour": "#6f4e37",
+            "collection": "chestnut-trail-brown"
+          }
+        },
+        "c1": {
+          "type": "colourway",
+          "settings": {
+            "title": "Forest Glade",
+            "colour": "#5c6b52",
+            "collection": "forrest-glade-green"
+          }
+        },
+        "c2": {
+          "type": "colourway",
+          "settings": {
+            "title": "Berry Moors",
+            "colour": "#6d1f3a",
+            "collection": "berry-moors"
+          }
+        },
+        "c3": {
+          "type": "colourway",
+          "settings": {
+            "title": "Starlit Meadow",
+            "colour": "#8fa9c4",
+            "collection": "products"
+          }
+        },
+        "c4": {
+          "type": "colourway",
+          "settings": {
+            "title": "Blush Petal",
+            "colour": "#e3b9bd",
+            "collection": "blush-petal-collection"
+          }
+        },
+        "c5": {
+          "type": "colourway",
+          "settings": {
+            "title": "Ivory Dune",
+            "colour": "#e4dccb",
+            "collection": "ivory-june-harness"
+          }
+        },
+        "c6": {
+          "type": "colourway",
+          "settings": {
+            "title": "Truffle Dusk",
+            "colour": "#8a7767",
+            "collection": "truffle-dusk"
+          }
+        },
+        "c7": {
+          "type": "colourway",
+          "settings": {
+            "title": "Sandstone Harbour",
+            "colour": "#c8ad8a",
+            "collection": "sandstone-harbour-luxury-adjustable-dog-harness"
+          }
+        },
+        "c8": {
+          "type": "colourway",
+          "settings": {
+            "title": "Duck Egg Vale",
+            "colour": "#a9c5c0",
+            "collection": "duck-egg-vale"
+          }
+        },
+        "c9": {
+          "type": "colourway",
+          "settings": {
+            "title": "Lavender Meadow",
+            "colour": "#b3a4cf",
+            "collection": "lavender-meadow"
+          }
+        },
+        "c10": {
+          "type": "colourway",
+          "settings": {
+            "title": "Blue Sky Moor",
+            "colour": "#7fa6cf",
+            "collection": "blue-sky-moor"
+          }
+        },
+        "c11": {
+          "type": "colourway",
+          "settings": {
+            "title": "Barley Vale",
+            "colour": "#d4bc85",
+            "collection": "barley-vale"
+          }
+        }
+      },
+      "block_order": [
+        "c0",
+        "c1",
+        "c2",
+        "c3",
+        "c4",
+        "c5",
+        "c6",
+        "c7",
+        "c8",
+        "c9",
+        "c10",
+        "c11"
+      ],
+      "settings": {
+        "eyebrow": "Named after the countryside",
+        "heading": "Shop by",
+        "subheading": "colourway",
+        "surface": true
+      }
+    },
+    "details": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/7d560008-7d4b-4eb0-99ae-fadd26779fc0.jpg",
+        "eyebrow": "The details",
+        "heading": "Stylish, yet practical",
+        "text": "<p>Soft, stretchy, water-resistant polar fleece. A zip-up back that makes dressing simple, a brass button fastening, and integrated D-rings so you can clip on a lead and head out.</p>",
+        "link_label": "Shop fleeces",
+        "link": "shopify://collections/fleeces",
+        "flip": true,
+        "surface": false
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/739206f9-f712-48a3-860b-c1fcb25f2488.jpg",
+        "eyebrow": "Our story",
+        "heading": "Meet the faces behind Dog Barn Yorkshire",
+        "text": "<p>We're Paul and Bobbi — and our trio of cavapoochons, Honey, Dora and Bertie. Our brand is built from the heart, driven by our love for dogs, Paul's deep-rooted love for Yorkshire and the countryside life we adore.</p>",
+        "link_label": "Read our story",
+        "link": "shopify://pages/our-story",
+        "flip": false,
+        "surface": true
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "How do I choose the right size?",
+            "answer": "<p>Every dog is different, so please check the measurements on each product before ordering. If you need a hand, email <a href=\"mailto:info@dogbarnyorkshire.com\">info@dogbarnyorkshire.com</a> or message @dogbarn.yorkshire on Instagram and we'll help.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How much is delivery, and how long does it take?",
+            "answer": "<p>UK Standard delivery (2–4 working days) is £2.95, and free when you spend over £50 on dog accessories. UK Tracked Express (24–48 hours) is £5.95 — order by 1pm, Monday to Friday. Standard orders are dispatched within 1–3 working days with Royal Mail.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Do you deliver outside the UK?",
+            "answer": "<p>Yes. European delivery takes 3–5 working days and international delivery 5–15 working days, both £6.95. Customs fees may apply in your country.</p>"
+          }
+        },
+        "q4": {
+          "type": "question",
+          "settings": {
+            "question": "Can I return or exchange an item?",
+            "answer": "<p>Yes — items returned in perfect condition, free from pet hair and in their original packaging can be refunded or exchanged. Personalised items are non-refundable. See <a href=\"/pages/delivery-returns\">Delivery & Returns</a> for the full details.</p>"
+          }
+        },
+        "q5": {
+          "type": "question",
+          "settings": {
+            "question": "How should I wash my dog's fleece?",
+            "answer": "<p>We recommend hand washing, or a delicate wash at no more than 30 degrees.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4",
+        "q5"
+      ],
+      "settings": {
+        "heading": "Good to know",
+        "surface": false
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Join the pack",
+        "text": "Be first to hear about new collections and offers.",
+        "scheme": "surface"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "trust",
+    "tiles",
+    "new",
+    "dachshund",
+    "marquee",
+    "videos",
+    "reviews",
+    "best",
+    "award",
+    "colourways",
+    "details",
+    "story",
+    "faq",
+    "newsletter"
+  ]
+}
