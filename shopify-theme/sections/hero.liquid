@@ -1,0 +1,107 @@
+{%- liquid
+  assign s = section.settings
+  assign has_media = false
+  if s.image != blank or s.video != blank
+    assign has_media = true
+  endif
+-%}
+<section
+  class="hero hero--{{ s.scheme }} hero--{{ s.height }} hero--align-{{ s.position }}{% if has_media %} hero--has-media{% endif %}"
+  data-scroll-fx
+>
+  <div class="hero__media">
+    {%- if s.video != blank -%}
+      {{ s.video | video_tag: image_size: '1920x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true, class: 'hero__video' }}
+    {%- elsif s.image != blank -%}
+      <picture>
+        {%- if s.image_mobile != blank -%}
+          <source media="(max-width: 749px)" srcset="{{ s.image_mobile | image_url: width: 900 }} 900w, {{ s.image_mobile | image_url: width: 1400 }} 1400w" sizes="100vw">
+        {%- endif -%}
+        {{
+          s.image
+          | image_url: width: 3000
+          | image_tag: widths: '750, 1100, 1500, 2000, 2600, 3000', sizes: '100vw', loading: 'eager', fetchpriority: 'high', class: 'hero__image', alt: s.image.alt
+        }}
+      </picture>
+    {%- else -%}
+      {% render 'hero-art' %}
+    {%- endif -%}
+  </div>
+
+  <div class="hero__content page-width">
+    {%- if s.eyebrow != blank -%}
+      <p class="eyebrow hero__eyebrow" data-hero-line style="--i: 0">{{ s.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if s.heading != blank -%}
+      <h1 class="hero__heading" data-hero-line style="--i: 1">{{ s.heading | escape | newline_to_br }}</h1>
+    {%- endif -%}
+    {%- if s.subheading != blank -%}
+      <p class="hero__subheading" data-hero-line style="--i: 2">{{ s.subheading | escape }}</p>
+    {%- endif -%}
+    {%- if s.button_label != blank or s.link_label != blank -%}
+      <div class="hero__actions" data-hero-line style="--i: 3">
+        {%- if s.button_label != blank -%}
+          <a class="button" href="{{ s.button_link | default: routes.all_products_collection_url }}">{{ s.button_label | escape }}</a>
+        {%- endif -%}
+        {%- if s.link_label != blank -%}
+          <a class="button button--outline" href="{{ s.link_link | default: routes.collections_url }}">{{ s.link_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "div",
+  "class": "section-hero",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "New season" },
+    { "type": "textarea", "id": "heading", "label": "Heading", "default": "Made for your Tesla." },
+    { "type": "text", "id": "subheading", "label": "Subheading", "default": "Precision-fit accessories that look factory, feel better and go on in minutes." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop all" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "link_label", "label": "Second button label", "default": "Shop by model" },
+    { "type": "url", "id": "link_link", "label": "Second button link" },
+    { "type": "header", "content": "Media" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "3000 × 1600px recommended. Without an image an animated illustration is shown." },
+    { "type": "image_picker", "id": "image_mobile", "label": "Mobile image" },
+    { "type": "video", "id": "video", "label": "Video", "info": "Plays muted on a loop and replaces the image." },
+    { "type": "header", "content": "Layout" },
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour scheme",
+      "options": [
+        { "value": "dark", "label": "Dark" },
+        { "value": "light", "label": "Light" }
+      ],
+      "default": "dark"
+    },
+    {
+      "type": "select",
+      "id": "height",
+      "label": "Height",
+      "options": [
+        { "value": "full", "label": "Full screen" },
+        { "value": "large", "label": "Large" },
+        { "value": "medium", "label": "Medium" }
+      ],
+      "default": "full"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Text position",
+      "options": [
+        { "value": "top", "label": "Top" },
+        { "value": "center", "label": "Centre" },
+        { "value": "bottom", "label": "Bottom" }
+      ],
+      "default": "top"
+    }
+  ],
+  "presets": [{ "name": "Hero" }]
+}
+{% endschema %}

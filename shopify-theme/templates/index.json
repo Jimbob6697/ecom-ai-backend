@@ -1,0 +1,225 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero",
+      "settings": {
+        "eyebrow": "New season",
+        "heading": "Made for your Tesla.",
+        "subheading": "Precision-fit accessories that look factory, feel better and go on in minutes.",
+        "button_label": "Shop all",
+        "link_label": "Shop by model",
+        "scheme": "dark",
+        "height": "full",
+        "position": "top"
+      }
+    },
+    "models": {
+      "type": "model-picker",
+      "blocks": {
+        "m3": { "type": "model", "settings": { "title": "Model 3", "caption": "Including Highland" } },
+        "my": { "type": "model", "settings": { "title": "Model Y", "caption": "Including Juniper" } },
+        "ms": { "type": "model", "settings": { "title": "Model S", "caption": "2021 onwards" } },
+        "mx": { "type": "model", "settings": { "title": "Model X", "caption": "2021 onwards" } },
+        "ct": { "type": "model", "settings": { "title": "Cybertruck", "caption": "All trims" } }
+      },
+      "block_order": ["m3", "my", "ms", "mx", "ct"],
+      "settings": {
+        "heading": "Shop by model.",
+        "subheading": "Find the perfect fit.",
+        "surface": false
+      }
+    },
+    "latest": {
+      "type": "product-shelf",
+      "settings": {
+        "heading": "The latest.",
+        "subheading": "Take a look at what's new.",
+        "limit": 8,
+        "show_view_all": true,
+        "surface": true
+      }
+    },
+    "tiles": {
+      "type": "promo-tiles",
+      "blocks": {
+        "liners": {
+          "type": "tile",
+          "settings": {
+            "eyebrow": "All-weather",
+            "heading": "Floor liners",
+            "text": "Mud, meet your match.",
+            "button_label": "Shop",
+            "link_label": "Learn more",
+            "icon": "shield",
+            "scheme": "dark",
+            "size": "full"
+          }
+        },
+        "charging": {
+          "type": "tile",
+          "settings": {
+            "heading": "Charging, sorted",
+            "text": "Cables, adapters and tidy storage.",
+            "button_label": "Shop",
+            "link_label": "",
+            "icon": "bolt",
+            "scheme": "light",
+            "size": "half"
+          }
+        },
+        "interior": {
+          "type": "tile",
+          "settings": {
+            "heading": "Interior",
+            "text": "Organisers, screen protection and more.",
+            "button_label": "Shop",
+            "link_label": "",
+            "icon": "star",
+            "scheme": "dark",
+            "size": "half"
+          }
+        },
+        "exterior": {
+          "type": "tile",
+          "settings": {
+            "heading": "Exterior",
+            "text": "Mud flaps, wheel caps and paint protection.",
+            "button_label": "Shop",
+            "link_label": "",
+            "icon": "car",
+            "scheme": "dark",
+            "size": "half"
+          }
+        },
+        "storage": {
+          "type": "tile",
+          "settings": {
+            "heading": "Storage",
+            "text": "A place for everything, frunk to boot.",
+            "button_label": "Shop",
+            "link_label": "",
+            "icon": "ruler",
+            "scheme": "light",
+            "size": "half"
+          }
+        }
+      },
+      "block_order": ["liners", "charging", "interior", "exterior", "storage"],
+      "settings": {}
+    },
+    "statement": {
+      "type": "statement",
+      "settings": {
+        "eyebrow": "Our promise",
+        "text": "Every accessory is measured against the real car, tested through a British winter and backed by a fit guarantee. If it doesn't look like it came from the factory, we take it back.",
+        "link_label": "Read our fit guarantee",
+        "scheme": "dark"
+      }
+    },
+    "features": {
+      "type": "features",
+      "blocks": {
+        "fit": {
+          "type": "feature",
+          "settings": {
+            "icon": "ruler",
+            "title": "Precision fit",
+            "text": "Laser-measured against the real car, so every edge lines up.",
+            "size": "two-thirds",
+            "dark": true
+          }
+        },
+        "returns": {
+          "type": "feature",
+          "settings": {
+            "stat": "30",
+            "title": "Days to change your mind",
+            "text": "Free returns on every order.",
+            "size": "third"
+          }
+        },
+        "dispatch": {
+          "type": "feature",
+          "settings": {
+            "icon": "truck",
+            "title": "Same-day dispatch",
+            "text": "Order before 2pm and it's on its way today.",
+            "size": "third"
+          }
+        },
+        "materials": {
+          "type": "feature",
+          "settings": {
+            "icon": "leaf",
+            "title": "Considered materials",
+            "text": "Odourless, recyclable TPE and vegan leather.",
+            "size": "third"
+          }
+        },
+        "help": {
+          "type": "feature",
+          "settings": {
+            "icon": "chat",
+            "title": "Help from real owners",
+            "text": "Fitting questions answered by people who drive one.",
+            "size": "third"
+          }
+        }
+      },
+      "block_order": ["fit", "returns", "dispatch", "materials", "help"],
+      "settings": {
+        "heading": "Why drivers choose us.",
+        "subheading": "Even more reasons to shop here.",
+        "surface": true
+      }
+    },
+    "story": {
+      "type": "image-with-text",
+      "settings": {
+        "eyebrow": "Materials",
+        "heading": "Built to outlast the lease.",
+        "text": "<p>Odourless TPE, vegan leather and anodised aluminium. Tough enough for muddy boots, refined enough for the cabin.</p>",
+        "link_label": "Learn more",
+        "flip": false,
+        "surface": false
+      }
+    },
+    "faq": {
+      "type": "faq",
+      "blocks": {
+        "q1": {
+          "type": "question",
+          "settings": {
+            "question": "Will this fit my car?",
+            "answer": "<p>Every product page lists the models and years it fits. If you're unsure, message us with your model and build year and we'll confirm before you order.</p>"
+          }
+        },
+        "q2": {
+          "type": "question",
+          "settings": {
+            "question": "How long does delivery take?",
+            "answer": "<p>Orders placed before 2pm ship the same working day. UK delivery usually takes one to two working days.</p>"
+          }
+        },
+        "q3": {
+          "type": "question",
+          "settings": {
+            "question": "Can I return something if I change my mind?",
+            "answer": "<p>Yes. You have 30 days to send it back for a full refund, as long as it's unused and in its original packaging.</p>"
+          }
+        }
+      },
+      "block_order": ["q1", "q2", "q3"],
+      "settings": { "heading": "Questions? Answers.", "surface": true }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Be first to know.",
+        "text": "New releases, fitting guides and owner-only offers. No spam.",
+        "scheme": "light"
+      }
+    }
+  },
+  "order": ["hero", "models", "latest", "tiles", "statement", "features", "story", "faq", "newsletter"]
+}

@@ -1,0 +1,27 @@
+{%- comment -%}
+  Lists the vehicles a product fits, based on product tags that match the
+  "Vehicle tags" theme setting.
+  Usage: {% render 'fitment', product: product, style: 'text' | 'chips' %}
+{%- endcomment -%}
+{%- liquid
+  assign vehicle_tags = settings.fitment_tags | split: ','
+  assign fits = ''
+  for vehicle in vehicle_tags
+    assign vehicle_name = vehicle | strip
+    if product.tags contains vehicle_name
+      assign fits = fits | append: vehicle_name | append: '|'
+    endif
+  endfor
+  assign fits = fits | split: '|'
+-%}
+{%- if fits.size > 0 -%}
+  {%- if style == 'chips' -%}
+    <ul class="chips" role="list" aria-label="{{ 'products.fits' | t }}">
+      {%- for fit in fits -%}
+        <li class="chip">{% render 'icon', name: 'check' %}{{ fit }}</li>
+      {%- endfor -%}
+    </ul>
+  {%- else -%}
+    <p class="product-card__fitment">{{ 'products.fits' | t }} {{ fits | join: ', ' }}</p>
+  {%- endif -%}
+{%- endif -%}

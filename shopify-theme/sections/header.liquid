@@ -1,0 +1,182 @@
+{%- liquid
+  assign menu = section.settings.menu
+  assign logo_style = 'height: ' | append: section.settings.logo_height | append: 'px; width: auto;'
+-%}
+<header class="site-header{% if section.settings.sticky %} site-header--sticky{% endif %}" data-header>
+  <div class="site-header__bar page-width">
+    <button
+      class="site-header__icon site-header__menu-toggle"
+      type="button"
+      aria-label="{{ 'general.menu' | t }}"
+      aria-expanded="false"
+      aria-controls="mobile-menu"
+      data-menu-toggle
+    >
+      <span class="burger" aria-hidden="true"><span></span><span></span></span>
+    </button>
+
+    <a class="site-header__logo" href="{{ routes.root_url }}" aria-label="{{ shop.name | escape }}">
+      {%- if section.settings.logo != blank -%}
+        {{
+          section.settings.logo
+          | image_url: width: 400
+          | image_tag: class: 'site-header__logo-image', loading: 'eager', style: logo_style, alt: shop.name
+        }}
+      {%- else -%}
+        <span class="site-header__wordmark">{{ shop.name }}</span>
+      {%- endif -%}
+    </a>
+
+    <nav class="site-nav" aria-label="Main">
+      <ul class="site-nav__list" role="list">
+        {%- for link in menu.links -%}
+          <li class="site-nav__item">
+            <a
+              class="site-nav__link{% if link.active or link.child_active %} is-active{% endif %}"
+              href="{{ link.url }}"
+              {% if link.links.size > 0 %}
+                data-flyout-trigger="flyout-{{ forloop.index }}"
+                aria-haspopup="true"
+                aria-expanded="false"
+              {% endif %}
+            >
+              {{- link.title -}}
+            </a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+
+    <div class="site-header__actions">
+      <button
+        class="site-header__icon"
+        type="button"
+        aria-label="{{ 'general.search' | t }}"
+        aria-expanded="false"
+        data-flyout-trigger="flyout-search"
+        data-flyout-click
+      >
+        {% render 'icon', name: 'search' %}
+      </button>
+      {%- if shop.customer_accounts_enabled -%}
+        <a class="site-header__icon site-header__account" href="{{ routes.account_url }}" aria-label="{{ 'general.account' | t }}">
+          {% render 'icon', name: 'account' %}
+        </a>
+      {%- endif -%}
+      <a class="site-header__icon site-header__bag" href="{{ routes.cart_url }}" aria-label="{{ 'general.bag' | t }}" data-cart-toggle>
+        {% render 'icon', name: 'bag' %}
+        <span class="site-header__count" data-cart-count{% if cart.item_count == 0 %} hidden{% endif %}>{{ cart.item_count }}</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="flyout" data-flyout>
+    <div class="flyout__inner">
+      {%- for link in menu.links -%}
+        {%- if link.links.size > 0 -%}
+          <div class="flyout__panel page-width" id="flyout-{{ forloop.index }}" data-flyout-panel hidden>
+            <div class="flyout__col flyout__col--primary">
+              <p class="flyout__label">{{ link.title }}</p>
+              <ul role="list">
+                <li style="--i: 0"><a href="{{ link.url }}">Explore all {{ link.title }}</a></li>
+                {%- for child in link.links -%}
+                  <li style="--i: {{ forloop.index }}"><a href="{{ child.url }}">{{ child.title }}</a></li>
+                {%- endfor -%}
+              </ul>
+            </div>
+            {%- for child in link.links -%}
+              {%- if child.links.size > 0 -%}
+                <div class="flyout__col">
+                  <p class="flyout__label">{{ child.title }}</p>
+                  <ul role="list">
+                    {%- for grandchild in child.links -%}
+                      <li style="--i: {{ forloop.index }}"><a href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
+                    {%- endfor -%}
+                  </ul>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <div class="flyout__panel flyout__panel--search page-width" id="flyout-search" data-flyout-panel hidden>
+        <form class="search-form" action="{{ routes.search_url }}" method="get" role="search" data-predictive-form>
+          {% render 'icon', name: 'search' %}
+          <input
+            class="search-form__input"
+            type="search"
+            name="q"
+            placeholder="{{ 'search.placeholder' | t }}"
+            aria-label="{{ 'search.placeholder' | t }}"
+            autocomplete="off"
+            autocorrect="off"
+            autocapitalize="off"
+            spellcheck="false"
+            data-predictive-input
+          >
+          <input type="hidden" name="type" value="product">
+        </form>
+        <div class="search-results" data-predictive-results aria-live="polite"></div>
+        {%- if section.settings.search_menu.links.size > 0 -%}
+          <div class="flyout__col flyout__col--quick" data-predictive-default>
+            <p class="flyout__label">Quick links</p>
+            <ul role="list">
+              {%- for link in section.settings.search_menu.links -%}
+                <li style="--i: {{ forloop.index }}">
+                  <a href="{{ link.url }}">{% render 'icon', name: 'arrow-up-right' %}{{ link.title }}</a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" data-mobile-menu hidden>
+    <nav class="mobile-menu__nav page-width" aria-label="Mobile">
+      <ul role="list">
+        {%- for link in menu.links -%}
+          <li style="--i: {{ forloop.index }}">
+            {%- if link.links.size > 0 -%}
+              <details class="mobile-menu__details">
+                <summary>{{ link.title }}{% render 'icon', name: 'chevron-down' %}</summary>
+                <ul role="list">
+                  <li><a href="{{ link.url }}">Explore all {{ link.title }}</a></li>
+                  {%- for child in link.links -%}
+                    <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+                    {%- for grandchild in child.links -%}
+                      <li class="mobile-menu__sub"><a href="{{ grandchild.url }}">{{ grandchild.title }}</a></li>
+                    {%- endfor -%}
+                  {%- endfor -%}
+                </ul>
+              </details>
+            {%- else -%}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+        {%- if shop.customer_accounts_enabled -%}
+          <li style="--i: {{ menu.links.size | plus: 1 }}">
+            <a href="{{ routes.account_url }}">{{ 'general.account' | t }}</a>
+          </li>
+        {%- endif -%}
+      </ul>
+    </nav>
+  </div>
+</header>
+
+{% schema %}
+{
+  "name": "Header",
+  "class": "section-header",
+  "settings": [
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Leave empty to show your shop name as a wordmark." },
+    { "type": "range", "id": "logo_height", "label": "Logo height", "min": 14, "max": 40, "step": 1, "unit": "px", "default": 20 },
+    { "type": "link_list", "id": "menu", "label": "Menu", "default": "main-menu", "info": "Menu items with nested links open a full-width flyout." },
+    { "type": "link_list", "id": "search_menu", "label": "Search quick links", "default": "footer" },
+    { "type": "checkbox", "id": "sticky", "label": "Stick to top while scrolling", "default": true }
+  ]
+}
+{% endschema %}

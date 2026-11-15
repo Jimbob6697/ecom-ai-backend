@@ -1,0 +1,77 @@
+{
+  "general": {
+    "skip_to_content": "Skip to content",
+    "close": "Close",
+    "menu": "Menu",
+    "search": "Search",
+    "bag": "Bag",
+    "account": "Account",
+    "previous": "Previous",
+    "next": "Next",
+    "continue_shopping": "Continue shopping",
+    "page_title_page": "Page {{ page }}"
+  },
+  "products": {
+    "add_to_bag": "Add to Bag",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable",
+    "from": "From {{ price }}",
+    "sale": "Sale",
+    "new": "New",
+    "fits": "Fits",
+    "quantity": "Quantity",
+    "view": "View"
+  },
+  "cart": {
+    "title": "Your Bag",
+    "empty": "Your bag is empty.",
+    "subtotal": "Subtotal",
+    "checkout": "Check Out",
+    "view_bag": "Review Bag",
+    "remove": "Remove",
+    "note": "Order note",
+    "taxes": "Taxes and delivery calculated at checkout.",
+    "free_shipping_remaining": "You're {{ amount }} away from free delivery.",
+    "free_shipping_reached": "You've unlocked free delivery."
+  },
+  "search": {
+    "placeholder": "Search accessories",
+    "no_results": "No results for “{{ terms }}”.",
+    "results_for": "Results for “{{ terms }}”",
+    "view_all": "View all results"
+  },
+  "collections": {
+    "filter": "Filter",
+    "sort": "Sort by",
+    "clear": "Clear all",
+    "apply": "Apply",
+    "empty": "No products match your filters.",
+    "count": {
+      "one": "{{ count }} product",
+      "other": "{{ count }} products"
+    }
+  },
+  "newsletter": {
+    "label": "Email address",
+    "button": "Sign up",
+    "success": "Thanks — you're on the list."
+  },
+  "contact": {
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send message",
+    "success": "Thanks for getting in touch. We'll reply shortly."
+  },
+  "password": {
+    "enter": "Enter using password",
+    "placeholder": "Password",
+    "submit": "Enter"
+  },
+  "gift_cards": {
+    "title": "Here's your gift card",
+    "balance": "Balance",
+    "expired": "Expired",
+    "shop": "Start shopping"
+  }
+}

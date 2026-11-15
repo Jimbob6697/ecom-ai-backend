@@ -1,0 +1,94 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Voltline",
+    "theme_version": "1.0.0",
+    "theme_author": "In House",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/manual/online-store/themes"
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      { "type": "color", "id": "color_background", "label": "Background", "default": "#ffffff" },
+      { "type": "color", "id": "color_surface", "label": "Alternate background", "default": "#f5f5f7" },
+      { "type": "color", "id": "color_text", "label": "Text", "default": "#1d1d1f" },
+      { "type": "color", "id": "color_muted", "label": "Secondary text", "default": "#6e6e73" },
+      { "type": "color", "id": "color_accent", "label": "Accent (buttons and links)", "default": "#0066f5" },
+      { "type": "color", "id": "color_dark", "label": "Dark section background", "default": "#000000" },
+      { "type": "color", "id": "color_sale", "label": "Sale price", "default": "#bf4800" }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      { "type": "font_picker", "id": "type_heading_font", "label": "Heading font", "default": "inter_n6" },
+      { "type": "font_picker", "id": "type_body_font", "label": "Body font", "default": "inter_n4" },
+      {
+        "type": "checkbox",
+        "id": "type_use_system",
+        "label": "Use the device system font instead",
+        "info": "Fastest option. Shows San Francisco on Apple devices and Segoe UI on Windows.",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Layout and motion",
+    "settings": [
+      { "type": "range", "id": "page_width", "label": "Page width", "min": 980, "max": 1600, "step": 20, "unit": "px", "default": 1260 },
+      { "type": "range", "id": "card_radius", "label": "Card corner radius", "min": 0, "max": 32, "step": 2, "unit": "px", "default": 18 },
+      { "type": "checkbox", "id": "animations_reveal", "label": "Reveal sections on scroll", "default": true },
+      { "type": "checkbox", "id": "animations_page", "label": "Smooth transitions between pages", "default": true },
+      { "type": "checkbox", "id": "animations_hover", "label": "Hover effects on cards", "default": true }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      { "type": "checkbox", "id": "card_show_vendor", "label": "Show vendor", "default": false },
+      { "type": "checkbox", "id": "card_show_fitment", "label": "Show vehicle fitment", "info": "Uses product tags such as “Model 3” or “Model Y”.", "default": true },
+      { "type": "checkbox", "id": "card_second_image", "label": "Show second image on hover", "default": true },
+      {
+        "type": "text",
+        "id": "fitment_tags",
+        "label": "Vehicle tags",
+        "info": "Comma-separated product tags treated as vehicle fitment.",
+        "default": "Model 3,Model Y,Model S,Model X,Cybertruck"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          { "value": "drawer", "label": "Slide-out drawer" },
+          { "value": "page", "label": "Cart page" }
+        ],
+        "default": "drawer"
+      },
+      { "type": "checkbox", "id": "cart_note", "label": "Allow order notes", "default": false },
+      { "type": "range", "id": "free_shipping_threshold", "label": "Free delivery threshold", "info": "In your store currency. Set to 0 to hide the progress bar.", "min": 0, "max": 300, "step": 5, "default": 50 }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      { "type": "text", "id": "social_instagram", "label": "Instagram URL" },
+      { "type": "text", "id": "social_tiktok", "label": "TikTok URL" },
+      { "type": "text", "id": "social_youtube", "label": "YouTube URL" },
+      { "type": "text", "id": "social_x", "label": "X URL" },
+      { "type": "text", "id": "social_facebook", "label": "Facebook URL" }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      { "type": "image_picker", "id": "favicon", "label": "Favicon", "info": "Scaled down to 32 × 32px" }
+    ]
+  }
+]

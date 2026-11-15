@@ -1,0 +1,7 @@
+{
+  "sections": {
+    "main": { "type": "main-cart", "settings": {} },
+    "shelf": { "type": "product-shelf", "settings": { "heading": "Before you go.", "subheading": "Popular with other owners.", "show_view_all": false } }
+  },
+  "order": ["main", "shelf"]
+}

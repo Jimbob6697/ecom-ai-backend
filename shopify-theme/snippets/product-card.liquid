@@ -1,0 +1,62 @@
+{%- comment -%}
+  Product card used in shelves, grids, search and recommendations.
+  Usage: {% render 'product-card', product: product, index: forloop.index, sizes: '...' %}
+  Pass a blank product to render a placeholder card.
+{%- endcomment -%}
+{%- liquid
+  assign card_sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 70vw'
+  assign badge = ''
+  if product != blank
+    assign now_s = 'now' | date: '%s' | plus: 0
+    assign published_s = product.published_at | date: '%s' | plus: 0
+    assign age_days = now_s | minus: published_s | divided_by: 86400
+    if product.available == false
+      assign badge = 'products.sold_out' | t
+    elsif product.compare_at_price > product.price
+      assign badge = 'products.sale' | t
+    elsif age_days < 30
+      assign badge = 'products.new' | t
+    endif
+  endif
+-%}
+<article class="product-card" data-reveal style="--i: {{ index | default: 0 }}">
+  <a class="product-card__link" href="{{ product.url | default: '#' }}">
+    <div class="product-card__media">
+      {%- if product.featured_media -%}
+        {{
+          product.featured_media
+          | image_url: width: 900
+          | image_tag: widths: '300, 450, 600, 900', sizes: card_sizes, loading: 'lazy', class: 'product-card__image', alt: product.featured_media.alt
+        }}
+        {%- if settings.card_second_image and product.media[1] -%}
+          {{
+            product.media[1]
+            | image_url: width: 900
+            | image_tag: widths: '300, 450, 600, 900', sizes: card_sizes, loading: 'lazy', class: 'product-card__image product-card__image--hover', alt: ''
+          }}
+        {%- endif -%}
+      {%- else -%}
+        {% render 'art', index: index %}
+      {%- endif -%}
+    </div>
+    <div class="product-card__info">
+      {%- if badge != blank -%}
+        <span class="badge{% if badge == 'New' %} badge--new{% endif %}">{{ badge }}</span>
+      {%- endif -%}
+      {%- if settings.card_show_vendor and product.vendor != blank -%}
+        <p class="product-card__vendor">{{ product.vendor }}</p>
+      {%- endif -%}
+      <h3 class="product-card__title">{{ product.title | default: 'Your product name' }}</h3>
+      {%- if settings.card_show_fitment and product != blank -%}
+        {% render 'fitment', product: product %}
+      {%- endif -%}
+      <p class="product-card__price">
+        {%- if product != blank -%}
+          {% render 'price', product: product, show_from: true %}
+        {%- else -%}
+          {{ 2900 | money }}
+        {%- endif -%}
+      </p>
+    </div>
+  </a>
+</article>

@@ -1,0 +1,107 @@
+<footer class="site-footer">
+  <div class="page-width">
+    {%- if section.settings.notes != blank -%}
+      <div class="site-footer__notes rte">{{ section.settings.notes }}</div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="site-footer__columns">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign social_links = settings.social_instagram | append: settings.social_tiktok | append: settings.social_youtube | append: settings.social_x | append: settings.social_facebook
+            if block.type == 'social' and social_links == blank
+              unless request.design_mode
+                continue
+              endunless
+            endif
+          -%}
+          <div class="site-footer__column" {{ block.shopify_attributes }}>
+            {%- case block.type -%}
+              {%- when 'menu' -%}
+                {%- assign block_menu = block.settings.menu -%}
+                <h2 class="site-footer__heading">{{ block.settings.heading | default: block_menu.title | escape }}</h2>
+                <ul role="list">
+                  {%- for link in block_menu.links -%}
+                    <li><a href="{{ link.url }}">{{ link.title }}</a></li>
+                  {%- endfor -%}
+                </ul>
+              {%- when 'text' -%}
+                <h2 class="site-footer__heading">{{ block.settings.heading | escape }}</h2>
+                <div class="rte">{{ block.settings.text }}</div>
+              {%- when 'social' -%}
+                <h2 class="site-footer__heading">{{ block.settings.heading | escape }}</h2>
+                <ul role="list">
+                  {%- if settings.social_instagram != blank -%}<li><a href="{{ settings.social_instagram }}" rel="noopener" target="_blank">Instagram</a></li>{%- endif -%}
+                  {%- if settings.social_tiktok != blank -%}<li><a href="{{ settings.social_tiktok }}" rel="noopener" target="_blank">TikTok</a></li>{%- endif -%}
+                  {%- if settings.social_youtube != blank -%}<li><a href="{{ settings.social_youtube }}" rel="noopener" target="_blank">YouTube</a></li>{%- endif -%}
+                  {%- if settings.social_x != blank -%}<li><a href="{{ settings.social_x }}" rel="noopener" target="_blank">X</a></li>{%- endif -%}
+                  {%- if settings.social_facebook != blank -%}<li><a href="{{ settings.social_facebook }}" rel="noopener" target="_blank">Facebook</a></li>{%- endif -%}
+                </ul>
+            {%- endcase -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="site-footer__bottom">
+      <p class="site-footer__copyright">
+        Copyright &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+      </p>
+      <ul class="site-footer__legal" role="list">
+        {%- for policy in shop.policies -%}
+          <li><a href="{{ policy.url }}">{{ policy.title }}</a></li>
+        {%- endfor -%}
+      </ul>
+      {%- if section.settings.show_payment -%}
+        <ul class="site-footer__payment" role="list" aria-label="Payment methods">
+          {%- for type in shop.enabled_payment_types -%}
+            <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</footer>
+
+{% schema %}
+{
+  "name": "Footer",
+  "max_blocks": 5,
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "notes",
+      "label": "Small print",
+      "info": "Shown above the footer links. Keep the trademark notice if you sell accessories for vehicles you don't manufacture.",
+      "default": "<p>We are an independent accessories retailer and are not affiliated with, endorsed by or sponsored by Tesla, Inc. Tesla, Model S, Model 3, Model X, Model Y and Cybertruck are trademarks of Tesla, Inc., used here only to describe vehicle compatibility.</p>"
+    },
+    { "type": "checkbox", "id": "show_payment", "label": "Show payment icons", "default": true }
+  ],
+  "blocks": [
+    {
+      "type": "menu",
+      "name": "Menu",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "info": "Leave empty to use the menu name." },
+        { "type": "link_list", "id": "menu", "label": "Menu", "default": "footer" }
+      ]
+    },
+    {
+      "type": "text",
+      "name": "Text",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "About us" },
+        { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Precision-fit accessories, designed for electric driving.</p>" }
+      ]
+    },
+    {
+      "type": "social",
+      "name": "Social links",
+      "limit": 1,
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Follow" }
+      ]
+    }
+  ]
+}
+{% endschema %}

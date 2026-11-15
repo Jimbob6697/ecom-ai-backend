@@ -1,0 +1,33 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": { "heading": "Shop", "menu": "main-menu" }
+        },
+        "help": {
+          "type": "menu",
+          "settings": { "heading": "Help", "menu": "footer" }
+        },
+        "about": {
+          "type": "text",
+          "settings": {
+            "heading": "About us",
+            "text": "<p>Precision-fit accessories, designed for electric driving.</p>"
+          }
+        },
+        "social": {
+          "type": "social",
+          "settings": { "heading": "Follow" }
+        }
+      },
+      "block_order": ["shop", "help", "about", "social"],
+      "settings": {}
+    }
+  },
+  "order": ["footer"]
+}

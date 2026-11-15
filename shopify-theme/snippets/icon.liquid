@@ -1,0 +1,53 @@
+{%- comment -%}
+  Renders an inline line icon.
+  Usage: {% render 'icon', name: 'bag' %}
+{%- endcomment -%}
+{%- capture attrs -%}
+  class="icon icon--{{ name }}{% if class %} {{ class }}{% endif %}" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"
+{%- endcapture -%}
+{%- case name -%}
+  {%- when 'search' -%}
+    <svg {{ attrs }}><circle cx="10.5" cy="10.5" r="6"/><path d="m15 15 5 5"/></svg>
+  {%- when 'bag' -%}
+    <svg {{ attrs }}><path d="M5.5 8.5h13l-.9 11.2a1.5 1.5 0 0 1-1.5 1.3H7.9a1.5 1.5 0 0 1-1.5-1.3L5.5 8.5Z"/><path d="M9 8.5V7a3 3 0 0 1 6 0v1.5"/></svg>
+  {%- when 'account' -%}
+    <svg {{ attrs }}><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.4 3.6-5 7-5s6.2 1.6 7 5"/></svg>
+  {%- when 'close' -%}
+    <svg {{ attrs }}><path d="m6 6 12 12M18 6 6 18"/></svg>
+  {%- when 'chevron-right' -%}
+    <svg {{ attrs }}><path d="m9 5 7 7-7 7"/></svg>
+  {%- when 'chevron-left' -%}
+    <svg {{ attrs }}><path d="m15 5-7 7 7 7"/></svg>
+  {%- when 'chevron-down' -%}
+    <svg {{ attrs }}><path d="m5 9 7 7 7-7"/></svg>
+  {%- when 'plus' -%}
+    <svg {{ attrs }}><path d="M12 5v14M5 12h14"/></svg>
+  {%- when 'minus' -%}
+    <svg {{ attrs }}><path d="M5 12h14"/></svg>
+  {%- when 'check' -%}
+    <svg {{ attrs }}><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>
+  {%- when 'truck' -%}
+    <svg {{ attrs }}><path d="M2.5 6.5h11v10h-11zM13.5 10h4l3 3v3.5h-7"/><circle cx="7" cy="17.5" r="1.8"/><circle cx="17" cy="17.5" r="1.8"/></svg>
+  {%- when 'return' -%}
+    <svg {{ attrs }}><path d="M4 9h11a5 5 0 0 1 0 10H9"/><path d="M8 5 4 9l4 4"/></svg>
+  {%- when 'shield' -%}
+    <svg {{ attrs }}><path d="M12 3 5 5.5v6c0 4.2 2.8 7.6 7 9.5 4.2-1.9 7-5.3 7-9.5v-6L12 3Z"/><path d="m9 12 2.2 2.2L15.2 10"/></svg>
+  {%- when 'chat' -%}
+    <svg {{ attrs }}><path d="M4 5.5h16v11H10l-4.5 3.5v-3.5H4z"/></svg>
+  {%- when 'bolt' -%}
+    <svg {{ attrs }}><path d="M13 2.5 5 13.5h6l-1 8 8-11h-6l1-8Z"/></svg>
+  {%- when 'ruler' -%}
+    <svg {{ attrs }}><rect x="2.5" y="8" width="19" height="8" rx="1.5"/><path d="M6.5 8v3M10.2 8v4M13.8 8v3M17.5 8v4"/></svg>
+  {%- when 'leaf' -%}
+    <svg {{ attrs }}><path d="M5 19c0-8 5-13 15-14 0 9-4 15-12 15"/><path d="M5 19c2-4 5-7 9-9"/></svg>
+  {%- when 'star' -%}
+    <svg {{ attrs }}><path d="m12 3.5 2.6 5.4 5.9.8-4.3 4.1 1 5.9-5.2-2.8-5.2 2.8 1-5.9-4.3-4.1 5.9-.8L12 3.5Z"/></svg>
+  {%- when 'car' -%}
+    <svg {{ attrs }}><path d="M3 15.5v-2.2c0-.8.5-1.5 1.3-1.7l2.2-.6 2-3.2c.4-.6 1-.9 1.7-.9h4.3c.9 0 1.7.4 2.2 1.1l2 2.7 1.5.4c.8.2 1.3.9 1.3 1.7v2.7"/><path d="M6.5 11h10.8"/><circle cx="7.5" cy="16" r="1.8"/><circle cx="16.5" cy="16" r="1.8"/><path d="M9.3 16h5.4"/></svg>
+  {%- when 'filter' -%}
+    <svg {{ attrs }}><path d="M4 7h16M7 12h10M10 17h4"/></svg>
+  {%- when 'arrow-up-right' -%}
+    <svg {{ attrs }}><path d="M7 17 17 7M9 7h8v8"/></svg>
+  {%- else -%}
+    <svg {{ attrs }}><circle cx="12" cy="12" r="8"/></svg>
+{%- endcase -%}

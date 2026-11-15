@@ -1,0 +1,27 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "blocks": {
+        "delivery": { "type": "perk", "settings": { "icon": "truck", "title": "Free delivery", "text": "On UK orders over £50. Dispatched same day before 2pm." } },
+        "returns": { "type": "perk", "settings": { "icon": "return", "title": "Free 30-day returns", "text": "Not the right fit? Send it back on us." } },
+        "fit": { "type": "perk", "settings": { "icon": "shield", "title": "Fit guarantee", "text": "Made to measure for your model, or your money back." } },
+        "shipping": { "type": "collapsible", "settings": { "heading": "Delivery and returns", "text": "<p>Orders placed before 2pm ship the same working day. Returns are free within 30 days.</p>" } }
+      },
+      "block_order": ["delivery", "returns", "fit", "shipping"],
+      "settings": {}
+    },
+    "recommendations": { "type": "product-recommendations", "settings": {} },
+    "props": {
+      "type": "value-props",
+      "blocks": {
+        "a": { "type": "prop", "settings": { "icon": "truck", "title": "Free delivery", "text": "On UK orders over £50." } },
+        "b": { "type": "prop", "settings": { "icon": "return", "title": "30-day returns", "text": "Changed your mind? Send it back." } },
+        "c": { "type": "prop", "settings": { "icon": "chat", "title": "Expert help", "text": "Real owners, real answers." } }
+      },
+      "block_order": ["a", "b", "c"],
+      "settings": {}
+    }
+  },
+  "order": ["main", "recommendations", "props"]
+}

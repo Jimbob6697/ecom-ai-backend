@@ -1,0 +1,43 @@
+<section class="section rich-text rich-text--{{ section.settings.align }}{% if section.settings.surface %} section--surface{% endif %}">
+  <div class="page-width page-width--narrow">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if section.settings.heading != blank -%}
+      <h2 class="rich-text__heading" data-reveal>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- if section.settings.text != blank -%}
+      <div class="rich-text__text rte" data-reveal>{{ section.settings.text }}</div>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <p data-reveal>
+        <a class="button" href="{{ section.settings.button_link | default: routes.all_products_collection_url }}">{{ section.settings.button_label | escape }}</a>
+      </p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Rich text",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Designed around the car." },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>Use this space to tell your story, explain a product range or share fitting advice.</p>" },
+    { "type": "text", "id": "button_label", "label": "Button label" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    {
+      "type": "select",
+      "id": "align",
+      "label": "Alignment",
+      "options": [
+        { "value": "center", "label": "Centre" },
+        { "value": "left", "label": "Left" }
+      ],
+      "default": "center"
+    },
+    { "type": "checkbox", "id": "surface", "label": "Grey background", "default": false }
+  ],
+  "presets": [{ "name": "Rich text" }]
+}
+{% endschema %}

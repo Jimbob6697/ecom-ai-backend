@@ -4,7 +4,8 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "node server.js",
+    "theme:zip": "mkdir -p dist && rm -f dist/voltline-theme.zip && cd shopify-theme && zip -rq ../dist/voltline-theme.zip assets config layout locales sections snippets templates"
   },
   "author": "InHouseYork",
   "license": "MIT",
@@ -15,6 +16,6 @@
     "express": "^4.18.2",
     "nodemailer": "^6.9.3",
     "openai": "^4.8.0",
-    "dotenv": "^16.3.1"  
+    "dotenv": "^16.3.1"
   }
 }

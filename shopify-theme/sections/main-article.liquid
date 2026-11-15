@@ -1,0 +1,30 @@
+<article class="article">
+  <header class="page-hero">
+    <div class="page-width page-width--narrow page-hero__content">
+      <p class="eyebrow" data-hero-line style="--i: 0">{{ article.published_at | date: '%-d %B %Y' }}</p>
+      <h1 class="page-hero__title" data-hero-line style="--i: 1">{{ article.title }}</h1>
+    </div>
+  </header>
+  {%- if article.image -%}
+    <div class="page-width article__image" data-reveal="scale">
+      {{ article.image | image_url: width: 2400 | image_tag: widths: '750, 1100, 1500, 2000, 2400', sizes: '(min-width: 1260px) 1200px, 100vw', loading: 'eager', alt: article.image.alt }}
+    </div>
+  {%- endif -%}
+  <section class="section section--tight">
+    <div class="page-width page-width--narrow rte" data-reveal>
+      {{ article.content }}
+    </div>
+    <p class="page-width page-width--narrow article__back">
+      <a class="link-arrow link-arrow--back" href="{{ blog.url }}">Back to {{ blog.title }}</a>
+    </p>
+  </section>
+</article>
+<script type="application/ld+json">
+  {{ article | structured_data }}
+</script>
+
+{% schema %}
+{
+  "name": "Article"
+}
+{% endschema %}
