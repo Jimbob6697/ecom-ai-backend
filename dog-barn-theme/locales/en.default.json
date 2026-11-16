@@ -15,7 +15,7 @@
     "add_to_bag": "Add to Bag",
     "sold_out": "Sold out",
     "unavailable": "Unavailable",
-    "from": "From {{ price }}",
+    "from_html": "From {{ price }}",
     "sale": "Sale",
     "new": "New",
     "fits": "Fits",
@@ -31,7 +31,7 @@
     "remove": "Remove",
     "note": "Order note",
     "taxes": "Delivery calculated at checkout. *Free UK delivery applies to dog accessories only.",
-    "free_shipping_remaining": "Spend {{ amount }} more for free UK delivery*",
+    "free_shipping_remaining_html": "Spend {{ amount }} more for free UK delivery*",
     "free_shipping_reached": "You've unlocked free UK delivery*"
   },
   "search": {

@@ -11,7 +11,7 @@
     assign price = product.price_min
     assign compare = 0
     assign min_price = price | money
-    assign money_price = 'products.from' | t: price: min_price
+    assign money_price = 'products.from_html' | t: price: min_price
   endif
 -%}
 <span class="price{% if compare > price %} price--sale{% endif %}">

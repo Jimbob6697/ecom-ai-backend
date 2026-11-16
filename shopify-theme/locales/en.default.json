@@ -15,7 +15,7 @@
     "add_to_bag": "Add to Bag",
     "sold_out": "Sold out",
     "unavailable": "Unavailable",
-    "from": "From {{ price }}",
+    "from_html": "From {{ price }}",
     "sale": "Sale",
     "new": "New",
     "fits": "Fits",
@@ -31,7 +31,7 @@
     "remove": "Remove",
     "note": "Order note",
     "taxes": "Taxes and delivery calculated at checkout.",
-    "free_shipping_remaining": "You're {{ amount }} away from free delivery.",
+    "free_shipping_remaining_html": "You're {{ amount }} away from free delivery.",
     "free_shipping_reached": "You've unlocked free delivery."
   },
   "search": {

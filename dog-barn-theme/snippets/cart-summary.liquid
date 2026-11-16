@@ -15,7 +15,7 @@
     <p>
       {%- if remaining > 0 -%}
         {%- assign remaining_money = remaining | money -%}
-        {{ 'cart.free_shipping_remaining' | t: amount: remaining_money }}
+        {{ 'cart.free_shipping_remaining_html' | t: amount: remaining_money }}
       {%- else -%}
         {% render 'icon', name: 'check' %}
         {{ 'cart.free_shipping_reached' | t }}
