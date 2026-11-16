@@ -1,25 +1,50 @@
-<section class="section award award--{{ section.settings.scheme }}">
+{%- liquid
+  assign s = section.settings
+  assign digits = s.year | split: ''
+-%}
+<section class="section award award--{{ s.scheme }}">
   <div class="page-width page-width--narrow award__inner">
     <div class="award__emblem" data-reveal="scale">
-      {%- if section.settings.image != blank -%}
-        {{ section.settings.image | image_url: width: 400 | image_tag: loading: 'lazy', alt: section.settings.image.alt }}
+      {%- if s.image != blank -%}
+        {{ s.image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'award__image', alt: s.image.alt }}
       {%- else -%}
-        <span class="award__laurel">
-          {% render 'icon', name: 'laurel' %}
-          <span class="award__year">{{ section.settings.year | escape }}</span>
-          <span class="award__status">{{ section.settings.status | escape }}</span>
+        <span class="award__seal">
+          <svg class="award__rings" viewBox="0 0 200 200" aria-hidden="true" focusable="false">
+            <defs>
+              <path id="award-path-{{ section.id }}" d="M100 100m-80 0a80 80 0 1 1 160 0a80 80 0 1 1-160 0"/>
+            </defs>
+            <circle class="award__ring" cx="100" cy="100" r="97" pathLength="1"/>
+            <circle class="award__ring award__ring--inner" cx="100" cy="100" r="64" pathLength="1"/>
+            {%- if s.ring_text != blank -%}
+              <g class="award__orbit">
+                <text class="award__ring-text">
+                  <textPath href="#award-path-{{ section.id }}" textLength="494" lengthAdjust="spacing">{{ s.ring_text | escape }}</textPath>
+                </text>
+              </g>
+            {%- endif -%}
+          </svg>
+          <span class="award__centre">
+            <span class="award__year" aria-label="{{ s.year | escape }}">
+              {%- for digit in digits -%}
+                <span class="award__digit" style="--d: {{ forloop.index0 }}" aria-hidden="true"><span>{{ digit }}</span></span>
+              {%- endfor -%}
+            </span>
+            {%- if s.status != blank -%}
+              <span class="award__status">{{ s.status | escape }}</span>
+            {%- endif -%}
+          </span>
         </span>
       {%- endif -%}
     </div>
-    {%- if section.settings.eyebrow != blank -%}
-      <p class="eyebrow" data-reveal style="--i: 1">{{ section.settings.eyebrow | escape }}</p>
+    {%- if s.eyebrow != blank -%}
+      <p class="eyebrow" data-reveal style="--i: 3">{{ s.eyebrow | escape }}</p>
     {%- endif -%}
-    <h2 class="award__heading" data-reveal data-split>{{ section.settings.heading | escape }}</h2>
-    {%- if section.settings.text != blank -%}
-      <div class="award__text rte" data-reveal style="--i: 3">{{ section.settings.text }}</div>
+    <h2 class="award__heading" data-reveal data-split style="--i: 4">{{ s.heading | escape }}</h2>
+    {%- if s.text != blank -%}
+      <div class="award__text rte" data-reveal style="--i: 6">{{ s.text }}</div>
     {%- endif -%}
-    {%- if section.settings.link_label != blank and section.settings.link != blank -%}
-      <a class="link-arrow" href="{{ section.settings.link }}" data-reveal style="--i: 4">{{ section.settings.link_label | escape }}</a>
+    {%- if s.link_label != blank and s.link != blank -%}
+      <a class="link-arrow" href="{{ s.link }}" data-reveal style="--i: 7">{{ s.link_label | escape }}</a>
     {%- endif -%}
   </div>
 </section>
@@ -28,9 +53,11 @@
 {
   "name": "Award",
   "settings": [
-    { "type": "image_picker", "id": "image", "label": "Award logo", "info": "Leave empty to show a laurel emblem with the year below." },
-    { "type": "text", "id": "year", "label": "Emblem year", "default": "2026" },
-    { "type": "text", "id": "status", "label": "Emblem label", "default": "Finalist" },
+    { "type": "paragraph", "content": "Shows an animated seal: the rings draw in, the award name turns slowly around the edge and the year rolls into place. Upload an award logo to show that instead." },
+    { "type": "image_picker", "id": "image", "label": "Award logo", "info": "Optional. Replaces the animated seal." },
+    { "type": "text", "id": "year", "label": "Seal year", "default": "2026" },
+    { "type": "text", "id": "status", "label": "Seal label", "default": "Finalist" },
+    { "type": "text", "id": "ring_text", "label": "Text around the seal", "info": "Keep it to around 45 characters so it reads comfortably round the circle.", "default": "The UK Small Business Awards · Best Pet Business ·" },
     { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "The UK Small Business Awards" },
     { "type": "text", "id": "heading", "label": "Heading", "default": "We're officially a 2026 finalist" },
     { "type": "richtext", "id": "text", "label": "Text", "default": "<p>We're incredibly proud to announce that Dog Barn Yorkshire has been shortlisted for <strong>Best Pet Business</strong> at The UK Small Business Awards 2026.</p>" },

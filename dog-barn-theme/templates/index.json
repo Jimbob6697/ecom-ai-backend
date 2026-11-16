@@ -231,10 +231,11 @@
       "settings": {
         "year": "2026",
         "status": "Finalist",
-        "eyebrow": "Award-nominated",
+        "eyebrow": "The UK Small Business Awards 2026",
         "heading": "Finalist, Best Pet Business",
-        "text": "<p>Shortlisted at The UK Small Business Awards 2026.</p>",
-        "scheme": "accent"
+        "text": "<p>We're incredibly proud to announce that Dog Barn Yorkshire has been shortlisted for <strong>Best Pet Business</strong> at The UK Small Business Awards 2026.</p>",
+        "scheme": "accent",
+        "ring_text": "The UK Small Business Awards · Best Pet Business ·"
       }
     },
     "colourways": {

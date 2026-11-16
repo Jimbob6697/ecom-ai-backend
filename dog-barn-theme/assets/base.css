@@ -6049,3 +6049,228 @@ h4 {
 .js .has-reveal .ugc__header .section-heading[data-reveal] {
   background: none;
 }
+
+/* ==========================================================================
+   16. Award: an animated seal
+   The rings draw in, the award name turns slowly round the edge, the year
+   rolls into place and a soft sheen crosses the band once.
+   ========================================================================== */
+.award {
+  position: relative;
+  overflow: hidden;
+  padding-block: clamp(56px, 6vw, 96px);
+}
+
+.award__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.award__emblem {
+  margin-bottom: clamp(24px, 2.6vw, 36px);
+}
+
+.award__image {
+  width: auto;
+  max-width: 240px;
+  max-height: 170px;
+}
+
+.award__seal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: clamp(168px, 16vw, 216px);
+  aspect-ratio: 1;
+}
+
+.award__rings {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.award__ring {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.1;
+  /* Slightly over one full length so the circle always closes. */
+  stroke-dasharray: 1.02;
+  stroke-dashoffset: 0;
+  transform: rotate(-90deg);
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+}
+
+.award__ring--inner {
+  opacity: 0.55;
+}
+
+.award__orbit {
+  transform-box: view-box;
+  transform-origin: 50% 50%;
+  animation: spin 36s linear infinite;
+}
+
+.award__ring-text {
+  fill: currentColor;
+  font-family: var(--font-label);
+  font-size: 8.6px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.award__centre {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.award__year {
+  display: flex;
+  font-family: var(--font-heading);
+  font-size: clamp(30px, 3vw, 40px);
+  font-weight: var(--font-heading-weight);
+  line-height: 1;
+  letter-spacing: 0.02em;
+}
+
+.award__digit {
+  display: inline-block;
+  overflow: hidden;
+  padding-block: 0.06em;
+}
+
+.award__digit > span {
+  display: inline-block;
+}
+
+.award__status {
+  margin: 0;
+  font-family: var(--font-label);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.award__heading {
+  font-size: clamp(26px, 3vw, 44px);
+}
+
+.award__text {
+  max-width: 36em;
+  margin-top: 14px;
+  font-size: 14px;
+}
+
+.award .link-arrow {
+  margin-top: 22px;
+}
+
+/* Entrance, played once when the seal scrolls into view. */
+.js .has-reveal .award__emblem[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+.js .has-reveal .award__emblem .award__ring {
+  stroke-dashoffset: 1.02;
+  transition: stroke-dashoffset 1.8s var(--ease-out);
+}
+
+.js .has-reveal .award__emblem .award__ring--inner {
+  transition-duration: 1.5s;
+  transition-delay: 0.35s;
+}
+
+.js .has-reveal .award__emblem.is-visible .award__ring {
+  stroke-dashoffset: 0;
+}
+
+.js .has-reveal .award__emblem .award__ring-text {
+  opacity: 0;
+  transition: opacity 1.2s var(--ease) 0.9s;
+}
+
+.js .has-reveal .award__emblem.is-visible .award__ring-text {
+  opacity: 1;
+}
+
+.js .has-reveal .award__emblem .award__digit > span {
+  transform: translateY(115%);
+  transition: transform 1s var(--ease-out);
+  transition-delay: calc(var(--d, 0) * 110ms + 0.7s);
+}
+
+.js .has-reveal .award__emblem.is-visible .award__digit > span {
+  transform: none;
+}
+
+.js .has-reveal .award__emblem .award__status {
+  opacity: 0;
+  letter-spacing: 0.4em;
+  transition: opacity 1s var(--ease) 1.3s, letter-spacing 1.4s var(--ease-out) 1.3s;
+}
+
+.js .has-reveal .award__emblem.is-visible .award__status {
+  opacity: 1;
+  letter-spacing: 0.14em;
+}
+
+.js .has-reveal .award__emblem .award__image {
+  opacity: 0;
+  transform: scale(0.9);
+  transition: opacity 1s var(--ease), transform 1.4s var(--ease-out);
+}
+
+.js .has-reveal .award__emblem.is-visible .award__image {
+  opacity: 1;
+  transform: none;
+}
+
+/* A single soft sheen across the band. */
+.award::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 38%, rgba(255, 255, 255, 0.16) 50%, transparent 62%);
+  transform: translateX(-100%);
+  pointer-events: none;
+}
+
+.js .has-reveal .award:has(.award__emblem.is-visible)::after {
+  animation: award-sheen 2.4s var(--ease-out) 0.5s both;
+}
+
+@keyframes award-sheen {
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* The seal lifts slightly and the text turns a little faster on hover. */
+@media (hover: hover) {
+  .award__seal {
+    transition: transform 0.8s var(--ease-out);
+  }
+
+  .award__seal:hover {
+    transform: scale(1.04);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .award__orbit {
+    animation: none;
+  }
+
+  .award::after {
+    display: none;
+  }
+}
