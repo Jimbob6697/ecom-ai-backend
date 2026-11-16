@@ -33,6 +33,22 @@ The default content points at things that already exist in the Dog Barn Yorkshir
 | Award logo | Theme editor → Award | Shows a simple ringed emblem by default. Upload the official finalist badge if you have permission to use it. |
 | Filters | Shopify Search & Discovery app | Enables the filter panel on collection pages. |
 
+## Collections page
+
+The page at `/collections` shows eight category tiles. Fleeces, Rain Jackets and Harnesses open in place to show their sub-collections; the others link straight to their collection.
+
+| Tile | Opens to |
+| --- | --- |
+| Fleeces | 2 Leg Zip Up Fleeces, 4 Leg Zip Fleeces, 2 Legged Fleeces (plus “Shop all Fleeces”) |
+| Sherpa Fleeces | its collection |
+| Rain Jackets | Lightweight, Fleece Lined |
+| Harnesses | Adjustable Harnesses, Adventurer Harnesses |
+| Drying Robes, Snoods, Daxie Collection, Leather Collection | their collections |
+
+To edit it, open Customize and choose **Collections list** from the page picker at the top. Each tile is a **Category** block. A category becomes expandable when **Sub-collection** blocks sit directly beneath it in the list; drag blocks to reorder or regroup. Tiles use the collection's own image, or its first product photo, unless you pick one.
+
+A link such as `/collections#fleeces` opens the page with that category already expanded — useful for menu links. The part after `#` is the category title in lower case with hyphens (`#rain-jackets`, `#harnesses`).
+
 ## What's in it
 
 **Trust** — rotating announcement bar with review score, a “Why Dog Barn” trust band, award band, product-page trust badges, secure checkout and payment icons, free-delivery progress in the bag.

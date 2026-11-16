@@ -868,6 +868,68 @@
   }
 
   /* ---------------------------------------------------------------------
+     Collections page: category tiles open a panel of sub-collections
+     --------------------------------------------------------------------- */
+  function initDirectory(root = document) {
+    $$('[data-directory]', root).forEach((directory) => {
+      if (directory.dataset.ready) return;
+      directory.dataset.ready = 'true';
+      const toggles = $$('[data-directory-toggle]', directory);
+
+      const setOpen = (toggle, open) => {
+        const panel = document.getElementById(toggle.getAttribute('aria-controls'));
+        if (!panel) return;
+        toggle.setAttribute('aria-expanded', String(open));
+        panel.classList.toggle('is-open', open);
+      };
+
+      const openOnly = (target, scroll = true) => {
+        toggles.forEach((toggle) => setOpen(toggle, toggle === target));
+        if (!target || !scroll) return;
+        const panel = document.getElementById(target.getAttribute('aria-controls'));
+        // Bring the panel into view if it opened below the fold.
+        requestAnimationFrame(() => {
+          const rect = panel.getBoundingClientRect();
+          if (rect.bottom > window.innerHeight || rect.top < 0) {
+            panel.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+          }
+        });
+      };
+
+      toggles.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+          const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+          openOnly(isOpen ? null : toggle);
+        });
+      });
+
+      directory.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        const current = toggles.find((toggle) => toggle.getAttribute('aria-expanded') === 'true');
+        if (!current) return;
+        openOnly(null);
+        current.focus();
+      });
+
+      // A link such as /collections#fleeces opens that category straight away.
+      const openFromHash = () => {
+        const id = decodeURIComponent(window.location.hash.slice(1));
+        const target = id && toggles.find((toggle) => toggle.id === id);
+        if (target) openOnly(target);
+      };
+      openFromHash();
+      window.addEventListener('hashchange', openFromHash);
+
+      // Theme editor: selecting a sub-collection block reveals its panel.
+      directory.addEventListener('shopify:block:select', (event) => {
+        const panel = event.target.closest('[data-directory-panel]');
+        if (!panel) return;
+        openOnly(toggles.find((toggle) => toggle.getAttribute('aria-controls') === panel.id), false);
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------------
      Collection filters
      --------------------------------------------------------------------- */
   function initFilters(root = document) {
@@ -907,6 +969,7 @@
     initProduct(root);
     initRecommendations(root);
     initFilters(root);
+    initDirectory(root);
     initUgc(root);
     collectScrollTargets();
     requestScrollUpdate();

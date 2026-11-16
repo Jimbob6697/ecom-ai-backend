@@ -1,4 +1,47 @@
 {
-  "sections": { "main": { "type": "main-list-collections", "settings": {} } },
+  "sections": {
+    "main": {
+      "type": "collection-directory",
+      "blocks": {
+        "fleeces": { "type": "group", "settings": { "title": "Fleeces", "collection": "fleeces" } },
+        "fleeces-2-zip": { "type": "sub", "settings": { "title": "2 Leg Zip Up Fleeces", "collection": "2-leg-fleece-jumper-zip-up" } },
+        "fleeces-4-zip": { "type": "sub", "settings": { "title": "4 Leg Zip Fleeces", "collection": "4-leg-zip-up-fleece" } },
+        "fleeces-2": { "type": "sub", "settings": { "title": "2 Legged Fleeces", "collection": "fleece-jumper-2-legged" } },
+        "sherpa": { "type": "group", "settings": { "title": "Sherpa Fleeces", "collection": "sherpa-jacket" } },
+        "rain": { "type": "group", "settings": { "title": "Rain Jackets" } },
+        "rain-light": { "type": "sub", "settings": { "title": "Lightweight", "collection": "rain-jacket" } },
+        "rain-lined": { "type": "sub", "settings": { "title": "Fleece Lined", "collection": "winter-rain-jacket-fleece-lined" } },
+        "harnesses": { "type": "group", "settings": { "title": "Harnesses" } },
+        "harness-adjustable": { "type": "sub", "settings": { "title": "Adjustable Harnesses", "collection": "harness" } },
+        "harness-adventurer": { "type": "sub", "settings": { "title": "Adventurer Harnesses", "collection": "adventurer-harness" } },
+        "robes": { "type": "group", "settings": { "title": "Drying Robes", "collection": "drying-robes" } },
+        "snoods": { "type": "group", "settings": { "title": "Snoods", "collection": "fleeced-snood" } },
+        "daxie": { "type": "group", "settings": { "title": "Daxie Collection", "collection": "dachshund-collections" } },
+        "leather": { "type": "group", "settings": { "title": "Leather Collection", "collection": "leather-collection" } }
+      },
+      "block_order": [
+        "fleeces",
+        "fleeces-2-zip",
+        "fleeces-4-zip",
+        "fleeces-2",
+        "sherpa",
+        "rain",
+        "rain-light",
+        "rain-lined",
+        "harnesses",
+        "harness-adjustable",
+        "harness-adventurer",
+        "robes",
+        "snoods",
+        "daxie",
+        "leather"
+      ],
+      "settings": {
+        "heading": "Collections",
+        "text": "Luxury country wear for the stylish and adventurous pup.",
+        "columns": "4"
+      }
+    }
+  },
   "order": ["main"]
 }

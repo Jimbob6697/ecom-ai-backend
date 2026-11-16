@@ -1,0 +1,185 @@
+{%- comment -%}
+  Collections page. "Category" blocks are the top-level tiles. Any
+  "Sub-collection" blocks placed directly beneath a category belong to it:
+  that category's tile then opens a panel of its sub-collections instead of
+  linking straight through.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign group_index = 0
+-%}
+<section class="directory" data-directory>
+  {%- if s.heading != blank or s.text != blank -%}
+    <header class="page-width directory__header">
+      {%- if s.heading != blank -%}
+        <h1 class="page-hero__title" data-hero-line style="--i: 0">{{ s.heading | escape }}</h1>
+      {%- endif -%}
+      {%- if s.text != blank -%}
+        <p class="page-hero__text" data-hero-line style="--i: 1">{{ s.text | escape }}</p>
+      {%- endif -%}
+    </header>
+  {%- endif -%}
+
+  <div class="directory__grid directory__grid--{{ s.columns }}">
+    {%- for block in section.blocks -%}
+      {%- if block.type != 'group' -%}
+        {%- continue -%}
+      {%- endif -%}
+      {%- liquid
+        assign b = block.settings
+        assign block_collection = b.collection
+        assign group_index = group_index | plus: 1
+
+        comment
+          Count the sub-collection blocks that follow this category, up to the next category.
+        endcomment
+        assign sub_count = 0
+        assign counting = true
+        for candidate in section.blocks offset: forloop.index
+          if candidate.type != 'sub'
+            assign counting = false
+          endif
+          if counting
+            assign sub_count = sub_count | plus: 1
+          endif
+        endfor
+
+        assign next_block = section.blocks[forloop.index]
+        assign next_collection = next_block.settings.collection
+        assign group_title = b.title | default: block_collection.title | default: 'Category'
+        assign group_url = b.link | default: block_collection.url
+        assign group_image = b.image | default: block_collection.featured_image | default: block_collection.products.first.featured_media
+        if group_image == blank and sub_count > 0
+          assign group_image = next_block.settings.image | default: next_collection.featured_image | default: next_collection.products.first.featured_media
+        endif
+        assign group_handle = group_title | handleize
+        assign panel_id = 'directory-' | append: section.id | append: '-' | append: group_handle
+      -%}
+      {%- capture tile_inner -%}
+        <span class="directory-tile__media">
+          {%- if group_image != blank -%}
+            {{ group_image | image_url: width: 1400 | image_tag: widths: '400, 600, 800, 1100, 1400', sizes: '(min-width: 990px) 25vw, 50vw', loading: 'lazy', alt: '' }}
+          {%- else -%}
+            {% render 'art', index: group_index, icon: 'paw' %}
+          {%- endif -%}
+        </span>
+        <span class="directory-tile__label">
+          <span class="directory-tile__title">{{ group_title | escape }}</span>
+          {%- if sub_count > 0 -%}
+            <span class="directory-tile__meta">{{ sub_count }} styles{% render 'icon', name: 'plus' %}</span>
+          {%- endif -%}
+        </span>
+      {%- endcapture -%}
+
+      {%- if sub_count > 0 -%}
+        <button
+          class="directory-tile"
+          type="button"
+          id="{{ group_handle }}"
+          aria-expanded="false"
+          aria-controls="{{ panel_id }}"
+          data-directory-toggle
+          data-reveal="fade"
+          {{ block.shopify_attributes }}
+        >
+          {{ tile_inner }}
+        </button>
+        <div class="directory__panel" id="{{ panel_id }}" data-directory-panel>
+          <div class="page-width directory__panel-inner">
+            <div class="directory__panel-header">
+              <h2 class="directory__panel-title">{{ group_title | escape }}</h2>
+              {%- if group_url != blank -%}
+                <a class="link-arrow" href="{{ group_url }}">Shop all {{ group_title | escape }}</a>
+              {%- endif -%}
+            </div>
+            <ul class="directory__subs" role="list">
+              {%- for sub in section.blocks offset: forloop.index limit: sub_count -%}
+                {%- liquid
+                  assign sub_collection = sub.settings.collection
+                  assign sub_title = sub.settings.title | default: sub_collection.title | default: 'Collection'
+                  assign sub_image = sub.settings.image | default: sub_collection.featured_image | default: sub_collection.products.first.featured_media
+                -%}
+                <li style="--i: {{ forloop.index0 | modulo: 4 }}" {{ sub.shopify_attributes }}>
+                  <a class="directory-sub" href="{{ sub.settings.link | default: sub_collection.url | default: routes.collections_url }}">
+                    <span class="directory-sub__media">
+                      {%- if sub_image != blank -%}
+                        {{ sub_image | image_url: width: 1000 | image_tag: widths: '300, 500, 700, 1000', sizes: '(min-width: 750px) 25vw, 50vw', loading: 'lazy', alt: '' }}
+                      {%- else -%}
+                        {% render 'art', index: forloop.index, icon: 'paw' %}
+                      {%- endif -%}
+                    </span>
+                    <span class="directory-sub__title">{{ sub_title | escape }}</span>
+                    {%- if sub.settings.caption != blank -%}
+                      <span class="directory-sub__caption">{{ sub.settings.caption | escape }}</span>
+                    {%- endif -%}
+                  </a>
+                </li>
+              {%- endfor -%}
+            </ul>
+          </div>
+        </div>
+      {%- else -%}
+        <a
+          class="directory-tile"
+          href="{{ group_url | default: routes.collections_url }}"
+          data-reveal="fade"
+          {{ block.shopify_attributes }}
+        >
+          {{ tile_inner }}
+        </a>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Collections page",
+  "max_blocks": 50,
+  "settings": [
+    { "type": "paragraph", "content": "Add a Category for each tile. To give a category sub-collections, add Sub-collection blocks directly beneath it: its tile will then open to show them." },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Collections" },
+    { "type": "text", "id": "text", "label": "Text" },
+    {
+      "type": "select",
+      "id": "columns",
+      "label": "Tiles per row on desktop",
+      "options": [
+        { "value": "2", "label": "2" },
+        { "value": "3", "label": "3" },
+        { "value": "4", "label": "4" }
+      ],
+      "default": "4"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "group",
+      "name": "Category",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "info": "Leave empty to use the collection name." },
+        { "type": "collection", "id": "collection", "label": "Collection", "info": "Where the tile links. For a category with sub-collections this is optional and adds a “Shop all” link." },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Leave empty to use the collection image or its first product photo." },
+        { "type": "url", "id": "link", "label": "Link", "info": "Overrides the collection link." }
+      ]
+    },
+    {
+      "type": "sub",
+      "name": "Sub-collection",
+      "settings": [
+        { "type": "collection", "id": "collection", "label": "Collection" },
+        { "type": "text", "id": "title", "label": "Title", "info": "Leave empty to use the collection name." },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "Leave empty to use the collection image or its first product photo." },
+        { "type": "url", "id": "link", "label": "Link", "info": "Overrides the collection link." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collections page",
+      "blocks": [{ "type": "group" }, { "type": "sub" }, { "type": "sub" }, { "type": "group" }, { "type": "group" }, { "type": "group" }]
+    }
+  ]
+}
+{% endschema %}

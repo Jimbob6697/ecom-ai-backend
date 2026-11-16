@@ -5491,3 +5491,229 @@ h4 {
 .trust-bar--dark {
   --color-brass: var(--color-on-dark);
 }
+
+/* ==========================================================================
+   13. Collections page: category tiles that open to show sub-collections
+   ========================================================================== */
+.directory__header {
+  padding-block: clamp(36px, 4vw, 60px) clamp(22px, 2.6vw, 36px);
+  text-align: center;
+}
+
+.directory__header .page-hero__title,
+.directory__header .page-hero__text {
+  max-width: none;
+  margin-inline: auto;
+}
+
+/* Dense flow lets an open panel take a full row directly beneath its tile's
+   row while the remaining tiles keep their places. */
+.directory__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-auto-flow: row dense;
+}
+
+@media (min-width: 990px) {
+  .directory__grid--3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .directory__grid--4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.directory-tile {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1 / 1.14;
+  overflow: hidden;
+  isolation: isolate;
+  color: #fff;
+  text-align: center;
+  cursor: pointer;
+}
+
+.directory-tile__media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--color-surface);
+}
+
+.directory-tile__media::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
+  transition: background-color 0.6s var(--ease);
+}
+
+.directory-tile__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.8s var(--ease-out);
+}
+
+.directory-tile__label {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 16px;
+}
+
+.directory-tile__title {
+  padding-bottom: 4px;
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 1px;
+  font-family: var(--font-label);
+  font-size: clamp(11px, 1.05vw, 15px);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background-size 0.5s var(--ease-out);
+}
+
+.directory-tile__meta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  letter-spacing: 0.02em;
+}
+
+.directory-tile__meta .icon {
+  width: 12px;
+  height: 12px;
+  transition: transform 0.5s var(--ease-out);
+}
+
+.directory-tile[aria-expanded='true'] .directory-tile__media::after {
+  background: rgba(var(--color-text-rgb), 0.62);
+}
+
+.directory-tile[aria-expanded='true'] .directory-tile__title {
+  background-size: 100% 1px;
+}
+
+.directory-tile[aria-expanded='true'] .directory-tile__meta .icon {
+  transform: rotate(45deg);
+}
+
+@media (hover: hover) {
+  .has-hover-fx .directory-tile:hover .directory-tile__media img {
+    transform: scale(1.05);
+  }
+
+  .directory-tile:hover .directory-tile__title {
+    background-size: 100% 1px;
+  }
+
+  .has-hover-fx .directory-sub:hover img {
+    transform: scale(1.04);
+  }
+
+  .directory-sub:hover .directory-sub__title {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+  }
+}
+
+.directory__panel {
+  grid-column: 1 / -1;
+  background: var(--color-surface);
+}
+
+/* Without JavaScript every panel stays open, so nothing is unreachable. */
+.js .directory__panel:not(.is-open) {
+  display: none;
+}
+
+.js .directory__panel.is-open {
+  animation: directory-open 0.65s var(--ease-out) both;
+}
+
+@keyframes directory-open {
+  from {
+    opacity: 0;
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    opacity: 1;
+    clip-path: inset(0);
+  }
+}
+
+.directory__panel-inner {
+  padding-block: clamp(28px, 3.4vw, 52px);
+}
+
+.directory__panel-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 10px 24px;
+  margin-bottom: clamp(18px, 2vw, 28px);
+}
+
+.directory__panel-title {
+  font-size: clamp(22px, 2.2vw, 32px);
+}
+
+.directory__subs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 24px 16px;
+}
+
+@media (min-width: 750px) {
+  .directory__subs {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+  }
+}
+
+.js .directory__panel.is-open .directory__subs li {
+  animation: rise 0.8s var(--ease-out) both;
+  animation-delay: calc(var(--i, 0) * 80ms + 140ms);
+}
+
+.directory-sub {
+  display: block;
+}
+
+.directory-sub__media {
+  display: block;
+  aspect-ratio: 1;
+  overflow: hidden;
+  background: var(--color-bg);
+}
+
+.directory-sub__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.4s var(--ease-out);
+}
+
+.directory-sub__title {
+  display: block;
+  margin-top: 12px;
+  font-family: var(--font-label);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.directory-sub__caption {
+  display: block;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--color-muted);
+}
