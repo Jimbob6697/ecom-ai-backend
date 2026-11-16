@@ -7,11 +7,19 @@
       "blocks": {
         "shop": {
           "type": "menu",
-          "settings": { "heading": "Shop", "menu": "main-menu", "limit": 10 }
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu",
+            "limit": 10
+          }
         },
         "help": {
           "type": "menu",
-          "settings": { "heading": "Help & information", "menu": "footer", "limit": 8 }
+          "settings": {
+            "heading": "Help & information",
+            "menu": "footer",
+            "limit": 8
+          }
         },
         "sizing": {
           "type": "text",
@@ -21,13 +29,20 @@
           }
         }
       },
-      "block_order": ["shop", "help", "sizing"],
+      "block_order": [
+        "shop",
+        "help",
+        "sizing"
+      ],
       "settings": {
         "logo": "shopify://shop_images/Dog_Barn_-_Logo_Suite_Watermarks-32.png",
         "tagline": "For the stylish & adventurous pup.",
-        "show_payment": true
+        "show_payment": true,
+        "show_wordmark": false
       }
     }
   },
-  "order": ["footer"]
+  "order": [
+    "footer"
+  ]
 }

@@ -92,10 +92,10 @@
         "v5"
       ],
       "settings": {
-        "eyebrow": "@dogbarn.yorkshire",
-        "heading": "See it on the walk",
+        "eyebrow": "",
+        "heading": "Seen on the walk",
         "text": "Real dogs, real adventures. Tag us to be featured.",
-        "scheme": "surface"
+        "scheme": "light"
       }
     },
     "reviews": {
@@ -120,13 +120,16 @@
         "r3"
       ],
       "settings": {
-        "scheme": "dark"
+        "eyebrow": "Reviews",
+        "heading": "What owners say",
+        "subheading": "",
+        "scheme": "surface"
       }
     },
     "recommendations": {
       "type": "product-recommendations",
       "settings": {
-        "heading": "Complete the look",
+        "heading": "You may also like",
         "subheading": ""
       }
     },
@@ -173,7 +176,8 @@
         "d"
       ],
       "settings": {
-        "scheme": "surface"
+        "label": "Why Dog Barn",
+        "scheme": "light"
       }
     }
   },

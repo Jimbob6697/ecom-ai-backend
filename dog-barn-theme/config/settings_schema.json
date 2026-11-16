@@ -14,55 +14,55 @@
         "type": "color",
         "id": "color_background",
         "label": "Background",
-        "default": "#f7f3ec"
+        "default": "#ffffff"
       },
       {
         "type": "color",
         "id": "color_surface",
-        "label": "Alternate background",
-        "default": "#ece5d8"
+        "label": "Grey panels",
+        "default": "#f1f1ef"
       },
       {
         "type": "color",
         "id": "color_text",
         "label": "Text",
-        "default": "#1b201d"
+        "default": "#0e0e0e"
       },
       {
         "type": "color",
         "id": "color_muted",
         "label": "Secondary text",
-        "default": "#6a6f69"
+        "default": "#6b6b6b"
       },
       {
         "type": "color",
         "id": "color_accent",
         "label": "Buttons",
-        "default": "#1b201d"
+        "default": "#0e0e0e"
       },
       {
         "type": "color",
         "id": "color_dark",
-        "label": "Announcement bar, footer and dark sections",
-        "default": "#1f2e26"
+        "label": "Announcement bar and dark sections",
+        "default": "#0e0e0e"
       },
       {
         "type": "color",
         "id": "color_on_dark",
         "label": "Text on dark sections",
-        "default": "#f4eee2"
+        "default": "#ffffff"
       },
       {
         "type": "color",
         "id": "color_brass",
-        "label": "Stars and fine details",
-        "default": "#a98652"
+        "label": "Review stars",
+        "default": "#0e0e0e"
       },
       {
         "type": "color",
         "id": "color_sale",
         "label": "Sale price",
-        "default": "#9b3d2e"
+        "default": "#b3261e"
       }
     ]
   },
@@ -73,7 +73,7 @@
         "type": "checkbox",
         "id": "type_builtin",
         "label": "Use the theme's own fonts",
-        "info": "Cormorant Garamond for headings and Jost for text, bundled with the theme. Untick to choose fonts below.",
+        "info": "Roboto Condensed for headings and DM Sans for text, bundled with the theme. Untick to choose fonts below.",
         "default": true
       },
       {
@@ -101,7 +101,7 @@
         "max": 1600,
         "step": 20,
         "unit": "px",
-        "default": 1400
+        "default": 1600
       },
       {
         "type": "range",
@@ -111,7 +111,7 @@
         "max": 24,
         "step": 2,
         "unit": "px",
-        "default": 2
+        "default": 0
       },
       {
         "type": "checkbox",
@@ -191,7 +191,7 @@
         "type": "checkbox",
         "id": "card_show_type",
         "label": "Show product type",
-        "default": true
+        "default": false
       },
       {
         "type": "select",
@@ -207,7 +207,7 @@
             "label": "Portrait"
           }
         ],
-        "default": "0.8"
+        "default": "1"
       }
     ]
   },

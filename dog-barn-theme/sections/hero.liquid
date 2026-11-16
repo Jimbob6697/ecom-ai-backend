@@ -1,68 +1,68 @@
 {%- liquid
   assign s = section.settings
+  assign heading_tag = 'h2'
+  if section.index == 1
+    assign heading_tag = 'h1'
+  endif
+  assign duo = false
+  if s.image_2 != blank
+    assign duo = true
+  endif
+  if s.video != blank
+    assign duo = false
+  endif
 -%}
-<section class="hero">
-  <div class="page-width hero__grid">
-    <div class="hero__copy">
-      {%- if s.eyebrow != blank -%}
-        <p class="eyebrow hero__eyebrow" data-hero-line style="--i: 0">{{ s.eyebrow | escape }}</p>
-      {%- endif -%}
-      <h1 class="hero__heading" data-reveal data-split>
-        {{- s.heading | escape -}}
-        {%- if s.heading_accent != blank %} <em>{{ s.heading_accent | escape }}</em>{% endif -%}
-      </h1>
-      {%- if s.subheading != blank -%}
-        <p class="hero__subheading" data-hero-line style="--i: 4">{{ s.subheading | escape }}</p>
-      {%- endif -%}
-      {%- if s.button_label != blank or s.link_label != blank -%}
-        <div class="hero__actions" data-hero-line style="--i: 5">
-          {%- if s.button_label != blank -%}
-            <a class="button" href="{{ s.button_link | default: routes.all_products_collection_url }}">
-              {{- s.button_label | escape -}}
-              {% render 'icon', name: 'arrow-right' %}
-            </a>
-          {%- endif -%}
-          {%- if s.link_label != blank -%}
-            <a class="link-arrow" href="{{ s.link_link | default: routes.collections_url }}">{{ s.link_label | escape }}</a>
-          {%- endif -%}
-        </div>
-      {%- endif -%}
-      {%- if s.show_reviews -%}
-        <div class="hero__reviews" data-hero-line style="--i: 6">{% render 'review-summary' %}</div>
+<section class="hero hero--{{ s.height }} hero--{{ s.position }}{% if duo %} hero--duo{% endif %}" data-scroll-fx>
+  <div class="hero__media">
+    <div class="hero__panel">
+      {%- if s.video != blank -%}
+        {{ s.video | video_tag: image_size: '1920x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true }}
+      {%- elsif s.image != blank -%}
+        {%- liquid
+          assign hero_sizes = '100vw'
+          if duo
+            assign hero_sizes = '(min-width: 750px) 50vw, 100vw'
+          endif
+          assign hero_loading = 'lazy'
+          if section.index == 1
+            assign hero_loading = 'eager'
+          endif
+        -%}
+        {{ s.image | image_url: width: 3000 | image_tag: widths: '750, 1100, 1500, 2000, 2600, 3000', sizes: hero_sizes, loading: hero_loading, alt: s.image.alt }}
+      {%- else -%}
+        {% render 'art', index: 2, icon: 'paw' %}
       {%- endif -%}
     </div>
-
-    <div class="hero__visual" data-scroll-fx>
-      <div class="hero__arch">
-        <div class="hero__arch-media">
-          {%- if s.video != blank -%}
-            {{ s.video | video_tag: image_size: '1600x', autoplay: true, loop: true, muted: true, controls: false, playsinline: true }}
-          {%- elsif s.image != blank -%}
-            {{
-              s.image
-              | image_url: width: 2000
-              | image_tag: widths: '500, 800, 1100, 1500, 2000', sizes: '(min-width: 990px) 42vw, 90vw', loading: 'eager', fetchpriority: 'high', alt: s.image.alt
-            }}
-          {%- else -%}
-            {% render 'art', index: 2, icon: 'paw' %}
-          {%- endif -%}
-        </div>
+    {%- if duo -%}
+      <div class="hero__panel hero__panel--second">
+        {{ s.image_2 | image_url: width: 2000 | image_tag: widths: '750, 1100, 1500, 2000', sizes: '50vw', loading: 'lazy', alt: s.image_2.alt }}
       </div>
-      {%- if s.image_2 != blank -%}
-        <div class="hero__inset">
-          {{ s.image_2 | image_url: width: 900 | image_tag: widths: '300, 500, 700, 900', sizes: '(min-width: 990px) 18vw, 36vw', loading: 'eager', alt: s.image_2.alt }}
-        </div>
-      {%- endif -%}
-      {%- if s.seal_text != blank -%}
-        <div class="hero__seal" aria-hidden="true">
-          <svg viewBox="0 0 200 200" class="hero__seal-ring">
-            <defs><path id="seal-path-{{ section.id }}" d="M100 100m-78 0a78 78 0 1 1 156 0a78 78 0 1 1-156 0"/></defs>
-            <text><textPath href="#seal-path-{{ section.id }}" textLength="484" lengthAdjust="spacing">{{ s.seal_text | escape }}</textPath></text>
-          </svg>
-          {% render 'icon', name: s.seal_icon %}
-        </div>
-      {%- endif -%}
-    </div>
+    {%- endif -%}
+  </div>
+
+  <div class="hero__content page-width">
+    {%- if s.eyebrow != blank -%}
+      <p class="hero__eyebrow" data-hero-line style="--i: 0">{{ s.eyebrow | escape }}</p>
+    {%- endif -%}
+    {%- if s.heading != blank -%}
+      <{{ heading_tag }} class="hero__heading" data-hero-line style="--i: 1">{{ s.heading | escape }}</{{ heading_tag }}>
+    {%- endif -%}
+    {%- if s.subheading != blank -%}
+      <p class="hero__subheading" data-hero-line style="--i: 2">{{ s.subheading | escape }}</p>
+    {%- endif -%}
+    {%- if s.button_label != blank or s.link_label != blank -%}
+      <div class="hero__actions" data-hero-line style="--i: 3">
+        {%- if s.button_label != blank -%}
+          <a class="button button--ghost" href="{{ s.button_link | default: routes.all_products_collection_url }}">{{ s.button_label | escape }}</a>
+        {%- endif -%}
+        {%- if s.link_label != blank -%}
+          <a class="button button--ghost" href="{{ s.link_link | default: routes.collections_url }}">{{ s.link_label | escape }}</a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+    {%- if s.show_reviews -%}
+      <div class="hero__reviews" data-hero-line style="--i: 4">{% render 'review-summary' %}</div>
+    {%- endif -%}
   </div>
 </section>
 
@@ -72,32 +72,38 @@
   "tag": "div",
   "class": "section-hero",
   "settings": [
-    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Luxury country wear for dogs" },
-    { "type": "text", "id": "heading", "label": "Heading", "default": "For the stylish &" },
-    { "type": "text", "id": "heading_accent", "label": "Heading (italic part)", "default": "adventurous pup" },
-    { "type": "text", "id": "subheading", "label": "Text", "default": "Fleeces, jackets and accessories made for countryside strolls and muddy woods alike." },
-    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the collection" },
+    { "type": "text", "id": "eyebrow", "label": "Small label" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "For the stylish & adventurous pup" },
+    { "type": "text", "id": "subheading", "label": "Text", "default": "Fleeces, jackets and accessories for countryside strolls and muddy woods alike." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore now" },
     { "type": "url", "id": "button_link", "label": "Button link" },
-    { "type": "text", "id": "link_label", "label": "Second link label" },
-    { "type": "url", "id": "link_link", "label": "Second link" },
-    { "type": "checkbox", "id": "show_reviews", "label": "Show review score", "default": true },
+    { "type": "text", "id": "link_label", "label": "Second button label" },
+    { "type": "url", "id": "link_link", "label": "Second button link" },
+    { "type": "checkbox", "id": "show_reviews", "label": "Show review score", "default": false },
     { "type": "header", "content": "Imagery" },
-    { "type": "image_picker", "id": "image", "label": "Main image", "info": "Shown in a tall arch. Square or portrait photos work best." },
-    { "type": "video", "id": "video", "label": "Main video", "info": "Plays muted on a loop in place of the main image." },
-    { "type": "image_picker", "id": "image_2", "label": "Small overlapping image", "info": "Optional detail shot." },
-    { "type": "header", "content": "Rotating seal" },
-    { "type": "text", "id": "seal_text", "label": "Seal text", "info": "Runs around a slowly turning circle. Leave empty to hide.", "default": "Finalist · Best Pet Business · UK Small Business Awards 2026 ·" },
+    { "type": "image_picker", "id": "image", "label": "Image", "info": "Fills the full width of the screen." },
+    { "type": "image_picker", "id": "image_2", "label": "Second image", "info": "Optional. On larger screens the two images sit side by side, edge to edge — ideal for square photos." },
+    { "type": "video", "id": "video", "label": "Video", "info": "Plays muted on a loop in place of the images." },
     {
       "type": "select",
-      "id": "seal_icon",
-      "label": "Seal icon",
+      "id": "height",
+      "label": "Height",
       "options": [
-        { "value": "award", "label": "Award" },
-        { "value": "paw", "label": "Paw" },
-        { "value": "star", "label": "Star" },
-        { "value": "heart", "label": "Heart" }
+        { "value": "full", "label": "Full screen" },
+        { "value": "large", "label": "Large" },
+        { "value": "medium", "label": "Medium" }
       ],
-      "default": "award"
+      "default": "large"
+    },
+    {
+      "type": "select",
+      "id": "position",
+      "label": "Text position",
+      "options": [
+        { "value": "bottom", "label": "Bottom centre" },
+        { "value": "center", "label": "Centre" }
+      ],
+      "default": "bottom"
     }
   ],
   "presets": [{ "name": "Hero" }]

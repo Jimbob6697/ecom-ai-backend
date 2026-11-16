@@ -3,7 +3,7 @@
     <div class="site-footer__top">
       <div class="site-footer__brand">
         {%- if section.settings.logo != blank -%}
-          {{ section.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy', class: 'site-footer__logo', alt: shop.name }}
+          {{ section.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy', class: 'site-footer__logo site-header__logo-image--dark', alt: shop.name }}
         {%- else -%}
           <p class="site-footer__wordmark">{{ shop.name }}</p>
         {%- endif -%}
@@ -71,10 +71,10 @@
   "name": "Footer",
   "max_blocks": 4,
   "settings": [
-    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "Use the light (cream) version." },
+    { "type": "image_picker", "id": "logo", "label": "Logo", "info": "A cream or white logo file is shown in black automatically." },
     { "type": "text", "id": "tagline", "label": "Tagline", "default": "For the stylish & adventurous pup." },
     { "type": "richtext", "id": "notes", "label": "Small print" },
-    { "type": "checkbox", "id": "show_wordmark", "label": "Show oversized shop name", "default": true },
+    { "type": "checkbox", "id": "show_wordmark", "label": "Show oversized shop name", "default": false },
     { "type": "checkbox", "id": "show_payment", "label": "Show payment icons", "default": true }
   ],
   "blocks": [

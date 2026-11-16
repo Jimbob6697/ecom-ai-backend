@@ -1,6 +1,6 @@
 # Dog Barn Yorkshire — Shopify theme
 
-A modern-luxury Online Store 2.0 theme for Dog Barn Yorkshire. It is a deliberate step away from the current site: a light, airy ivory canvas instead of the slate header block, an editorial split hero with an arched photograph, large light serif headlines, arched category portraits, pill buttons and a deep forest green for the footer and feature sections. Products, orders, customers and checkout stay in Shopify exactly as they are now.
+A minimal, gallery-style Online Store 2.0 theme for Dog Barn Yorkshire: white, black and soft grey; bold condensed uppercase headings with small, quiet text; square edges throughout; and edge-to-edge photography. The layout language follows the direction of the Cloud7 reference the brand liked (split navigation around a centred logo, full-bleed hero, a two-up category grid, tight product rows on grey squares, an image-grid product page) using Dog Barn's own logo, photography and copy. Products, orders, customers and checkout stay in Shopify exactly as they are now.
 
 ## Install
 
@@ -23,7 +23,7 @@ The default content points at things that already exist in the Dog Barn Yorkshir
 
 | What | Where | Why |
 | --- | --- | --- |
-| Regroup the main menu | Content → Menus | The header shows top-level links in one row. The current menu has too many to fit, so the theme falls back to a menu button on desktop. Grouping into about eight parents (Dachshund, Fleeces & jackets, Harnesses, Collars & leads, Leather, Accessories, Colourways, Our story) gives the full dropdown navigation. |
+| Set up the two header menus | Content → Menus, then Theme editor → Header | Navigation sits either side of the centred logo. Use up to five grouped links on the left (for example Dog Wear, Dachshund, Harnesses, Collars & Leads, Leather) and create a short second menu for the right (for example Colourways, Our Story). The current main menu has too many top-level links, so until it is regrouped the theme shows a menu button on desktop instead. |
 | Add real reviews | Theme editor → Customer reviews | Paste genuine reviews into the review blocks, or add your Trustpilot widget as an app block. Empty review blocks never appear on the live store. |
 | Check the review score | Theme settings → Reviews and trust | Defaults to “4.9 Excellent on Trustpilot”, as shown on the current site. Keep it in line with your live profile and add the profile link. |
 | Upload customer videos | Theme editor → Customer videos | Add vertical 9:16 clips to each block (Shopify-hosted). Until then the blocks show photos. Link a product to each for “shop the look”. |
@@ -35,20 +35,21 @@ The default content points at things that already exist in the Dog Barn Yorkshir
 
 ## What's in it
 
-**Trust** — rotating announcement bar with review score, trust badge strip, award section, review score in the hero, product page and footer, product-page trust badges, secure checkout and payment icons, free-delivery progress in the bag.
+**Trust** — rotating announcement bar with review score, a “Why Dog Barn” trust band, award band, product-page trust badges, secure checkout and payment icons, free-delivery progress in the bag.
 
-**Reviews** — a reviews section with a large score on one side and one big quote at a time on the other (stars, headline, text, customer, photo, linked product), plus support for review-app blocks.
+**Reviews** — a reviews section with a large score on one side and one review at a time on the other (stars, headline, text, customer, photo, linked product), plus support for review-app blocks.
 
 **Customer videos** — a carousel of vertical clips that play silently as they scroll into view and open in a full-screen viewer with sound, progress bar, previous/next and a “shop the look” link.
 
-**Shopping** — full-width dropdown navigation with collection imagery, live search suggestions, shop by category and by colourway, size tiles that strike through sold-out sizes, slide-out size guide, sticky add-to-bag bar, slide-out bag.
+**Shopping** — split navigation with full-width dropdowns, live search suggestions, a full-bleed category grid, shop by colourway, an image-grid product page with a sticky details column, size squares that strike through sold-out sizes, slide-out size guide, sticky add-to-bag bar, slide-out bag.
 
-**Motion** — headline words that rise into place, an arch that unveils the hero photo, a slowly turning award seal, parallax on the hero imagery, staggered section reveals, curtain image reveals, an oversized scrolling text band, a header that slides away on the way down and returns on the way up, and cross-page fades. Everything respects the visitor's reduced-motion setting and can be switched off in Theme settings → Layout and motion.
+**Motion** — hero images that ease in and drift on scroll, sections that fade up as they arrive, slow image zoom on hover, underlines that draw across links, a header that slides away on the way down and returns on the way up, and cross-page fades. Everything respects the visitor's reduced-motion setting and can be switched off in Theme settings → Layout and motion.
 
 ## Notes
 
-- Fonts: Cormorant Garamond (headings) and Jost (text) are bundled with the theme under the SIL Open Font Licence, so nothing has to be installed. To use other fonts, untick “Use the theme's own fonts” in Theme settings → Typography.
-- Logo: the header is light, and the current logo file is cream. The header setting “Show a light logo in dark ink” renders it in ink automatically; untick it if you upload a dark logo. The footer shows the logo in its original cream.
-- Colours: the palette (ivory, sand, ink, forest green, brass) is in Theme settings → Colours if you want to move it closer to, or further from, the old slate.
+- Fonts: Roboto Condensed (headings) and DM Sans (text) are bundled with the theme under the SIL Open Font Licence, so nothing has to be installed. To use other fonts, untick “Use the theme's own fonts” in Theme settings → Typography.
+- Logo: the header and footer are light, and the current logo file is cream. The header setting “Show a light logo in black” renders it in black automatically; untick it if you upload a dark logo.
+- Colours: the palette is deliberately neutral (white, soft grey, black) so the photography carries the colour. It can be changed in Theme settings → Colours.
+- Photography: the minimal look is at its best with clean, consistent product shots on a plain background. The current lifestyle photos work, but studio-style images on light grey would lift the product grid further.
 - The free-delivery bar counts the whole bag. Because free delivery applies to dog accessories only, the bag shows that caveat beside it.
 - The theme assumes Shopify's current hosted customer accounts.

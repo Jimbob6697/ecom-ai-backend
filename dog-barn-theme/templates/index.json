@@ -3,19 +3,15 @@
     "hero": {
       "type": "hero",
       "settings": {
-        "eyebrow": "Luxury country wear for dogs",
-        "heading": "For the stylish &",
-        "heading_accent": "adventurous pup",
-        "subheading": "Fleeces, jackets and accessories made for countryside strolls and muddy woods alike.",
-        "button_label": "Shop the collection",
+        "heading": "For the stylish & adventurous pup",
+        "subheading": "Fleeces, jackets and accessories for countryside strolls and muddy woods alike.",
+        "button_label": "Explore now",
         "button_link": "shopify://collections/all",
-        "link_label": "Shop Dachshund",
-        "link_link": "shopify://collections/dachshund-collections",
-        "show_reviews": true,
+        "show_reviews": false,
         "image": "shopify://shop_images/Yorkshire_Dog_in_Chestnut_Fleece.png",
-        "image_2": "shopify://shop_images/7d560008-7d4b-4eb0-99ae-fadd26779fc0.jpg",
-        "seal_text": "Finalist · Best Pet Business · UK Small Business Awards 2026 ·",
-        "seal_icon": "award"
+        "image_2": "shopify://shop_images/IMG-4254.jpg",
+        "height": "large",
+        "position": "bottom"
       }
     },
     "trust": {
@@ -61,7 +57,8 @@
         "d"
       ],
       "settings": {
-        "scheme": "light"
+        "label": "Why Dog Barn",
+        "scheme": "surface"
       }
     },
     "tiles": {
@@ -78,20 +75,12 @@
         "t1": {
           "type": "collection",
           "settings": {
-            "collection": "sherpa-jacket",
-            "title": "Sherpa jackets",
-            "image": "shopify://shop_images/IMG-2613.png"
-          }
-        },
-        "t2": {
-          "type": "collection",
-          "settings": {
             "collection": "rain-jacket",
             "title": "Rain jackets",
             "image": "shopify://shop_images/C02092E0-BF74-48CC-98D1-DA4AF1486855.jpg"
           }
         },
-        "t3": {
+        "t2": {
           "type": "collection",
           "settings": {
             "collection": "dachshund-collections",
@@ -99,32 +88,11 @@
             "image": "shopify://shop_images/930A3466-67C8-4838-AA64-6892B7C07D06.jpg"
           }
         },
-        "t4": {
-          "type": "collection",
-          "settings": {
-            "collection": "adventurer-harness",
-            "title": "Harnesses"
-          }
-        },
-        "t5": {
+        "t3": {
           "type": "collection",
           "settings": {
             "collection": "leather-collection",
             "title": "Leather"
-          }
-        },
-        "t6": {
-          "type": "collection",
-          "settings": {
-            "collection": "collars",
-            "title": "Collars & leads"
-          }
-        },
-        "t7": {
-          "type": "collection",
-          "settings": {
-            "collection": "bundles",
-            "title": "Bundles"
           }
         }
       },
@@ -132,75 +100,23 @@
         "t0",
         "t1",
         "t2",
-        "t3",
-        "t4",
-        "t5",
-        "t6",
-        "t7"
+        "t3"
       ],
       "settings": {
-        "eyebrow": "The collections",
-        "heading": "Shop by",
-        "subheading": "category",
-        "surface": false
+        "heading": "",
+        "columns": "2"
       }
     },
     "new": {
       "type": "product-shelf",
       "settings": {
-        "eyebrow": "New collection",
-        "heading": "Sherpa fleece",
-        "subheading": "jackets",
+        "eyebrow": "",
+        "heading": "New collection",
+        "subheading": "Sherpa fleece jackets",
         "collection": "sherpa-jacket",
         "limit": 8,
         "show_view_all": true,
         "surface": false
-      }
-    },
-    "dachshund": {
-      "type": "image-with-text",
-      "settings": {
-        "image": "shopify://shop_images/930A3466-67C8-4838-AA64-6892B7C07D06.jpg",
-        "eyebrow": "The Dachshund collection",
-        "heading": "Made for little legs that love adventure",
-        "text": "<p>Fleeces, harnesses, rain jackets and drying robes shaped for dachshunds — from crisp morning strolls to woodland wanders.</p>",
-        "link_label": "Shop Dachshund",
-        "link": "shopify://collections/dachshund-collections",
-        "flip": false,
-        "surface": true,
-        "shape": "arch"
-      }
-    },
-    "marquee": {
-      "type": "marquee",
-      "blocks": {
-        "m1": {
-          "type": "text",
-          "settings": {
-            "text": "For the stylish & adventurous pup"
-          }
-        },
-        "m2": {
-          "type": "text",
-          "settings": {
-            "text": "Elegant yet adventurous"
-          }
-        },
-        "m3": {
-          "type": "text",
-          "settings": {
-            "text": "From the barn, in Yorkshire"
-          }
-        }
-      },
-      "block_order": [
-        "m1",
-        "m2",
-        "m3"
-      ],
-      "settings": {
-        "speed": 40,
-        "scheme": "light"
       }
     },
     "videos": {
@@ -258,10 +174,10 @@
         "v5"
       ],
       "settings": {
-        "eyebrow": "@dogbarn.yorkshire",
-        "heading": "Spotted on",
-        "subheading": "the walk",
-        "text": "Real dogs, real adventures. Tag us on Instagram or TikTok to be featured.",
+        "eyebrow": "",
+        "heading": "Share your Dog Barn moments",
+        "subheading": "",
+        "text": "Tag us with @dogbarn.yorkshire to be featured.",
         "scheme": "light"
       }
     },
@@ -292,18 +208,18 @@
         "r4"
       ],
       "settings": {
-        "eyebrow": "Loved by dogs, trusted by owners",
-        "heading": "Kind words from",
-        "subheading": "the pack",
-        "scheme": "dark"
+        "eyebrow": "Reviews",
+        "heading": "What owners say",
+        "subheading": "",
+        "scheme": "surface"
       }
     },
     "best": {
       "type": "product-shelf",
       "settings": {
-        "eyebrow": "Most loved",
-        "heading": "Best",
-        "subheading": "sellers",
+        "eyebrow": "",
+        "heading": "Most loved",
+        "subheading": "",
         "collection": "best-sellers",
         "limit": 8,
         "show_view_all": true,
@@ -315,9 +231,9 @@
       "settings": {
         "year": "2026",
         "status": "Finalist",
-        "eyebrow": "The UK Small Business Awards",
-        "heading": "We're officially a 2026 finalist",
-        "text": "<p>We're incredibly proud to announce that Dog Barn Yorkshire has been shortlisted for <strong>Best Pet Business</strong> at The UK Small Business Awards 2026.</p>",
+        "eyebrow": "Award-nominated",
+        "heading": "Finalist, Best Pet Business",
+        "text": "<p>Shortlisted at The UK Small Business Awards 2026.</p>",
         "scheme": "surface"
       }
     },
@@ -436,9 +352,9 @@
         "c11"
       ],
       "settings": {
-        "eyebrow": "Named after the countryside",
-        "heading": "Shop by",
-        "subheading": "colourway",
+        "eyebrow": "",
+        "heading": "Shop by colourway",
+        "subheading": "",
         "surface": false
       }
     },
@@ -457,17 +373,16 @@
       }
     },
     "story": {
-      "type": "image-with-text",
+      "type": "hero",
       "settings": {
+        "heading": "About Dog Barn",
+        "subheading": "Built from the heart, in Yorkshire. Elegant yet adventurous, just like the pups we design for.",
+        "button_label": "Read our story",
+        "button_link": "shopify://pages/our-story",
         "image": "shopify://shop_images/739206f9-f712-48a3-860b-c1fcb25f2488.jpg",
-        "eyebrow": "Our story",
-        "heading": "Meet the faces behind Dog Barn Yorkshire",
-        "text": "<p>We're Paul and Bobbi — and our trio of cavapoochons, Honey, Dora and Bertie. Our brand is built from the heart, driven by our love for dogs, Paul's deep-rooted love for Yorkshire and the countryside life we adore.</p>",
-        "link_label": "Read our story",
-        "link": "shopify://pages/our-story",
-        "flip": false,
-        "surface": false,
-        "shape": "arch"
+        "image_2": "shopify://shop_images/0F73F928-EF02-4BD7-AAA5-527B060A9720.jpg",
+        "height": "large",
+        "position": "center"
       }
     },
     "faq": {
@@ -518,7 +433,7 @@
       ],
       "settings": {
         "heading": "Good to know",
-        "surface": false
+        "surface": true
       }
     },
     "newsletter": {
@@ -526,7 +441,7 @@
       "settings": {
         "heading": "Join the pack",
         "text": "Be first to hear about new collections and offers.",
-        "scheme": "surface"
+        "scheme": "light"
       }
     }
   },
@@ -534,16 +449,14 @@
     "hero",
     "trust",
     "tiles",
-    "marquee",
+    "best",
+    "award",
+    "details",
     "new",
-    "dachshund",
     "videos",
     "reviews",
-    "best",
-    "details",
-    "colourways",
-    "award",
     "story",
+    "colourways",
     "faq",
     "newsletter"
   ]

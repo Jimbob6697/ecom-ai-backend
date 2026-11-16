@@ -233,17 +233,16 @@
     const mobileMenu = $('[data-mobile-menu]', header);
     const menuToggle = $('[data-menu-toggle]', header);
     const hoverCapable = window.matchMedia('(hover: hover)').matches;
-    const navList = $('.site-nav__list', header);
+    const navLists = $$('.site-nav__list', header);
     let activeId = null;
     let closeTimer;
 
-    // If the store's menu has more top-level links than fit on one row,
+    // If the menus have more top-level links than fit either side of the logo,
     // fall back to the menu button and panel on desktop too.
     const fitNavigation = () => {
       header.classList.remove('is-condensed');
-      if (navList && window.innerWidth >= 990 && navList.scrollWidth > navList.clientWidth + 2) {
-        header.classList.add('is-condensed');
-      }
+      const overflowing = navLists.some((list) => list.scrollWidth > list.clientWidth + 2);
+      if (window.innerWidth >= 990 && overflowing) header.classList.add('is-condensed');
     };
     fitNavigation();
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitNavigation);

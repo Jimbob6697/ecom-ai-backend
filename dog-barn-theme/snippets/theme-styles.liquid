@@ -4,30 +4,23 @@
   assign heading_italic = heading_font | font_modify: 'style', 'italic'
 -%}
 {%- if settings.type_builtin -%}
-  {{ 'cormorant-garamond-normal.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
-  {{ 'jost-normal.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {{ 'roboto-condensed.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {{ 'dm-sans.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
 {%- else -%}
   <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
 {%- endif -%}
 {% style %}
   {%- if settings.type_builtin -%}
     @font-face {
-      font-family: 'Cormorant Garamond';
-      src: url('{{ 'cormorant-garamond-normal.woff2' | asset_url }}') format('woff2');
-      font-weight: 300 700;
+      font-family: 'Roboto Condensed';
+      src: url('{{ 'roboto-condensed.woff2' | asset_url }}') format('woff2');
+      font-weight: 300 800;
       font-style: normal;
       font-display: swap;
     }
     @font-face {
-      font-family: 'Cormorant Garamond';
-      src: url('{{ 'cormorant-garamond-italic.woff2' | asset_url }}') format('woff2');
-      font-weight: 300 700;
-      font-style: italic;
-      font-display: swap;
-    }
-    @font-face {
-      font-family: 'Jost';
-      src: url('{{ 'jost-normal.woff2' | asset_url }}') format('woff2');
+      font-family: 'DM Sans';
+      src: url('{{ 'dm-sans.woff2' | asset_url }}') format('woff2');
       font-weight: 300 700;
       font-style: normal;
       font-display: swap;
@@ -56,9 +49,9 @@
     --radius-card: {{ settings.card_radius }}px;
     --card-ratio: {{ settings.card_ratio }};
     {%- if settings.type_builtin %}
-      --font-body: 'Jost', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      --font-heading: 'Cormorant Garamond', 'Iowan Old Style', 'Times New Roman', serif;
-      --font-heading-weight: 400;
+      --font-body: 'DM Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --font-heading: 'Roboto Condensed', 'Arial Narrow', 'Helvetica Neue', Arial, sans-serif;
+      --font-heading-weight: 700;
       --font-strong: 500;
     {%- else %}
       --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};

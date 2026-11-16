@@ -1,4 +1,7 @@
 <section class="trust-bar trust-bar--{{ section.settings.scheme }}" aria-label="Why shop with us">
+  {%- if section.settings.label != blank -%}
+    <p class="trust-bar__label">{{ section.settings.label | escape }}</p>
+  {%- endif -%}
   <ul class="page-width trust-bar__list" role="list">
     {%- for block in section.blocks -%}
       <li class="trust-badge" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
@@ -25,16 +28,17 @@
   "name": "Trust badges",
   "max_blocks": 5,
   "settings": [
+    { "type": "text", "id": "label", "label": "Small label", "default": "Why Dog Barn" },
     {
       "type": "select",
       "id": "scheme",
       "label": "Colour scheme",
       "options": [
         { "value": "light", "label": "Light" },
-        { "value": "surface", "label": "Stone" },
+        { "value": "surface", "label": "Grey" },
         { "value": "dark", "label": "Dark" }
       ],
-      "default": "light"
+      "default": "surface"
     }
   ],
   "blocks": [
