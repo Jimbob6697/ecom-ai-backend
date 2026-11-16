@@ -14,55 +14,84 @@
         "type": "color",
         "id": "color_background",
         "label": "Background",
-        "default": "#ffffff"
+        "default": "#ffffff",
+        "info": "Brand white."
       },
       {
         "type": "color",
         "id": "color_surface",
-        "label": "Grey panels",
-        "default": "#f1f1ef"
+        "label": "Soft panels",
+        "default": "#ece9e2",
+        "info": "A light tint of brand Beige, used behind product photos and quiet bands."
       },
       {
         "type": "color",
         "id": "color_text",
         "label": "Text",
-        "default": "#0e0e0e"
+        "default": "#425563",
+        "info": "Brand Midnight."
       },
       {
         "type": "color",
         "id": "color_muted",
         "label": "Secondary text",
-        "default": "#6b6b6b"
+        "default": "#6f6259",
+        "info": "Brand Bark."
       },
       {
         "type": "color",
         "id": "color_accent",
         "label": "Buttons",
-        "default": "#0e0e0e"
+        "default": "#425563",
+        "info": "Brand Midnight."
       },
       {
         "type": "color",
         "id": "color_dark",
-        "label": "Announcement bar and dark sections",
-        "default": "#0e0e0e"
+        "label": "Dark sections",
+        "default": "#425563",
+        "info": "Brand Midnight."
       },
       {
         "type": "color",
         "id": "color_on_dark",
-        "label": "Text on dark sections",
+        "label": "Text on dark sections, footer and accent sections",
         "default": "#ffffff"
+      },
+      {
+        "type": "color",
+        "id": "color_announcement",
+        "label": "Announcement bar",
+        "default": "#d2ccbe",
+        "info": "Brand Beige."
+      },
+      {
+        "type": "color",
+        "id": "color_footer",
+        "label": "Footer",
+        "default": "#6f6259",
+        "info": "Brand Bark."
+      },
+      {
+        "type": "color",
+        "id": "color_highlight",
+        "label": "Accent sections",
+        "default": "#6f755c",
+        "info": "Brand Lawn."
       },
       {
         "type": "color",
         "id": "color_brass",
         "label": "Review stars",
-        "default": "#0e0e0e"
+        "default": "#6f755c",
+        "info": "Brand Lawn."
       },
       {
         "type": "color",
         "id": "color_sale",
-        "label": "Sale price",
-        "default": "#b3261e"
+        "label": "Sale price and “New” label",
+        "default": "#6f755c",
+        "info": "Brand Lawn."
       }
     ]
   },
@@ -72,9 +101,29 @@
       {
         "type": "checkbox",
         "id": "type_builtin",
-        "label": "Use the theme's own fonts",
-        "info": "Roboto Condensed for headings and DM Sans for text, bundled with the theme. Untick to choose fonts below.",
+        "label": "Use the brand fonts",
+        "info": "Headings in Big Caslon, labels and buttons in Nord, text in Poppins Light.",
         "default": true
+      },
+      {
+        "type": "paragraph",
+        "content": "Big Caslon and Nord are licensed fonts, so the theme ships with close stand-ins (Libre Caslon Display and Lexend Giga). To show the real fonts, upload your licensed web font files (.woff2) under Content → Files and paste each file's URL below."
+      },
+      {
+        "type": "text",
+        "id": "font_heading_url",
+        "label": "Big Caslon Medium file URL",
+        "info": "Used for headings."
+      },
+      {
+        "type": "text",
+        "id": "font_label_url",
+        "label": "Nord Medium file URL",
+        "info": "Used for labels, buttons and small capitals."
+      },
+      {
+        "type": "header",
+        "content": "Or choose other fonts"
       },
       {
         "type": "font_picker",

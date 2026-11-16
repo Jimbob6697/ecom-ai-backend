@@ -1,6 +1,6 @@
 # Dog Barn Yorkshire — Shopify theme
 
-A minimal, gallery-style Online Store 2.0 theme for Dog Barn Yorkshire: white, black and soft grey; bold condensed uppercase headings with small, quiet text; square edges throughout; and edge-to-edge photography. The layout language follows the direction of the Cloud7 reference the brand liked (split navigation around a centred logo, full-bleed hero, a two-up category grid, tight product rows on grey squares, an image-grid product page) using Dog Barn's own logo, photography and copy. Products, orders, customers and checkout stay in Shopify exactly as they are now.
+A minimal, gallery-style Online Store 2.0 theme for Dog Barn Yorkshire, styled to the brand guide: the Midnight, Bark, Beige, Lawn and White palette, Big Caslon headings, Nord labels and Poppins Light text. Square edges, edge-to-edge photography, split navigation around a centred logo, a two-up category grid, tight product rows and an image-grid product page. Products, orders, customers and checkout stay in Shopify exactly as they are now.
 
 ## Install
 
@@ -47,9 +47,9 @@ The default content points at things that already exist in the Dog Barn Yorkshir
 
 ## Notes
 
-- Fonts: Roboto Condensed (headings) and DM Sans (text) are bundled with the theme under the SIL Open Font Licence, so nothing has to be installed. To use other fonts, untick “Use the theme's own fonts” in Theme settings → Typography.
-- Logo: the header and footer are light, and the current logo file is cream. The header setting “Show a light logo in black” renders it in black automatically; untick it if you upload a dark logo.
-- Colours: the palette is deliberately neutral (white, soft grey, black) so the photography carries the colour. It can be changed in Theme settings → Colours.
+- Fonts: headings use Big Caslon Medium, labels and buttons use Nord Medium, and text uses Poppins Light, as set out in the brand guide. Poppins is open-licence and is bundled. **Big Caslon and Nord are licensed fonts and are not included**: until their web font files are added, the theme shows close stand-ins (Libre Caslon Display and Lexend Giga). To switch to the real fonts, upload the licensed `.woff2` files under Content → Files, then paste each file's URL into Theme settings → Typography.
+- Logo: the header is white and the current logo file is cream, so the header setting “Tint the logo to the text colour” recolours it to Midnight automatically. Untick it if you upload a dark logo. The footer shows the logo in its original cream on Bark.
+- Colours follow the brand guide: White background, Midnight (#425563) for text, buttons and dark sections, Bark (#6F6259) for the footer and secondary text, Beige (#D2CCBE) for the announcement bar with a lighter tint of it behind product photos and quiet bands, and Lawn (#6F755C) for review stars, “New” labels and accent sections such as the award band. Each role can be changed in Theme settings → Colours.
 - Photography: the minimal look is at its best with clean, consistent product shots on a plain background. The current lifestyle photos work, but studio-style images on light grey would lift the product grid further.
 - The free-delivery bar counts the whole bag. Because free delivery applies to dog accessories only, the bag shows that caveat beside it.
 - The theme assumes Shopify's current hosted customer accounts.

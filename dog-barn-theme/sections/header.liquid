@@ -7,6 +7,14 @@
     assign logo_class = 'site-header__logo-image site-header__logo-image--dark'
   endif
 -%}
+{%- if section.settings.logo_dark -%}
+  <svg class="logo-tint" width="0" height="0" aria-hidden="true" focusable="false">
+    <filter id="logo-tint" color-interpolation-filters="sRGB">
+      <feFlood class="logo-tint__colour"/>
+      <feComposite in2="SourceAlpha" operator="in"/>
+    </filter>
+  </svg>
+{%- endif -%}
 <header class="site-header{% if section.settings.sticky %} site-header--sticky{% endif %}" data-header>
   <div class="site-header__bar page-width">
     <div class="site-header__side">
@@ -224,7 +232,7 @@
   "class": "section-header",
   "settings": [
     { "type": "image_picker", "id": "logo", "label": "Logo" },
-    { "type": "checkbox", "id": "logo_dark", "label": "Show a light logo in black", "info": "The header is white. Tick this if your logo file is cream or white so it stays visible.", "default": true },
+    { "type": "checkbox", "id": "logo_dark", "label": "Tint the logo to the text colour", "info": "The header is white. Tick this if your logo file is cream or white so it stays visible.", "default": true },
     { "type": "range", "id": "logo_height", "label": "Logo height", "min": 20, "max": 70, "step": 2, "unit": "px", "default": 38 },
     { "type": "link_list", "id": "menu", "label": "Left menu", "default": "main-menu", "info": "Sits to the left of the logo. Up to five top-level links fit comfortably; with more, the header switches to a menu button." },
     { "type": "link_list", "id": "menu_secondary", "label": "Right menu", "info": "Optional. Two or three links such as Our Story or Delivery, shown to the right of the logo." },

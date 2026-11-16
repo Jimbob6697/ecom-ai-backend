@@ -125,6 +125,9 @@ fieldset {
 }
 
 /* Dark contexts re-map the colour tokens so every primitive adapts. */
+.site-footer,
+.award--accent,
+.newsletter--accent,
 .promo-tile--dark,
 .statement--dark,
 .feature-card--dark,
@@ -883,13 +886,17 @@ a:hover .art__icon {
 
 /* 4. Header -------------------------------------------------------------- */
 .announcement {
-  background: var(--color-dark);
-  color: var(--color-on-dark);
-  --color-text-rgb: var(--color-on-dark-rgb);
-  --color-brass: var(--color-on-dark);
-  font-size: 11px;
-  letter-spacing: 0.1em;
+  background: var(--color-announcement);
+  --color-brass: var(--color-text);
+  font-family: var(--font-label);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
+}
+
+.announcement__reviews {
+  font-family: var(--font-body);
 }
 
 .announcement__inner {
@@ -1023,15 +1030,23 @@ a.review-summary:hover .review-summary__text {
   max-width: none;
 }
 
-/* Renders a cream or white logo file in black. */
+/* Recolours a cream or white logo file to the text colour. */
+.logo-tint {
+  position: absolute;
+}
+
+.logo-tint__colour {
+  flood-color: var(--color-text);
+}
+
 .site-header__logo-image--dark {
-  filter: brightness(0);
+  filter: url('#logo-tint');
 }
 
 .site-header__wordmark {
   font-family: var(--font-heading);
   font-size: 24px;
-  font-weight: 700;
+  font-weight: var(--font-heading-weight);
   letter-spacing: 0.06em;
   text-transform: uppercase;
   white-space: nowrap;
@@ -1149,8 +1164,8 @@ a.review-summary:hover .review-summary__text {
   align-items: center;
   height: var(--header-h);
   font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.06em;
+  font-weight: 400;
+  letter-spacing: 0.04em;
   white-space: nowrap;
 }
 
@@ -1208,10 +1223,10 @@ a.review-summary:hover .review-summary__text {
 
 .flyout__label {
   margin-bottom: 14px;
-  font-family: var(--font-heading);
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  font-family: var(--font-label);
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   animation: fade-in 0.5s var(--ease) both;
 }
@@ -1266,10 +1281,10 @@ a.review-summary:hover .review-summary__text {
   display: grid;
   place-items: center;
   background: rgba(0, 0, 0, 0.18);
-  font-family: var(--font-heading);
-  font-size: 16px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  font-family: var(--font-label);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -1288,8 +1303,10 @@ a.review-summary:hover .review-summary__text {
 .flyout__col--quick a {
   padding: 8px 14px;
   border: 1px solid var(--color-text);
-  font-size: 11.5px;
-  letter-spacing: 0.08em;
+  font-family: var(--font-label);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -1406,11 +1423,11 @@ a.review-summary:hover .review-summary__text {
   align-items: center;
   justify-content: space-between;
   gap: 16px;
-  padding: 16px 0;
-  font-family: var(--font-heading);
-  font-size: 17px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
+  padding: 17px 0;
+  font-family: var(--font-label);
+  font-size: 11.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
   list-style: none;
   cursor: pointer;
@@ -1572,17 +1589,18 @@ a.review-summary:hover .review-summary__text {
 }
 
 .hero__eyebrow {
-  margin-bottom: 10px;
-  font-size: 11.5px;
+  margin-bottom: 12px;
+  font-family: var(--font-label);
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
 }
 
 .hero__heading {
-  font-size: clamp(30px, 3.9vw, 56px);
-  line-height: 1.1;
-  letter-spacing: 0.05em;
+  font-size: clamp(32px, 4.6vw, 68px);
+  line-height: 1.08;
+  letter-spacing: 0.03em;
   text-transform: uppercase;
 }
 
@@ -1590,7 +1608,7 @@ a.review-summary:hover .review-summary__text {
   max-width: 44em;
   margin: 12px auto 0;
   font-size: 15px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
 }
 
 .hero__actions {
@@ -1719,17 +1737,18 @@ a.review-summary:hover .review-summary__text {
   left: 10px;
   padding: 5px 8px;
   background: var(--color-bg);
-  color: var(--color-ink);
-  font-size: 10px;
+  color: var(--color-sale);
+  font-family: var(--font-label);
+  font-size: 8.5px;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   line-height: 1;
   text-transform: uppercase;
 }
 
 .badge--sale {
-  background: var(--color-ink);
-  color: var(--color-bg);
+  background: var(--color-sale);
+  color: #fff;
 }
 
 .badge--muted {
@@ -1769,17 +1788,17 @@ a.review-summary:hover .review-summary__text {
 
 .product-card__title {
   font-family: var(--font-body);
-  font-size: 13px;
-  font-weight: 500;
+  font-size: 13.5px;
+  font-weight: 400;
   line-height: 1.4;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   text-transform: none;
 }
 
 .product-card__price {
   margin-top: 1px;
   font-size: 12.5px;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   color: var(--color-muted);
 }
 
@@ -4114,7 +4133,7 @@ a.review-summary:hover .review-summary__text {
 /* 9. Footer -------------------------------------------------------------- */
 .site-footer {
   padding-block: clamp(40px, 4.4vw, 64px) 26px;
-  background: var(--color-surface);
+  background: var(--color-footer);
   font-size: 13px;
 }
 
@@ -4140,7 +4159,7 @@ a.review-summary:hover .review-summary__text {
   margin-bottom: 12px;
   font-family: var(--font-heading);
   font-size: 22px;
-  font-weight: 700;
+  font-weight: var(--font-heading-weight);
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -4156,8 +4175,10 @@ a.review-summary:hover .review-summary__text {
   flex-wrap: wrap;
   gap: 8px 20px;
   margin-top: 20px;
-  font-size: 11.5px;
-  letter-spacing: 0.1em;
+  font-family: var(--font-label);
+  font-size: 9.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -4168,11 +4189,11 @@ a.review-summary:hover .review-summary__text {
 }
 
 .site-footer__heading {
-  margin-bottom: 14px;
-  font-family: var(--font-body);
-  font-size: 12px;
+  margin-bottom: 16px;
+  font-family: var(--font-label);
+  font-size: 10px;
   font-weight: 500;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
@@ -4189,7 +4210,7 @@ a.review-summary:hover .review-summary__text {
   margin-bottom: 12px;
   font-family: var(--font-heading);
   font-size: clamp(40px, 10vw, 170px);
-  font-weight: 700;
+  font-weight: var(--font-heading-weight);
   line-height: 0.9;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -5225,4 +5246,248 @@ h4 {
   .trust-bar .trust-badge:nth-child(n + 3) {
     border-top: 0;
   }
+}
+
+/* ==========================================================================
+   12. Brand typography and colour roles
+   Headings: Big Caslon. Labels, buttons and small capitals: Nord.
+   Text: Poppins Light.
+   ========================================================================== */
+body {
+  font-weight: var(--font-body-weight, 300);
+  letter-spacing: 0.02em;
+}
+
+strong,
+b {
+  font-weight: var(--font-strong);
+}
+
+h1,
+h2,
+h3,
+h4 {
+  letter-spacing: 0.03em;
+}
+
+/* Small capitals set in the label face */
+.eyebrow,
+.section-heading,
+.section-label,
+.button,
+.link-arrow,
+.trust-bar__label,
+.trust-badge__text strong,
+.collection-tile__title,
+.review-quote__author,
+.ugc-card__handle,
+.award__status,
+.option__legend,
+.toolbar__toggle,
+.select select,
+.product__secure,
+.site-footer__legal {
+  font-family: var(--font-label);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.eyebrow {
+  font-size: 9.5px;
+}
+
+.section-heading,
+.section-label {
+  font-size: 10.5px;
+  padding-bottom: 4px;
+}
+
+.button {
+  font-size: 10px;
+}
+
+.button--small {
+  font-size: 9px;
+}
+
+.link-arrow {
+  font-size: 9.5px;
+}
+
+.trust-bar__label {
+  font-size: 10px;
+}
+
+.trust-badge__text strong {
+  font-size: 10.5px;
+}
+
+.trust-badge__text span {
+  margin-top: 4px;
+}
+
+.trust-badge--compact .trust-badge__text strong {
+  font-family: var(--font-label);
+  font-size: 9px;
+  letter-spacing: 0.05em;
+}
+
+.collection-tile__title {
+  font-size: clamp(12px, 1.05vw, 15px);
+}
+
+.review-quote__author,
+.ugc-card__handle,
+.product__secure,
+.site-footer__legal {
+  font-size: 9px;
+}
+
+.option__legend {
+  font-size: 9.5px;
+  text-transform: uppercase;
+}
+
+.option__legend strong {
+  font-weight: 500;
+}
+
+.option__guide {
+  font-family: var(--font-body);
+  text-transform: none;
+}
+
+.toolbar__toggle,
+.select select {
+  font-size: 9.5px;
+}
+
+.announcement__message {
+  line-height: 1.5;
+}
+
+/* Headings set in the heading face */
+.ugc__header .section-heading {
+  font-family: var(--font-heading);
+  font-size: clamp(22px, 2.2vw, 32px);
+  font-weight: var(--font-heading-weight);
+  letter-spacing: 0.03em;
+}
+
+.image-with-text__heading,
+.newsletter__heading,
+.award__heading,
+.page-hero__title,
+.cart-page__title {
+  font-weight: var(--font-heading-weight);
+  letter-spacing: 0.03em;
+}
+
+.image-with-text__heading {
+  font-size: clamp(28px, 3.2vw, 48px);
+}
+
+.newsletter__heading,
+.award__heading {
+  font-size: clamp(24px, 2.6vw, 36px);
+}
+
+.page-hero__title {
+  font-size: clamp(30px, 3.4vw, 50px);
+}
+
+.reviews__number,
+.award__year,
+.drawer__title {
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+}
+
+.marquee__item {
+  font-weight: var(--font-heading-weight);
+  letter-spacing: 0.04em;
+}
+
+.product__title {
+  font-family: var(--font-heading);
+  font-size: clamp(26px, 2.3vw, 34px);
+  font-weight: var(--font-heading-weight);
+  line-height: 1.15;
+  letter-spacing: 0.01em;
+}
+
+.product__price {
+  margin-top: 8px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.review-quote__text {
+  font-weight: var(--font-body-weight, 300);
+}
+
+.accordion__summary,
+.cart-item__title,
+.buy-bar__title,
+.cart-summary__row--total {
+  font-weight: 400;
+}
+
+.rte h2,
+.rte h3 {
+  font-size: 18px;
+}
+
+/* Colour roles */
+.site-footer {
+  background: var(--color-footer);
+}
+
+.site-footer__tagline {
+  color: inherit;
+  opacity: 0.8;
+}
+
+.award--accent,
+.newsletter--accent {
+  --section-bg: var(--color-highlight);
+  background: var(--color-highlight);
+}
+
+.award--accent .award__laurel,
+.award--dark .award__laurel {
+  border-color: currentColor;
+}
+
+.award--accent .award__text,
+.newsletter--accent .newsletter__text {
+  color: inherit;
+  opacity: 0.85;
+}
+
+.badge--muted {
+  color: var(--color-muted);
+}
+
+.option__tile input:checked + span {
+  background: var(--color-accent);
+  box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+
+.page-dim {
+  background: rgba(var(--color-text-rgb), 0.24);
+}
+
+.hero .button--ghost:hover {
+  color: var(--color-ink);
+}
+
+/* Stars stay legible on coloured backgrounds. */
+.site-footer,
+.award--accent,
+.newsletter--accent,
+.reviews--dark,
+.ugc--dark,
+.trust-bar--dark {
+  --color-brass: var(--color-on-dark);
 }
