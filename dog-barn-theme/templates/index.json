@@ -358,20 +358,6 @@
         "surface": false
       }
     },
-    "details": {
-      "type": "image-with-text",
-      "settings": {
-        "image": "shopify://shop_images/7d560008-7d4b-4eb0-99ae-fadd26779fc0.jpg",
-        "eyebrow": "The details",
-        "heading": "Stylish, yet practical",
-        "text": "<p>Soft, stretchy, water-resistant polar fleece. A zip-up back that makes dressing simple, a brass button fastening, and integrated D-rings so you can clip on a lead and head out.</p>",
-        "link_label": "Shop fleeces",
-        "link": "shopify://collections/fleeces",
-        "flip": true,
-        "surface": false,
-        "shape": "rect"
-      }
-    },
     "story": {
       "type": "hero",
       "settings": {
@@ -443,6 +429,96 @@
         "text": "Be first to hear about new collections and offers.",
         "scheme": "light"
       }
+    },
+    "tour": {
+      "type": "feature-tour",
+      "blocks": {
+        "s1": {
+          "type": "step",
+          "settings": {
+            "title": "No over-the-head design",
+            "text": "A 3-click buckle system makes it easy to put on and take off, perfect for nervous or head-shy dogs.",
+            "angle": 30,
+            "zoom": 100
+          }
+        },
+        "s2": {
+          "type": "step",
+          "settings": {
+            "title": "Top handle",
+            "text": "Ideal for lifting your dog over stiles, for extra control on hikes, or for holding them close when needed.",
+            "angle": 120,
+            "zoom": 90
+          }
+        },
+        "s3": {
+          "type": "step",
+          "settings": {
+            "title": "AirTag storage pouch",
+            "text": "A discreet buttoned pocket to safely hold your Apple AirTag, for peace of mind on every walk.",
+            "angle": 210,
+            "zoom": 85
+          }
+        },
+        "s4": {
+          "type": "step",
+          "settings": {
+            "title": "Thin corded fabric",
+            "text": "Classy and lightweight, for a premium, tailored look with breathable comfort.",
+            "angle": 315,
+            "zoom": 100
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3",
+        "s4"
+      ],
+      "settings": {
+        "product": "chestnut-trail-adventurer-harness",
+        "eyebrow": "The Adventurer Harness",
+        "heading": "For the stylish explorer",
+        "text": "Outdoor practicality with Dog Barn Yorkshire's signature elegant styling.",
+        "button_label": "Shop the harness",
+        "scheme": "surface",
+        "start_angle": 30,
+        "tilt": 75,
+        "allow_drag": false
+      }
+    },
+    "marquee": {
+      "type": "marquee",
+      "blocks": {
+        "m1": {
+          "type": "text",
+          "settings": {
+            "text": "For the stylish & adventurous pup"
+          }
+        },
+        "m2": {
+          "type": "text",
+          "settings": {
+            "text": "Elegant yet adventurous"
+          }
+        },
+        "m3": {
+          "type": "text",
+          "settings": {
+            "text": "From the barn, in Yorkshire"
+          }
+        }
+      },
+      "block_order": [
+        "m1",
+        "m2",
+        "m3"
+      ],
+      "settings": {
+        "speed": 45,
+        "scheme": "light"
+      }
     }
   },
   "order": [
@@ -450,9 +526,10 @@
     "trust",
     "tiles",
     "best",
+    "tour",
     "award",
-    "details",
     "new",
+    "marquee",
     "videos",
     "reviews",
     "story",

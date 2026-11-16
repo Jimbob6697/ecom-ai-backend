@@ -1,0 +1,217 @@
+{%- comment -%}
+  Scroll-driven product tour. The visual stays pinned while selling points
+  scroll past, and turns as the visitor scrolls. In order of preference it shows:
+
+  1. A 3D model (GLB) — from the chosen product's 3D media, or a file URL.
+  2. A 360° spin — "Spin frame" blocks, one photo per angle.
+  3. One photo per selling point, cross-fading with a slight turn.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign tour_product = s.product
+  assign model_url = s.model_url
+  assign model_poster = blank
+
+  if model_url == blank and tour_product != blank
+    for media in tour_product.media
+      if media.media_type == 'model'
+        for source in media.sources
+          if source.format == 'glb'
+            assign model_url = source.url
+          endif
+        endfor
+        assign model_poster = media.preview_image
+        break
+      endif
+    endfor
+  endif
+
+  assign step_count = 0
+  assign frame_count = 0
+  for block in section.blocks
+    if block.type == 'step'
+      assign step_count = step_count | plus: 1
+    elsif block.type == 'frame' and block.settings.image != blank
+      assign frame_count = frame_count | plus: 1
+    endif
+  endfor
+
+  assign mode = 'images'
+  if model_url != blank
+    assign mode = 'model'
+  elsif frame_count > 1
+    assign mode = 'frames'
+  endif
+  assign tour_url = s.button_link | default: tour_product.url
+-%}
+<section
+  class="tour tour--{{ s.scheme }}"
+  data-tour
+  data-mode="{{ mode }}"
+  {% if mode == 'model' %}
+    data-viewer-src="{{ 'model-viewer.min.js' | asset_url }}"
+  {% endif %}
+>
+  <div class="page-width tour__grid">
+    <div class="tour__stage">
+      <div class="tour__visual" data-tour-visual>
+        {%- if mode == 'model' -%}
+          <model-viewer
+            class="tour__model"
+            src="{{ model_url }}"
+            {% if model_poster != blank %}
+              poster="{{ model_poster | image_url: width: 1200 }}"
+            {% endif %}
+            alt="{{ tour_product.title | default: s.heading | escape }}"
+            camera-orbit="{{ s.start_angle }}deg {{ s.tilt }}deg 105%"
+            interpolation-decay="120"
+            interaction-prompt="none"
+            shadow-intensity="0.7"
+            shadow-softness="1"
+            exposure="1"
+            disable-zoom
+            disable-pan
+            {% if s.allow_drag %}
+              camera-controls touch-action="pan-y"
+            {% endif %}
+            data-tour-model
+            data-tilt="{{ s.tilt }}"
+          ></model-viewer>
+        {%- elsif mode == 'frames' -%}
+          {%- assign frame_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'frame' and block.settings.image != blank -%}
+              <div class="tour__frame{% if frame_index == 0 %} is-active{% endif %}" data-tour-frame="{{ frame_index }}">
+                {{ block.settings.image | image_url: width: 1400 | image_tag: widths: '600, 900, 1400', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: '' }}
+              </div>
+              {%- assign frame_index = frame_index | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- else -%}
+          {%- assign step_index = 0 -%}
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'step' -%}
+              {%- assign step_image = block.settings.image | default: tour_product.media[step_index].preview_image | default: tour_product.featured_media -%}
+              <div class="tour__image{% if step_index == 0 %} is-active{% endif %}" data-tour-image="{{ step_index }}">
+                {%- if step_image != blank -%}
+                  {{ step_image | image_url: width: 1600 | image_tag: widths: '600, 900, 1200, 1600', sizes: '(min-width: 990px) 50vw, 100vw', loading: 'lazy', alt: '' }}
+                {%- else -%}
+                  {% render 'art', index: step_index, icon: 'paw' %}
+                {%- endif -%}
+              </div>
+              {%- assign step_index = step_index | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        {%- endif -%}
+      </div>
+      <div class="tour__progress" aria-hidden="true">
+        <span data-tour-count>01</span>
+        <span class="tour__bar"><span data-tour-bar></span></span>
+        <span>{% if step_count < 10 %}0{% endif %}{{ step_count }}</span>
+      </div>
+    </div>
+
+    <div class="tour__content">
+      <header class="tour__intro">
+        {%- if s.eyebrow != blank -%}
+          <p class="eyebrow" data-reveal>{{ s.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="tour__heading" data-reveal data-split>{{ s.heading | escape }}</h2>
+        {%- endif -%}
+        {%- if s.text != blank -%}
+          <p class="tour__text" data-reveal style="--i: 1">{{ s.text | escape }}</p>
+        {%- endif -%}
+      </header>
+
+      <ol class="tour__steps" role="list">
+        {%- assign step_number = 0 -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'step' -%}
+            {%- assign step_number = step_number | plus: 1 -%}
+            <li
+              class="tour-step{% if step_number == 1 %} is-active{% endif %}"
+              data-tour-step
+              data-angle="{{ block.settings.angle }}"
+              data-zoom="{{ block.settings.zoom }}"
+              {{ block.shopify_attributes }}
+            >
+              <p class="tour-step__number">{% if step_number < 10 %}0{% endif %}{{ step_number }}</p>
+              <h3 class="tour-step__title">{{ block.settings.title | escape }}</h3>
+              {%- if block.settings.text != blank -%}
+                <p class="tour-step__text">{{ block.settings.text | escape }}</p>
+              {%- endif -%}
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ol>
+
+      {%- if s.button_label != blank and tour_url != blank -%}
+        <div class="tour__cta" data-reveal>
+          <a class="button button--large" href="{{ tour_url }}">{{ s.button_label | escape }}</a>
+          {%- if tour_product != blank -%}
+            <p class="tour__price">{{ tour_product.title }} · {% render 'price', product: tour_product, show_from: true %}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Product tour",
+  "max_blocks": 50,
+  "settings": [
+    { "type": "paragraph", "content": "The picture stays in place and turns while selling points scroll past. It uses a 3D model if one is available, then a 360° spin if you add Spin frame blocks, and otherwise one photo per selling point." },
+    { "type": "product", "id": "product", "label": "Product", "info": "If this product has a 3D model in its media, the model is used automatically. Its photos are used for selling points that have no image of their own." },
+    { "type": "text", "id": "model_url", "label": "3D model file URL", "info": "Optional. A .glb file uploaded under Content → Files. Overrides the product's own 3D model." },
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "The Adventurer Harness" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "For the stylish explorer" },
+    { "type": "textarea", "id": "text", "label": "Text" },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the harness" },
+    { "type": "url", "id": "button_link", "label": "Button link", "info": "Leave empty to link to the product." },
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour scheme",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "surface", "label": "Soft panel" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "surface"
+    },
+    { "type": "header", "content": "3D model" },
+    { "type": "range", "id": "start_angle", "label": "Starting angle", "min": 0, "max": 360, "step": 15, "unit": "°", "default": 30 },
+    { "type": "range", "id": "tilt", "label": "Viewing height", "info": "90 looks straight on; lower numbers look down from above.", "min": 40, "max": 100, "step": 5, "unit": "°", "default": 75 },
+    { "type": "checkbox", "id": "allow_drag", "label": "Let visitors drag the model to turn it", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Selling point",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Top handle" },
+        { "type": "textarea", "id": "text", "label": "Text", "default": "Ideal for lifting your dog over stiles." },
+        { "type": "image_picker", "id": "image", "label": "Photo", "info": "Used when there is no 3D model or 360° spin. Leave empty to use the product's photos in order." },
+        { "type": "range", "id": "angle", "label": "3D model: turn to", "info": "The angle the model faces when this point is on screen.", "min": 0, "max": 360, "step": 15, "unit": "°", "default": 90 },
+        { "type": "range", "id": "zoom", "label": "3D model: distance", "info": "Smaller numbers move closer.", "min": 60, "max": 130, "step": 5, "unit": "%", "default": 100 }
+      ]
+    },
+    {
+      "type": "frame",
+      "name": "Spin frame",
+      "settings": [
+        { "type": "image_picker", "id": "image", "label": "Photo", "info": "One photo per angle, in turning order. 24 to 36 photos taken on a turntable give a smooth 360° spin." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product tour",
+      "blocks": [{ "type": "step" }, { "type": "step", "settings": { "title": "No over-the-head design", "text": "A 3-click buckle system makes it easy to put on and take off.", "angle": 180 } }, { "type": "step", "settings": { "title": "AirTag storage pouch", "text": "A discreet buttoned pocket.", "angle": 270 } }]
+    }
+  ]
+}
+{% endschema %}

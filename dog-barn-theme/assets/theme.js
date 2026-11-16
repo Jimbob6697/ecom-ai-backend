@@ -145,6 +145,8 @@
       element.style.setProperty('--p', progress.toFixed(4));
     });
 
+    tours.forEach(updateTour);
+
     if (designMode) return;
     scrollTargets.words.forEach((element) => {
       const rect = element.getBoundingClientRect();
@@ -930,6 +932,122 @@
   }
 
   /* ---------------------------------------------------------------------
+     Product tour: a pinned visual that turns as selling points scroll past
+     --------------------------------------------------------------------- */
+  const tours = [];
+
+  function initTours(root = document) {
+    $$('[data-tour]', root).forEach((section) => {
+      if (section.dataset.ready) return;
+      section.dataset.ready = 'true';
+
+      const tour = {
+        section,
+        mode: section.dataset.mode,
+        steps: $$('[data-tour-step]', section),
+        images: $$('[data-tour-image]', section),
+        frames: $$('[data-tour-frame]', section),
+        model: $('[data-tour-model]', section),
+        count: $('[data-tour-count]', section),
+        active: -1,
+        frame: -1,
+      };
+      tours.push(tour);
+
+      // The 3D viewer is large, so it is only fetched when the section is near.
+      if (tour.model && section.dataset.viewerSrc && 'IntersectionObserver' in window) {
+        const loader = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry.isIntersecting) return;
+            loader.disconnect();
+            if (window.customElements && customElements.get('model-viewer')) return;
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = section.dataset.viewerSrc;
+            document.head.append(script);
+          },
+          { rootMargin: '150% 0px' }
+        );
+        loader.observe(section);
+      }
+      updateTour(tour);
+    });
+  }
+
+  // Shortest way round from one angle to the next, so the model never spins back on itself.
+  const turnTo = (from, to) => from + ((((to - from) % 360) + 540) % 360) - 180;
+
+  function updateTour(tour) {
+    const { section, steps } = tour;
+    if (!steps.length) return;
+    const viewport = window.innerHeight;
+    const rect = section.getBoundingClientRect();
+    if (rect.bottom < -viewport || rect.top > viewport * 2) return;
+
+    // The reading line: mid-screen on desktop; on phones, the middle of the space under the pinned picture.
+    const focus = viewport * (window.innerWidth < 900 ? 0.76 : 0.55);
+    const centres = steps.map((step) => {
+      const box = step.getBoundingClientRect();
+      return box.top + box.height / 2;
+    });
+
+    // Which selling point is nearest the reading line.
+    let active = 0;
+    centres.forEach((centre, index) => {
+      if (Math.abs(centre - focus) < Math.abs(centres[active] - focus)) active = index;
+    });
+
+    // Continuous position between the first and last points: 0 → steps.length - 1.
+    let position = 0;
+    if (focus <= centres[0]) position = 0;
+    else if (focus >= centres[centres.length - 1]) position = centres.length - 1;
+    else {
+      for (let i = 0; i < centres.length - 1; i += 1) {
+        if (focus >= centres[i] && focus <= centres[i + 1]) {
+          position = i + (focus - centres[i]) / (centres[i + 1] - centres[i]);
+          break;
+        }
+      }
+    }
+    const progress = steps.length > 1 ? position / (steps.length - 1) : 0;
+    section.style.setProperty('--tour-p', progress.toFixed(4));
+
+    if (active !== tour.active) {
+      tour.active = active;
+      steps.forEach((step, index) => step.classList.toggle('is-active', index === active));
+      tour.images.forEach((image, index) => {
+        image.classList.toggle('is-active', index === active);
+        image.classList.toggle('is-past', index < active);
+      });
+      if (tour.count) tour.count.textContent = String(active + 1).padStart(2, '0');
+    }
+
+    if (tour.frames.length) {
+      const frame = Math.round(progress * (tour.frames.length - 1));
+      if (frame !== tour.frame) {
+        tour.frame = frame;
+        tour.frames.forEach((image, index) => image.classList.toggle('is-active', index === frame));
+      }
+    }
+
+    if (tour.model && !reduceMotion) {
+      // Blend the angle and distance set on the two nearest selling points.
+      const lower = Math.floor(position);
+      const upper = Math.min(lower + 1, steps.length - 1);
+      const blend = position - lower;
+      let angle = Number(steps[0].dataset.angle) || 0;
+      for (let i = 1; i <= lower; i += 1) angle = turnTo(angle, Number(steps[i].dataset.angle) || 0);
+      const next = turnTo(angle, Number(steps[upper].dataset.angle) || 0);
+      const theta = angle + (next - angle) * blend;
+      const zoomA = Number(steps[lower].dataset.zoom) || 100;
+      const zoomB = Number(steps[upper].dataset.zoom) || 100;
+      const zoom = zoomA + (zoomB - zoomA) * blend;
+      const tilt = Number(tour.model.dataset.tilt) || 75;
+      tour.model.setAttribute('camera-orbit', `${theta.toFixed(1)}deg ${tilt}deg ${zoom.toFixed(1)}%`);
+    }
+  }
+
+  /* ---------------------------------------------------------------------
      Collection filters
      --------------------------------------------------------------------- */
   function initFilters(root = document) {
@@ -970,6 +1088,7 @@
     initRecommendations(root);
     initFilters(root);
     initDirectory(root);
+    initTours(root);
     initUgc(root);
     collectScrollTargets();
     requestScrollUpdate();
@@ -993,7 +1112,12 @@
     initAnnouncements();
     initSection(event.target);
   });
-  document.addEventListener('shopify:section:unload', () => setTimeout(collectScrollTargets, 0));
+  document.addEventListener('shopify:section:unload', (event) => {
+    for (let i = tours.length - 1; i >= 0; i -= 1) {
+      if (event.target.contains(tours[i].section)) tours.splice(i, 1);
+    }
+    setTimeout(collectScrollTargets, 0);
+  });
   document.addEventListener('shopify:block:select', (event) => {
     event.target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
   });

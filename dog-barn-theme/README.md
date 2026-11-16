@@ -49,6 +49,18 @@ To edit it, open Customize and choose **Collections list** from the page picker 
 
 A link such as `/collections#fleeces` opens the page with that category already expanded — useful for menu links. The part after `#` is the category title in lower case with hyphens (`#rain-jackets`, `#harnesses`).
 
+## Product tour (scroll animation)
+
+The home page has a **Product tour** section for the Adventurer Harness: the picture stays pinned while four selling points scroll past, and it turns as the visitor scrolls. It picks the best visual available:
+
+1. **3D model** — if the chosen product has a 3D model in its media (Products → the product → Media → add a `.glb` file), or you paste a `.glb` file URL into the section, the model rotates to the angle set on each selling point and moves closer or further away. The 3D viewer only downloads when the section is about to come into view.
+2. **360° spin** — add *Spin frame* blocks, one photo per angle (24 to 36 shots on a turntable), and the photos are scrubbed as the visitor scrolls.
+3. **Photos** — with neither of the above, each selling point shows its own photo (or the product's photos in order), wiping from one to the next with a slight turn. This is what shows today.
+
+**The theme does not include a 3D model of the harness.** One has to be made from the real product, by a 3D scanning or product-visualisation service, and exported as GLB (ideally under 10MB). Once it is uploaded to the product, the section switches to it automatically.
+
+Each selling point has a “turn to” angle and a distance for the 3D model, so you can point the camera at the handle, the buckle or the AirTag pouch. The section can be added to any page, including product templates.
+
 ## What's in it
 
 **Trust** — rotating announcement bar with review score, a “Why Dog Barn” trust band, award band, product-page trust badges, secure checkout and payment icons, free-delivery progress in the bag.
