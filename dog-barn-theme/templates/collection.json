@@ -1,4 +1,15 @@
 {
-  "sections": { "main": { "type": "main-collection", "settings": {} } },
-  "order": ["main"]
+  "sections": {
+    "main": {
+      "type": "main-collection",
+      "settings": {
+        "per_page": 24,
+        "show_image": true,
+        "description": "hidden"
+      }
+    }
+  },
+  "order": [
+    "main"
+  ]
 }
