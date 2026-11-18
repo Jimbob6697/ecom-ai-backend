@@ -1131,6 +1131,261 @@
   }
 
   /* ---------------------------------------------------------------------
+     Find your fit: dog, size and colour questions, then matching products
+     --------------------------------------------------------------------- */
+  function initFinder(root = document) {
+    $$('[data-finder]', root).forEach((finder) => {
+      if (finder.dataset.ready) return;
+      finder.dataset.ready = 'true';
+
+      const dataNode = $('[data-finder-products]', finder);
+      let products = [];
+      try {
+        products = JSON.parse(dataNode.textContent);
+      } catch (error) {
+        console.error(error);
+      }
+
+      const words = (value) =>
+        (value || '')
+          .split(',')
+          .map((word) => word.trim().toLowerCase())
+          .filter(Boolean);
+      const hasAny = (text, list) => list.some((word) => text.includes(word));
+      const escapeHtml = (value) => {
+        const node = document.createElement('span');
+        node.textContent = value;
+        return node.innerHTML;
+      };
+
+      const steps = ['dog', 'size', 'colour', 'results'];
+      const panels = Object.fromEntries(steps.map((name) => [name, $(`[data-finder-step="${name}"]`, finder)]));
+      const dogs = $$('[data-finder-choice="dog"]', finder);
+      const sizes = $$('[data-finder-choice="size"]', finder);
+      const colours = $$('[data-finder-choice="colour"]', finder);
+      const universal = words(finder.dataset.universal);
+      const state = { dog: null, size: null, colours: [], type: null };
+
+      // Everything a product can be matched on, lower-cased once.
+      products.forEach((product) => {
+        product.text = `${product.t} ${product.y} ${product.g}`.toLowerCase();
+        product.title = product.t.toLowerCase();
+      });
+      // Sizes on a scale the answers do not cover (for example numbered sizes) are
+      // still shown, but the customer picks the size on the product page.
+      const known = sizes.flatMap((button) => words(button.dataset.values));
+      products.forEach((product) => {
+        if (product.s < 0) return;
+        const values = [...new Set(product.v.map((variant) => String(variant.o[product.s]).trim().toLowerCase()))];
+        product.one = values.length === 1 && !known.includes(values[0]);
+        product.other = !product.one && !values.some((value) => known.includes(value));
+      });
+      [dogs, sizes, colours].forEach((list) => list.forEach((button, index) => button.style.setProperty('--n', index)));
+
+      const passesDog = (product) => {
+        if (state.dog === null) return true;
+        const button = dogs[state.dog];
+        const include = words(button.dataset.include);
+        const exclude = words(button.dataset.exclude);
+        if (hasAny(product.text, universal)) return true;
+        if (exclude.length && hasAny(product.text, exclude)) return false;
+        return !include.length || hasAny(product.text, include);
+      };
+
+      // The variant to offer for a size answer, or null when the product does not come in it.
+      const variantFor = (product, sizeIndex) => {
+        if (product.s < 0 || product.one) return product.v.find((variant) => variant.a) || product.v[0];
+        if (product.other) return { other: true, a: product.v.some((variant) => variant.a), p: product.v[0].p };
+        if (sizeIndex === null) return product.v.find((variant) => variant.a) || product.v[0];
+        const wanted = words(sizes[sizeIndex].dataset.values);
+        const matches = product.v.filter((variant) => wanted.includes(String(variant.o[product.s]).trim().toLowerCase()));
+        if (!matches.length) return null;
+        return matches.find((variant) => variant.a) || matches[0];
+      };
+
+      const passesColour = (product) => {
+        if (!state.colours.length) return true;
+        return state.colours.some((index) => product.title.includes(colours[index].dataset.match.toLowerCase()));
+      };
+
+      const matches = () =>
+        products
+          .filter(passesDog)
+          .map((product) => ({ product, variant: variantFor(product, state.size) }))
+          .filter((item) => item.variant && passesColour(item.product));
+
+      const go = (name, back = false) => {
+        steps.forEach((step) => {
+          const active = step === name;
+          panels[step].hidden = !active;
+          panels[step].classList.toggle('is-active', active);
+          panels[step].classList.toggle('is-back', active && back);
+        });
+        finder.style.setProperty('--finder-p', (steps.indexOf(name) + 1) / steps.length);
+        const top = finder.getBoundingClientRect().top + window.scrollY - 90;
+        if (window.scrollY > top) window.scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
+      };
+
+      const syncUrl = () => {
+        const url = new URL(window.location.href);
+        ['dog', 'size', 'colours'].forEach((key) => url.searchParams.delete(key));
+        if (state.dog !== null) url.searchParams.set('dog', state.dog);
+        if (state.size !== null) url.searchParams.set('size', state.size);
+        if (state.colours.length) url.searchParams.set('colours', state.colours.join('-'));
+        window.history.replaceState({}, '', url);
+      };
+
+      // Only offer sizes that the chosen dog's products actually come in.
+      const refreshSizes = () => {
+        const pool = products.filter(passesDog);
+        sizes.forEach((button, index) => {
+          button.hidden = !pool.some((product) => product.s >= 0 && !product.one && !product.other && variantFor(product, index));
+        });
+      };
+
+      const render = () => {
+        const all = matches();
+        const types = [...new Set(all.map((item) => item.product.y).filter(Boolean))].sort();
+        if (state.type && !types.includes(state.type)) state.type = null;
+        const shown = state.type ? all.filter((item) => item.product.y === state.type) : all;
+
+        const parts = [];
+        if (state.dog !== null) parts.push(dogs[state.dog].dataset.label);
+        if (state.size !== null) parts.push(sizes[state.size].dataset.label);
+        parts.push(state.colours.length ? state.colours.map((index) => colours[index].dataset.label).join(', ') : 'Every colour');
+        $('[data-finder-summary]', finder).textContent = `${parts.join(' · ')} — ${all.length} ${all.length === 1 ? 'match' : 'matches'}`;
+
+        const filters = $('[data-finder-filters]', finder);
+        filters.innerHTML =
+          types.length > 1
+            ? [`<button class="finder-chip" type="button" data-finder-type="" aria-pressed="${!state.type}">All</button>`]
+                .concat(
+                  types.map(
+                    (type) =>
+                      `<button class="finder-chip" type="button" data-finder-type="${escapeHtml(type)}" aria-pressed="${state.type === type}">${escapeHtml(type)}</button>`
+                  )
+                )
+                .join('')
+            : '';
+
+        const sizeLabel = finder.dataset.sizeLabel || 'Size';
+        // In stock in the chosen size first.
+        const rank = (item) => (item.variant.a ? 0 : 2) + (item.variant.other ? 1 : 0);
+        shown.sort((a, b) => rank(a) - rank(b));
+        $('[data-finder-results]', finder).innerHTML = shown
+          .map(({ product, variant }, index) => {
+            const size = variant.other
+              ? escapeHtml(finder.dataset.otherSize)
+              : product.s < 0 || product.one
+                ? escapeHtml(finder.dataset.oneSize)
+                : `${escapeHtml(sizeLabel)} ${escapeHtml(String(variant.o[product.s]))}`;
+            const href = variant.other ? product.u : `${product.u}${product.u.includes('?') ? '&' : '?'}variant=${variant.id}`;
+            const image = product.i ? `<img src="${escapeHtml(product.i)}" alt="" loading="lazy" width="700" height="700">` : '';
+            const action = variant.a && !variant.other
+              ? `<div class="quick-add" data-quick-add><input type="hidden" value="${variant.id}" data-quick-id><button class="quick-add__button" type="button" data-quick-add-button aria-label="${escapeHtml(finder.dataset.addLabel)}: ${escapeHtml(product.t)}"><span>${escapeHtml(finder.dataset.addLabel)}</span></button></div>`
+              : '';
+            return `<li class="finder-card" style="--n: ${index}">
+              <a class="finder-card__link" href="${escapeHtml(href)}">
+                <span class="finder-card__media">${image}</span>
+                <span class="finder-card__title">${escapeHtml(product.t)}</span>
+              </a>
+              <p class="finder-card__meta"><span>${variant.p}</span><span class="finder-card__size${variant.a ? '' : ' is-sold-out'}">${variant.a ? size : `${size} · ${escapeHtml(finder.dataset.soldOut)}`}</span></p>
+              ${action}
+            </li>`;
+          })
+          .join('');
+        $('[data-finder-empty]', finder).hidden = shown.length > 0;
+        $('[data-finder-any-colour]', finder).hidden = !state.colours.length;
+      };
+
+      const showResults = () => {
+        render();
+        syncUrl();
+        go('results');
+        const heading = $('[data-finder-heading]', finder);
+        if (heading) heading.focus({ preventScroll: true });
+      };
+
+      const updateShowLabel = () => {
+        const label = $('[data-finder-show-label]', finder);
+        if (!label.dataset.base) label.dataset.base = label.textContent;
+        label.textContent = `${label.dataset.base} (${matches().length})`;
+      };
+
+      finder.addEventListener('click', (event) => {
+        const choice = event.target.closest('[data-finder-choice]');
+        if (choice) {
+          const kind = choice.dataset.finderChoice;
+          if (kind === 'dog') {
+            state.dog = dogs.indexOf(choice);
+            state.size = null;
+            refreshSizes();
+            go('size');
+          } else if (kind === 'size') {
+            state.size = sizes.indexOf(choice);
+            updateShowLabel();
+            go('colour');
+          } else {
+            const index = colours.indexOf(choice);
+            const on = !state.colours.includes(index);
+            state.colours = on ? state.colours.concat(index) : state.colours.filter((item) => item !== index);
+            choice.setAttribute('aria-pressed', String(on));
+            updateShowLabel();
+          }
+          return;
+        }
+
+        if (event.target.closest('[data-finder-show]')) return showResults();
+
+        if (event.target.closest('[data-finder-back]')) {
+          const current = steps.find((step) => !panels[step].hidden);
+          return go(steps[Math.max(0, steps.indexOf(current) - 1)], true);
+        }
+
+        if (event.target.closest('[data-finder-restart]')) {
+          state.dog = null;
+          state.size = null;
+          state.colours = [];
+          state.type = null;
+          colours.forEach((button) => button.setAttribute('aria-pressed', 'false'));
+          syncUrl();
+          return go('dog', true);
+        }
+
+        if (event.target.closest('[data-finder-any-colour]')) {
+          state.colours = [];
+          colours.forEach((button) => button.setAttribute('aria-pressed', 'false'));
+          return showResults();
+        }
+
+        const chip = event.target.closest('[data-finder-type]');
+        if (chip) {
+          state.type = chip.dataset.finderType || null;
+          render();
+        }
+      });
+
+      // A shared or revisited link opens straight on the results.
+      const params = new URLSearchParams(window.location.search);
+      const dog = Number(params.get('dog'));
+      const size = Number(params.get('size'));
+      if (params.has('dog') && dogs[dog] && params.has('size') && sizes[size]) {
+        state.dog = dog;
+        state.size = size;
+        state.colours = (params.get('colours') || '')
+          .split('-')
+          .filter(Boolean)
+          .map(Number)
+          .filter((index) => colours[index]);
+        state.colours.forEach((index) => colours[index].setAttribute('aria-pressed', 'true'));
+        refreshSizes();
+        render();
+        go('results');
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
      Collection filters
      --------------------------------------------------------------------- */
   function initFilters(root = document) {
@@ -1171,6 +1426,7 @@
     initRecommendations(root);
     initFilters(root);
     initDirectory(root);
+    initFinder(root);
     initAddons(root);
     initTours(root);
     initUgc(root);

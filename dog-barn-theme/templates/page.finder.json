@@ -1,0 +1,191 @@
+{
+  "sections": {
+    "finder": {
+      "type": "dog-finder",
+      "blocks": {
+        "dog-1": {
+          "type": "dog",
+          "settings": {
+            "label": "Dachshund",
+            "caption": "Cut for longer backs and shorter legs",
+            "include": "Dachshund"
+          }
+        },
+        "dog-2": {
+          "type": "dog",
+          "settings": {
+            "label": "Another breed",
+            "caption": "Our classic fit",
+            "exclude": "Dachshund"
+          }
+        },
+        "size-1": {
+          "type": "size",
+          "settings": {
+            "label": "XXS",
+            "values": "XXS"
+          }
+        },
+        "size-2": {
+          "type": "size",
+          "settings": {
+            "label": "XS",
+            "values": "XS"
+          }
+        },
+        "size-3": {
+          "type": "size",
+          "settings": {
+            "label": "Small",
+            "values": "S, SS, SW"
+          }
+        },
+        "size-4": {
+          "type": "size",
+          "settings": {
+            "label": "Medium",
+            "values": "M, MS, MW"
+          }
+        },
+        "size-5": {
+          "type": "size",
+          "settings": {
+            "label": "Large",
+            "values": "L"
+          }
+        },
+        "size-6": {
+          "type": "size",
+          "settings": {
+            "label": "XL",
+            "values": "XL"
+          }
+        },
+        "colour-1": {
+          "type": "colour",
+          "settings": {
+            "label": "Chestnut Trail",
+            "colour": "#6f4e37",
+            "match": "Chestnut Trail"
+          }
+        },
+        "colour-2": {
+          "type": "colour",
+          "settings": {
+            "label": "Forest Glade",
+            "colour": "#5c6b52",
+            "match": "Forest Glade"
+          }
+        },
+        "colour-3": {
+          "type": "colour",
+          "settings": {
+            "label": "Berry Moors",
+            "colour": "#6d1f3a",
+            "match": "Berry Moors"
+          }
+        },
+        "colour-4": {
+          "type": "colour",
+          "settings": {
+            "label": "Starlit Meadow",
+            "colour": "#8fa9c4",
+            "match": "Starlit Meadow"
+          }
+        },
+        "colour-5": {
+          "type": "colour",
+          "settings": {
+            "label": "Blush Petal",
+            "colour": "#e3b9bd",
+            "match": "Blush Petal"
+          }
+        },
+        "colour-6": {
+          "type": "colour",
+          "settings": {
+            "label": "Ivory Dune",
+            "colour": "#e4dccb",
+            "match": "Ivory Dune"
+          }
+        },
+        "colour-7": {
+          "type": "colour",
+          "settings": {
+            "label": "Truffle Dusk",
+            "colour": "#8a7767",
+            "match": "Truffle Dusk"
+          }
+        },
+        "colour-8": {
+          "type": "colour",
+          "settings": {
+            "label": "Sandstone Harbour",
+            "colour": "#c8ad8a",
+            "match": "Sandstone Harbour"
+          }
+        },
+        "colour-9": {
+          "type": "colour",
+          "settings": {
+            "label": "Duck Egg Vale",
+            "colour": "#a9c5c0",
+            "match": "Duck Egg Vale"
+          }
+        },
+        "colour-10": {
+          "type": "colour",
+          "settings": {
+            "label": "Lavender Meadow",
+            "colour": "#b3a4cf",
+            "match": "Lavender Meadow"
+          }
+        },
+        "colour-11": {
+          "type": "colour",
+          "settings": {
+            "label": "Blue Sky Moor",
+            "colour": "#7fa6cf",
+            "match": "Blue Sky Moor"
+          }
+        },
+        "colour-12": {
+          "type": "colour",
+          "settings": {
+            "label": "Barley Vale",
+            "colour": "#d4bc85",
+            "match": "Barley Vale"
+          }
+        }
+      },
+      "block_order": [
+        "dog-1",
+        "dog-2",
+        "size-1",
+        "size-2",
+        "size-3",
+        "size-4",
+        "size-5",
+        "size-6",
+        "colour-1",
+        "colour-2",
+        "colour-3",
+        "colour-4",
+        "colour-5",
+        "colour-6",
+        "colour-7",
+        "colour-8",
+        "colour-9",
+        "colour-10",
+        "colour-11",
+        "colour-12"
+      ],
+      "settings": {
+        "size_help_link": "shopify://pages/contact"
+      }
+    }
+  },
+  "order": [
+    "finder"
+  ]
+}

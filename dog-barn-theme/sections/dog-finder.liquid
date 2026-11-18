@@ -1,0 +1,275 @@
+{%- comment -%}
+  "Find your fit": asks which dog, what size and which colours, then shows only
+  the matching products with the right size already chosen.
+
+  How matching works
+  - Dog:    a product matches a dog when its title, type or tags contain one of
+            that dog's "show" words (or it has none), and none of its "hide" words.
+            Products containing one of the section's "suits every dog" words always pass.
+  - Size:   each size answer lists the size labels it covers (for example S, SS, SW).
+            A product matches when one of its variants uses one of those labels.
+            Products with no size option always match.
+  - Colour: a product matches when its title contains the colour's match word.
+{%- endcomment -%}
+{%- liquid
+  assign s = section.settings
+  assign finder_collection = s.collection | default: collections.all
+-%}
+<section
+  class="finder"
+  data-finder
+  data-universal="{{ s.universal | escape }}"
+  data-size-label="{{ s.size_prefix | escape }}"
+  data-one-size="{{ s.one_size_label | escape }}"
+  data-other-size="{{ s.other_size_label | escape }}"
+  data-add-label="{{ 'products.add' | t | escape }}"
+  data-sold-out="{{ 'products.sold_out' | t | escape }}"
+>
+  <div class="page-width finder__inner">
+    <div class="finder__progress" aria-hidden="true"><span data-finder-progress></span></div>
+
+    <div class="finder__step is-active" data-finder-step="dog">
+      <p class="eyebrow">{{ s.eyebrow | escape }} · 1 / 3</p>
+      <h1 class="finder__question">{{ s.dog_question | escape }}</h1>
+      {%- if s.dog_text != blank -%}
+        <p class="finder__text">{{ s.dog_text | escape }}</p>
+      {%- endif -%}
+      <div class="finder__options finder__options--dogs">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'dog' -%}
+            <button
+              class="finder-option finder-option--dog"
+              type="button"
+              data-finder-choice="dog"
+              data-include="{{ block.settings.include | escape }}"
+              data-exclude="{{ block.settings.exclude | escape }}"
+              data-label="{{ block.settings.label | escape }}"
+              {{ block.shopify_attributes }}
+            >
+              <span class="finder-option__media">
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 900 | image_tag: widths: '300, 500, 700, 900', sizes: '(min-width: 750px) 30vw, 80vw', loading: 'lazy', alt: '' }}
+                {%- else -%}
+                  {% render 'art', index: forloop.index, icon: 'paw' %}
+                {%- endif -%}
+              </span>
+              <span class="finder-option__label">{{ block.settings.label | escape }}</span>
+              {%- if block.settings.caption != blank -%}
+                <span class="finder-option__caption">{{ block.settings.caption | escape }}</span>
+              {%- endif -%}
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+
+    <div class="finder__step" data-finder-step="size" hidden>
+      <p class="eyebrow">{{ s.eyebrow | escape }} · 2 / 3</p>
+      <h2 class="finder__question">{{ s.size_question | escape }}</h2>
+      {%- if s.size_text != blank -%}
+        <p class="finder__text">{{ s.size_text | escape }}</p>
+      {%- endif -%}
+      <div class="finder__options finder__options--sizes">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'size' -%}
+            <button
+              class="finder-option finder-option--size"
+              type="button"
+              data-finder-choice="size"
+              data-values="{{ block.settings.values | escape }}"
+              data-label="{{ block.settings.label | escape }}"
+              {{ block.shopify_attributes }}
+            >
+              <span class="finder-option__label">{{ block.settings.label | escape }}</span>
+              {%- if block.settings.caption != blank -%}
+                <span class="finder-option__caption">{{ block.settings.caption | escape }}</span>
+              {%- endif -%}
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      {%- if s.size_help_label != blank and s.size_help_link != blank -%}
+        <p class="finder__help"><a class="link-arrow" href="{{ s.size_help_link }}" target="_blank" rel="noopener">{{ s.size_help_label | escape }}</a></p>
+      {%- endif -%}
+      <button class="finder__back" type="button" data-finder-back>{% render 'icon', name: 'chevron-left' %}Back</button>
+    </div>
+
+    <div class="finder__step" data-finder-step="colour" hidden>
+      <p class="eyebrow">{{ s.eyebrow | escape }} · 3 / 3</p>
+      <h2 class="finder__question">{{ s.colour_question | escape }}</h2>
+      {%- if s.colour_text != blank -%}
+        <p class="finder__text">{{ s.colour_text | escape }}</p>
+      {%- endif -%}
+      <div class="finder__options finder__options--colours">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'colour' -%}
+            <button
+              class="finder-option finder-option--colour"
+              type="button"
+              aria-pressed="false"
+              data-finder-choice="colour"
+              data-match="{{ block.settings.match | default: block.settings.label | escape }}"
+              data-label="{{ block.settings.label | escape }}"
+              {{ block.shopify_attributes }}
+            >
+              <span class="finder-option__swatch" style="--swatch: {{ block.settings.colour }}">
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+                {%- endif -%}
+                {% render 'icon', name: 'check' %}
+              </span>
+              <span class="finder-option__label">{{ block.settings.label | escape }}</span>
+            </button>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+      <div class="finder__actions">
+        <button class="button button--large" type="button" data-finder-show>
+          <span data-finder-show-label>{{ s.show_label | escape }}</span>
+        </button>
+      </div>
+      <button class="finder__back" type="button" data-finder-back>{% render 'icon', name: 'chevron-left' %}Back</button>
+    </div>
+
+    <div class="finder__step finder__step--results" data-finder-step="results" hidden>
+      <header class="finder__results-header">
+        <div>
+          <p class="eyebrow">{{ s.results_eyebrow | escape }}</p>
+          <h2 class="finder__question" data-finder-heading tabindex="-1">{{ s.results_heading | escape }}</h2>
+          <p class="finder__summary" data-finder-summary></p>
+        </div>
+        <button class="button button--outline button--small" type="button" data-finder-restart>{{ s.restart_label | escape }}</button>
+      </header>
+      <div class="finder__filters" data-finder-filters></div>
+      <ul class="finder__grid product-grid" role="list" data-finder-results></ul>
+      <div class="finder__empty" data-finder-empty hidden>
+        <p>{{ s.empty_text | escape }}</p>
+        <button class="button button--small" type="button" data-finder-any-colour>{{ s.any_colour_label | escape }}</button>
+      </div>
+    </div>
+
+    <noscript>
+      <p class="finder__text">
+        This page needs JavaScript. You can <a href="{{ routes.collections_url }}">browse all collections</a> instead.
+      </p>
+    </noscript>
+  </div>
+
+  <script type="application/json" data-finder-products>
+    [
+      {%- paginate finder_collection.products by 250 -%}
+        {%- for product in finder_collection.products -%}
+          {%- liquid
+            assign size_index = -1
+            unless product.has_only_default_variant
+              for option_name in product.options
+                assign option_lower = option_name | downcase
+                if option_lower contains 'size' and size_index == -1
+                  assign size_index = forloop.index0
+                endif
+              endfor
+            endunless
+            assign card_image = ''
+            if product.featured_media
+              assign card_image = product.featured_media | image_url: width: 700
+            endif
+          -%}
+          {
+            "t": {{ product.title | json }},
+            "u": {{ product.url | json }},
+            "y": {{ product.type | json }},
+            "g": {{ product.tags | join: ',' | json }},
+            "i": {{ card_image | json }},
+            "s": {{ size_index }},
+            "v": [
+              {%- for variant in product.variants -%}
+                {%- assign variant_price = variant.price | money -%}
+                { "id": {{ variant.id }}, "o": {{ variant.options | json }}, "a": {{ variant.available | json }}, "p": {{ variant_price | json }} }
+                {%- unless forloop.last -%},{%- endunless -%}
+              {%- endfor -%}
+            ]
+          }
+          {%- unless forloop.last -%},{%- endunless -%}
+        {%- endfor -%}
+      {%- endpaginate -%}
+    ]
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Find your fit",
+  "max_blocks": 50,
+  "settings": [
+    { "type": "paragraph", "content": "A three-question finder: dog, size, colours. Add Dog, Size and Colour blocks for the answers. Results link to each product with the matching size already chosen." },
+    { "type": "collection", "id": "collection", "label": "Products to search", "info": "Leave empty to search every product (up to 250)." },
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Find your fit" },
+    { "type": "text", "id": "universal", "label": "Suits every dog", "info": "Comma-separated words. Products with any of these in their title, type or tags are shown whichever dog is chosen.", "default": "Collar, Lead, Poo Bag, Bow Tie" },
+    { "type": "header", "content": "Question 1: dog" },
+    { "type": "text", "id": "dog_question", "label": "Question", "default": "Who are we dressing?" },
+    { "type": "text", "id": "dog_text", "label": "Text", "default": "Our Dachshund range is cut for longer backs and shorter legs." },
+    { "type": "header", "content": "Question 2: size" },
+    { "type": "text", "id": "size_question", "label": "Question", "default": "What size is your dog?" },
+    { "type": "text", "id": "size_text", "label": "Text", "default": "Choose the size you would normally buy. Every dog is different, so check the size guide on each product before ordering." },
+    { "type": "text", "id": "size_help_label", "label": "Help link label", "default": "Need help with sizing? Get in touch" },
+    { "type": "url", "id": "size_help_link", "label": "Help link" },
+    { "type": "header", "content": "Question 3: colours" },
+    { "type": "text", "id": "colour_question", "label": "Question", "default": "Which colours do you love?" },
+    { "type": "text", "id": "colour_text", "label": "Text", "default": "Pick as many as you like, or skip to see every colour." },
+    { "type": "text", "id": "show_label", "label": "Button label", "default": "Show my matches" },
+    { "type": "header", "content": "Results" },
+    { "type": "text", "id": "results_eyebrow", "label": "Small label", "default": "Your matches" },
+    { "type": "text", "id": "results_heading", "label": "Heading", "default": "Picked for your dog" },
+    { "type": "text", "id": "size_prefix", "label": "Size label", "info": "Shown before the chosen size on each product.", "default": "Size" },
+    { "type": "text", "id": "one_size_label", "label": "Label for products with no sizes", "default": "One size" },
+    { "type": "text", "id": "other_size_label", "label": "Label for other size scales", "info": "Shown on products whose sizes are not covered by any Size answer, such as numbered sizes. To pre-select those too, add the numbers to each Size answer.", "default": "Choose your size" },
+    { "type": "text", "id": "restart_label", "label": "Start again label", "default": "Start again" },
+    { "type": "text", "id": "empty_text", "label": "No matches message", "default": "Nothing matches all three answers just yet." },
+    { "type": "text", "id": "any_colour_label", "label": "No matches button", "default": "Show every colour" }
+  ],
+  "blocks": [
+    {
+      "type": "dog",
+      "name": "Dog",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Answer", "default": "Dachshund" },
+        { "type": "text", "id": "caption", "label": "Caption" },
+        { "type": "image_picker", "id": "image", "label": "Photo" },
+        { "type": "text", "id": "include", "label": "Show products containing", "info": "Comma-separated words matched against the product title, type and tags. Leave empty to show everything." },
+        { "type": "text", "id": "exclude", "label": "Hide products containing", "info": "Comma-separated words." }
+      ]
+    },
+    {
+      "type": "size",
+      "name": "Size",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Answer", "default": "Small" },
+        { "type": "text", "id": "caption", "label": "Caption", "info": "Optional, for example a chest measurement from your size guide." },
+        { "type": "text", "id": "values", "label": "Size labels this covers", "info": "Comma-separated, exactly as they appear on your products, for example: S, SS, SW", "default": "S" }
+      ]
+    },
+    {
+      "type": "colour",
+      "name": "Colour",
+      "settings": [
+        { "type": "text", "id": "label", "label": "Answer", "default": "Chestnut Trail" },
+        { "type": "color", "id": "colour", "label": "Swatch colour", "default": "#6f4e37" },
+        { "type": "image_picker", "id": "image", "label": "Fabric photo", "info": "Optional. Replaces the flat colour." },
+        { "type": "text", "id": "match", "label": "Match products containing", "info": "Leave empty to use the answer text. Matched against the product title." }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Find your fit",
+      "blocks": [
+        { "type": "dog", "settings": { "label": "Dachshund", "include": "Dachshund" } },
+        { "type": "dog", "settings": { "label": "Another breed", "exclude": "Dachshund" } },
+        { "type": "size", "settings": { "label": "Small", "values": "S, SS, SW" } },
+        { "type": "size", "settings": { "label": "Medium", "values": "M, MS, MW" } },
+        { "type": "colour" }
+      ]
+    }
+  ]
+}
+{% endschema %}

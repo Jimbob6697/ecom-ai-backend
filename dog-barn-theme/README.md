@@ -108,3 +108,23 @@ The theme accepts each metafield in whichever form it was created: text, multi-l
 - Photography: the minimal look is at its best with clean, consistent product shots on a plain background. The current lifestyle photos work, but studio-style images on light grey would lift the product grid further.
 - The free-delivery bar counts the whole bag. Because free delivery applies to dog accessories only, the bag shows that caveat beside it.
 - The theme assumes Shopify's current hosted customer accounts.
+
+## Find your fit page (filter by dog)
+
+A three-question finder: which dog, what size, which colours. It then shows only the matching products, each linking to the product with the right size already selected, plus a one-tap **Add** in that size.
+
+**To switch it on**
+
+1. Shopify admin → Online Store → Pages → Add page. Title it "Find your fit" (leave the content empty).
+2. Under **Theme template** choose `finder`, then save.
+3. Add the page to your menu (Online Store → Navigation).
+
+**To edit the answers** open the page in the theme editor and select the **Find your fit** section.
+
+- **Dog** blocks: the answer, an optional photo, and the words that decide which products show ("Show products containing" / "Hide products containing", matched against title, type and tags). The section setting **Suits every dog** lists words for products shown whichever dog is chosen (collars, leads and so on).
+- **Size** blocks: the answer and the size labels it covers, exactly as they appear on your products (for example Small = `S, SS, SW`). A size answer is hidden automatically when the chosen dog has nothing in it.
+- **Colour** blocks: the name, a swatch colour or fabric photo, and the words to match in the product title.
+
+Products with a single size show as "One size". Products on a size scale no Size block covers (for example numbered sizes 1–8) still appear, labelled "Choose your size" and linking to the product without a size selected. To pre-select those as well, add the numbers to the relevant Size blocks (for example Small = `S, SS, SW, 3`).
+
+The finder searches up to 250 products; pick a collection in **Products to search** to narrow it. The results link can be shared or bookmarked.

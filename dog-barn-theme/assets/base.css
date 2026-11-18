@@ -6761,3 +6761,401 @@ h4 {
   font-size: 13px;
   color: var(--color-muted);
 }
+
+/* ==========================================================================
+   18. Find your fit: three questions, then matching products
+   ========================================================================== */
+.finder {
+  min-height: 72vh;
+  padding-block: clamp(28px, 4vw, 56px) clamp(56px, 7vw, 110px);
+}
+
+.finder__progress {
+  height: 1px;
+  margin-bottom: clamp(32px, 5vw, 72px);
+  background: var(--color-line);
+}
+
+.finder__progress span {
+  display: block;
+  height: 100%;
+  background: var(--color-text);
+  transform: scaleX(var(--finder-p, 0.25));
+  transform-origin: left;
+  transition: transform 0.9s var(--ease-out);
+}
+
+.finder__step {
+  text-align: center;
+}
+
+.finder__step.is-active {
+  animation: finder-in 0.7s var(--ease-out) both;
+}
+
+.finder__step.is-active.is-back {
+  animation-name: finder-in-back;
+}
+
+@keyframes finder-in {
+  from {
+    opacity: 0;
+    transform: translateX(36px);
+  }
+}
+
+@keyframes finder-in-back {
+  from {
+    opacity: 0;
+    transform: translateX(-36px);
+  }
+}
+
+.finder__question {
+  font-size: clamp(30px, 4.2vw, 60px);
+  line-height: 1.06;
+}
+
+.finder__text {
+  max-width: 40em;
+  margin: 14px auto 0;
+  font-size: 14px;
+  color: var(--color-muted);
+}
+
+.finder__options {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 14px;
+  margin-top: clamp(28px, 4vw, 52px);
+}
+
+.finder-option {
+  position: relative;
+  transition: transform 0.4s var(--ease-out), background-color 0.3s var(--ease), color 0.3s var(--ease), box-shadow 0.3s var(--ease);
+}
+
+.finder__step.is-active .finder-option {
+  animation: rise 0.7s var(--ease-out) both;
+  animation-delay: calc(var(--n, 0) * 60ms + 120ms);
+}
+
+.finder-option[hidden] {
+  display: none;
+}
+
+.finder-option__label {
+  display: block;
+  font-family: var(--font-label);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.finder-option__caption {
+  display: block;
+  margin-top: 4px;
+  font-size: 12.5px;
+  color: var(--color-muted);
+}
+
+/* Dog answers: large photo tiles */
+.finder__options--dogs {
+  gap: clamp(14px, 2vw, 28px);
+}
+
+.finder-option--dog {
+  width: min(100%, 380px);
+  text-align: center;
+}
+
+.finder-option--dog .finder-option__media {
+  display: block;
+  aspect-ratio: 1 / 1.1;
+  margin-bottom: 16px;
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.finder-option--dog img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.6s var(--ease-out);
+}
+
+/* Size answers: squares */
+.finder-option--size {
+  min-width: 132px;
+  padding: 26px 20px;
+  box-shadow: inset 0 0 0 1px rgba(var(--color-text-rgb), 0.3);
+}
+
+/* Colour answers: swatches */
+.finder__options--colours {
+  gap: 22px clamp(12px, 2vw, 26px);
+  max-width: 900px;
+  margin-inline: auto;
+}
+
+.finder-option--colour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 96px;
+}
+
+.finder-option__swatch {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--swatch);
+  box-shadow: inset 0 0 0 1px rgba(var(--color-text-rgb), 0.14);
+  outline: 1px solid transparent;
+  outline-offset: 5px;
+  transition: outline-color 0.3s var(--ease), transform 0.4s var(--ease-out);
+}
+
+.finder-option__swatch img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.finder-option__swatch .icon {
+  position: relative;
+  width: 22px;
+  height: 22px;
+  color: #fff;
+  stroke-width: 2;
+  filter: drop-shadow(0 0 3px rgba(0, 0, 0, 0.5));
+  opacity: 0;
+  transform: scale(0.5);
+  transition: opacity 0.3s var(--ease), transform 0.4s var(--ease-out);
+}
+
+.finder-option--colour .finder-option__label {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+.finder-option--colour[aria-pressed='true'] .finder-option__swatch {
+  outline-color: var(--color-text);
+}
+
+.finder-option--colour[aria-pressed='true'] .finder-option__swatch .icon {
+  opacity: 1;
+  transform: none;
+}
+
+@media (hover: hover) {
+  .finder-option--dog:hover img {
+    transform: scale(1.05);
+  }
+
+  .finder-option--dog:hover .finder-option__label {
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+
+  .finder-option--size:hover {
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .finder-option--size:hover .finder-option__caption {
+    color: inherit;
+  }
+
+  .finder-option--colour:hover .finder-option__swatch {
+    transform: scale(0.94);
+  }
+}
+
+.finder__help {
+  margin-top: 28px;
+}
+
+.finder__actions {
+  margin-top: clamp(28px, 4vw, 48px);
+}
+
+.finder__back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 28px;
+  font-size: 12.5px;
+  color: var(--color-muted);
+}
+
+.finder__back:hover {
+  color: var(--color-text);
+}
+
+.finder__back .icon {
+  width: 12px;
+  height: 12px;
+}
+
+/* Results */
+.finder__step--results {
+  text-align: left;
+}
+
+.finder__results-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px 32px;
+  margin-bottom: 24px;
+}
+
+.finder__results-header .finder__question {
+  font-size: clamp(28px, 3.4vw, 48px);
+  outline: none;
+}
+
+.finder__summary {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--color-muted);
+}
+
+.finder__filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.finder__filters:empty {
+  display: none;
+}
+
+.finder-chip {
+  padding: 8px 14px;
+  box-shadow: inset 0 0 0 1px rgba(var(--color-text-rgb), 0.3);
+  font-family: var(--font-label);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background-color 0.3s var(--ease), color 0.3s var(--ease);
+}
+
+.finder-chip[aria-pressed='true'],
+.finder-chip:hover {
+  background: var(--color-text);
+  color: var(--color-bg);
+}
+
+.finder-card {
+  animation: rise 0.7s var(--ease-out) both;
+  animation-delay: calc(min(var(--n, 0), 11) * 50ms);
+}
+
+.finder-card__link {
+  display: block;
+}
+
+.finder-card__media {
+  position: relative;
+  display: block;
+  aspect-ratio: var(--card-ratio, 1);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.finder-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 1.4s var(--ease-out);
+}
+
+.finder-card__link:hover img {
+  transform: scale(1.04);
+}
+
+.finder-card__title {
+  display: block;
+  margin-top: 12px;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+
+.finder-card__link:hover .finder-card__title {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+.finder-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 2px 12px;
+  margin-top: 2px;
+  font-size: 12.5px;
+  color: var(--color-muted);
+}
+
+.finder-card__size {
+  font-family: var(--font-label);
+  font-size: 8.5px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--color-text);
+}
+
+.finder-card__size.is-sold-out {
+  color: var(--color-muted);
+}
+
+.finder-card .quick-add {
+  margin-top: 10px;
+}
+
+.finder-card .quick-add__button {
+  flex: 1;
+}
+
+.finder__empty {
+  padding: 48px 0;
+  text-align: center;
+  color: var(--color-muted);
+}
+
+.finder__empty .button {
+  margin-top: 16px;
+}
+
+@media (max-width: 599px) {
+  .finder-option--dog {
+    width: calc(50% - 8px);
+  }
+
+  .finder-option--size {
+    min-width: calc(50% - 8px);
+    padding: 20px 12px;
+  }
+
+  .finder-option--colour {
+    width: 78px;
+  }
+}
