@@ -1,0 +1,351 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-jars",
+      "settings": {
+        "eyebrow": "Overnight oats and chia puddings",
+        "heading": "Decadent taste.",
+        "heading_accent": "Vibrant nutrition.",
+        "text": "100% natural overnight oats for a fast breakfast, with slow-release energy.",
+        "button_label": "Order now",
+        "button_link": "shopify://collections/all",
+        "link_label": "Our ingredients",
+        "link": "shopify://pages/our-ingredients",
+        "badge_text": "Gluten free · Vegan · No refined sugar · 100% natural ·"
+      },
+      "blocks": {
+        "product-1": {
+          "type": "product",
+          "settings": {
+            "product": "salted-date"
+          }
+        },
+        "product-2": {
+          "type": "product",
+          "settings": {
+            "product": "strawberries-cream"
+          }
+        },
+        "product-3": {
+          "type": "product",
+          "settings": {
+            "product": "apple-crumble"
+          }
+        },
+        "product-4": {
+          "type": "product",
+          "settings": {
+            "product": "mango-tropic"
+          }
+        },
+        "product-5": {
+          "type": "product",
+          "settings": {
+            "product": "cookies-cream"
+          }
+        }
+      },
+      "block_order": [
+        "product-1",
+        "product-2",
+        "product-3",
+        "product-4",
+        "product-5"
+      ]
+    },
+    "claims": {
+      "type": "marquee",
+      "settings": {
+        "speed": 40,
+        "scheme": "dark"
+      },
+      "blocks": {
+        "text-1": {
+          "type": "text",
+          "settings": {
+            "text": "Dairy free"
+          }
+        },
+        "text-2": {
+          "type": "text",
+          "settings": {
+            "text": "Vegan"
+          }
+        },
+        "text-3": {
+          "type": "text",
+          "settings": {
+            "text": "Refined sugar free"
+          }
+        },
+        "text-4": {
+          "type": "text",
+          "settings": {
+            "text": "Earth friendly"
+          }
+        },
+        "text-5": {
+          "type": "text",
+          "settings": {
+            "text": "Gluten free"
+          }
+        },
+        "text-6": {
+          "type": "text",
+          "settings": {
+            "text": "Plant based"
+          }
+        },
+        "text-7": {
+          "type": "text",
+          "settings": {
+            "text": "Made in the UK"
+          }
+        }
+      },
+      "block_order": [
+        "text-1",
+        "text-2",
+        "text-3",
+        "text-4",
+        "text-5",
+        "text-6",
+        "text-7"
+      ]
+    },
+    "flavours": {
+      "type": "product-shelf",
+      "settings": {
+        "eyebrow": "Overnight oats",
+        "heading": "Let's talk",
+        "subheading": "flavour",
+        "collection": "overnight-oats",
+        "limit": 12,
+        "show_view_all": true,
+        "surface": false
+      }
+    },
+    "story": {
+      "type": "jar-story",
+      "settings": {
+        "eyebrow": "What's inside",
+        "heading": "Good things, into the jar",
+        "product": "salted-date",
+        "caption": "Overnight oats",
+        "finale_heading": "Soaked overnight. Ready when you are.",
+        "finale_text": "No shopping, no prep, no clean-up. Which means you’ll never skip breakfast.",
+        "button_label": "Shop the flavours",
+        "button_link": "shopify://collections/all"
+      },
+      "blocks": {
+        "ingredient-1": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Jumbo oats",
+            "text": "British-sourced and gluten free, cold-soaked overnight so no nutrients are lost.",
+            "illustration": "oat",
+            "colour": "#ead9b5"
+          }
+        },
+        "ingredient-2": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Chia seeds",
+            "text": "Soaked alongside the oats, never gloopy.",
+            "illustration": "chia",
+            "colour": "#d4c8b4"
+          }
+        },
+        "ingredient-3": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Creamy plant milk",
+            "text": "A silky cashew base. Always dairy free.",
+            "illustration": "cashew",
+            "colour": "#f3e6c8"
+          }
+        },
+        "ingredient-4": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Medjool dates",
+            "text": "Naturally sweet, so there are no refined sugars. Ever.",
+            "illustration": "date",
+            "colour": "#b9895c"
+          }
+        },
+        "ingredient-5": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Raw cacao and nut butters",
+            "text": "Decadent flavours, hand-picked for their nutritional value.",
+            "illustration": "cacao",
+            "colour": "#6b4633"
+          }
+        }
+      },
+      "block_order": [
+        "ingredient-1",
+        "ingredient-2",
+        "ingredient-3",
+        "ingredient-4",
+        "ingredient-5"
+      ]
+    },
+    "chia": {
+      "type": "product-shelf",
+      "settings": {
+        "eyebrow": "Chia puddings",
+        "heading": "Silky, creamy,",
+        "subheading": "never gloopy",
+        "collection": "chia-puddings",
+        "limit": 8,
+        "show_view_all": true,
+        "surface": true
+      }
+    },
+    "bundles": {
+      "type": "image-with-text",
+      "settings": {
+        "eyebrow": "Bundles",
+        "heading": "Can’t decide on a flavour?",
+        "text": "<p>Indecisiveness gets the best of us. Don’t give in! Try six of our favourites in the Taste-Test Bundle.</p>",
+        "link_label": "Shop bundles",
+        "link": "shopify://collections/bundles",
+        "shape": "rect",
+        "flip": false,
+        "surface": false,
+        "image": "shopify://shop_images/good-grain-gluten-free-overnight-oats.png"
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "eyebrow": "Good gut feelings",
+        "heading": "What our customers say",
+        "subheading": "",
+        "scheme": "surface"
+      },
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Most delicious!",
+            "text": "The Good Grain’s oats are truly the most delicious things I’ve ever tasted.",
+            "author": "Richard L.",
+            "verified": false
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Absolute time saver!",
+            "text": "The Good Grain has saved me a solid 15 minutes in the morning — didn’t need to put the stove on and stir oats. Also didn’t need to go out and source the individual high quality ingredients that you use!",
+            "author": "Sarah H.",
+            "verified": false
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "So convenient!",
+            "text": "I truly look forward to breakfast now thanks to The Good Grain. I think about them whilst I’m in bed in the morning, and I’m like YES they’re all waiting for me in my fridge. So convenient and absolutely delicious.",
+            "author": "Rachel R.",
+            "verified": false
+          }
+        },
+        "review-4": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "I could eat these all day!",
+            "text": "I never have to have a mid-morning snack after I eat this for breakfast. I feel happier as I know I did something good for myself and feel much more energised after! I could eat these all day!!",
+            "author": "Marisa P.",
+            "verified": false
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3",
+        "review-4"
+      ]
+    },
+    "press": {
+      "type": "press",
+      "settings": {
+        "heading": "As seen in"
+      },
+      "blocks": {
+        "logo-1": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/BBC_GF.png",
+            "name": "BBC Good Food"
+          }
+        },
+        "logo-2": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/Hip_Healthy.png",
+            "name": "Hip & Healthy"
+          }
+        },
+        "logo-3": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/Sheer_Luxe.png",
+            "name": "SheerLuxe"
+          }
+        },
+        "logo-4": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/The_Grocer.png",
+            "name": "The Grocer"
+          }
+        }
+      },
+      "block_order": [
+        "logo-1",
+        "logo-2",
+        "logo-3",
+        "logo-4"
+      ]
+    },
+    "about": {
+      "type": "statement",
+      "settings": {
+        "eyebrow": "About us",
+        "text": "Think porridge, but so much better.",
+        "link_label": "Read our story",
+        "link": "shopify://pages/about-us",
+        "scheme": "dark"
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Start your day with us",
+        "text": "New flavours and limited editions, straight to your inbox.",
+        "scheme": "light"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "claims",
+    "flavours",
+    "story",
+    "chia",
+    "bundles",
+    "reviews",
+    "press",
+    "about",
+    "newsletter"
+  ]
+}

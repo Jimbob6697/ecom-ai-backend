@@ -1,0 +1,83 @@
+{
+  "general": {
+    "skip_to_content": "Skip to content",
+    "close": "Close",
+    "menu": "Menu",
+    "search": "Search",
+    "bag": "Basket",
+    "account": "Account",
+    "previous": "Previous",
+    "next": "Next",
+    "continue_shopping": "Continue shopping",
+    "page_title_page": "Page {{ page }}"
+  },
+  "products": {
+    "add_to_bag": "Add to basket",
+    "sold_out": "Sold out",
+    "unavailable": "Unavailable",
+    "from_html": "From {{ price }}",
+    "sale": "Sale",
+    "new": "New",
+    "fits": "Fits",
+    "quantity": "Quantity",
+    "view": "View product",
+    "add": "Add",
+    "in_stock": "In stock",
+    "low_stock": {
+      "one": "Only {{ count }} left",
+      "other": "Only {{ count }} left"
+    }
+  },
+  "cart": {
+    "title": "Your basket",
+    "empty": "Your basket is empty.",
+    "subtotal": "Subtotal",
+    "checkout": "Checkout",
+    "view_bag": "View basket",
+    "remove": "Remove",
+    "note": "Order note",
+    "taxes": "Taxes and delivery calculated at checkout.",
+    "free_shipping_remaining_html": "Spend {{ amount }} more for free delivery",
+    "free_shipping_reached": "You've unlocked free delivery"
+  },
+  "search": {
+    "placeholder": "Search flavours…",
+    "no_results": "No results for “{{ terms }}”.",
+    "results_for": "Results for “{{ terms }}”",
+    "view_all": "View all results"
+  },
+  "collections": {
+    "filter": "Filter",
+    "sort": "Sort by",
+    "clear": "Clear all",
+    "apply": "Apply",
+    "empty": "No products match your filters.",
+    "count": {
+      "one": "{{ count }} product",
+      "other": "{{ count }} products"
+    }
+  },
+  "newsletter": {
+    "label": "Email address",
+    "button": "Sign up",
+    "success": "Thanks — you're on the list."
+  },
+  "contact": {
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "send": "Send message",
+    "success": "Thanks for getting in touch. We'll reply shortly."
+  },
+  "password": {
+    "enter": "Enter using password",
+    "placeholder": "Password",
+    "submit": "Enter"
+  },
+  "gift_cards": {
+    "title": "Here's your gift card",
+    "balance": "Balance",
+    "expired": "Expired",
+    "shop": "Start shopping"
+  }
+}

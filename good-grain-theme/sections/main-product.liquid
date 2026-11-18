@@ -1,0 +1,438 @@
+{%- liquid
+  assign s = section.settings
+  assign current = product.selected_or_first_available_variant
+  assign form_id = 'product-form-' | append: section.id
+  assign now_s = 'now' | date: '%s' | plus: 0
+  assign published_s = product.published_at | date: '%s' | plus: 0
+  assign age_days = now_s | minus: published_s | divided_by: 86400
+
+  comment
+    Optional product metafields: custom.label_colour, custom.protein, custom.fibre,
+    custom.ingredients, custom.nutrition. Each is skipped on products where it is empty.
+  endcomment
+  assign protein_field = product.metafields.custom.protein.value
+  assign fibre_field = product.metafields.custom.fibre.value
+  assign ingredients_field = product.metafields.custom.ingredients
+  assign nutrition_field = product.metafields.custom.nutrition
+
+  capture label_vars
+    render 'label-vars', product: product
+  endcapture
+  assign label_vars = label_vars | strip
+
+  assign cutout = false
+  assign image_src = product.featured_media.preview_image.src | downcase
+  if image_src contains '.png' or image_src contains '.webp'
+    assign cutout = true
+  endif
+-%}
+<section
+  class="section product product--label"
+  data-product
+  data-label-page
+  style="{{ label_vars }}"
+  {% if label_vars == blank %}
+    data-label-auto
+  {% endif %}
+>
+  <div class="page-width product__grid">
+    <div class="product__gallery" data-gallery>
+      <div class="product__stage" data-gallery-track>
+        {%- for media in product.media -%}
+          <div class="product__slide{% if forloop.first and cutout %} product__slide--jar{% endif %}" data-media-id="{{ media.id }}">
+            {%- if forloop.first and cutout -%}
+              <span class="product__sun" aria-hidden="true"></span>
+            {%- endif -%}
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- liquid
+                  assign loading = 'lazy'
+                  if forloop.first
+                    assign loading = 'eager'
+                  endif
+                -%}
+                {{
+                  media
+                  | image_url: width: 2000
+                  | image_tag: widths: '500, 800, 1100, 1500, 2000', sizes: '(min-width: 990px) 55vw, 100vw', loading: loading, alt: media.alt, crossorigin: 'anonymous'
+                }}
+              {%- when 'video' -%}
+                {{ media | video_tag: controls: true, image_size: '1500x' }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag: loading: 'lazy' }}
+              {%- when 'model' -%}
+                {{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}
+            {%- endcase -%}
+          </div>
+        {%- else -%}
+          <div class="product__slide">{% render 'art', index: 1, icon: 'leaf' %}</div>
+        {%- endfor -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="product__thumbs" role="tablist" aria-label="Gallery">
+          {%- for media in product.media -%}
+            <button
+              class="product__thumb{% if forloop.first %} is-active{% endif %}"
+              type="button"
+              role="tab"
+              aria-label="{{ 'products.view' | t }} {{ forloop.index }}"
+              data-gallery-thumb="{{ forloop.index0 }}"
+            >
+              {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product__info">
+      <div class="product__top" data-reveal>
+        <p class="eyebrow">
+          {%- if age_days < 30 -%}
+            <span class="eyebrow--accent">{{ 'products.new' | t }}</span> ·
+          {%- endif -%}
+          {{ product.type | default: product.vendor }}
+        </p>
+        {%- if s.show_reviews -%}
+          {% render 'review-summary' %}
+        {%- endif -%}
+      </div>
+      <h1 class="product__title" data-reveal style="--i: 1">{{ product.title }}</h1>
+      {%- if s.claims != blank -%}
+        <p class="product__claims" data-reveal style="--i: 1">{{ s.claims | escape }}</p>
+      {%- endif -%}
+      {%- if product.description != blank -%}
+        <div class="product__description rte" data-product-description data-reveal style="--i: 2">{{ product.description }}</div>
+      {%- endif -%}
+
+      {%- if s.show_stats -%}
+        {%- comment -%}
+          Protein and fibre bubbles, like the ones on the label. Filled from the
+          custom.protein and custom.fibre metafields; when those are empty the script
+          looks for figures such as "7.8g protein" in the product description.
+        {%- endcomment -%}
+        <ul class="product__stats" role="list" data-stats data-reveal style="--i: 2">
+          <li class="stat" data-stat="protein"{% if protein_field == blank %} hidden{% endif %}>
+            <strong data-stat-value>{{ protein_field }}{% if protein_field != blank %}g{% endif %}</strong>
+            <span>{{ s.protein_label | escape }}</span>
+          </li>
+          <li class="stat" data-stat="fibre"{% if fibre_field == blank %} hidden{% endif %}>
+            <strong data-stat-value>{{ fibre_field }}{% if fibre_field != blank %}g{% endif %}</strong>
+            <span>{{ s.fibre_label | escape }}</span>
+          </li>
+        </ul>
+      {%- endif -%}
+
+      <div class="product__price" data-product-price data-reveal style="--i: 3">
+        {% render 'price', product: product, variant: current %}
+      </div>
+      {%- if settings.pay_later_text != blank -%}
+        <p class="product__note" data-reveal style="--i: 3">{{ settings.pay_later_text | escape }}</p>
+      {%- endif -%}
+
+      {%- if s.show_stock -%}
+        <div class="product__availability" data-reveal style="--i: 3">
+          <span data-product-stock>{% render 'stock', variant: current, threshold: s.low_stock_threshold %}</span>
+          {%- if s.dispatch_text != blank -%}
+            <span class="product__dispatch">{% render 'icon', name: 'truck' %}{{ s.dispatch_text | escape }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- unless product.has_only_default_variant -%}
+        <div class="product__options" data-reveal style="--i: 3">
+          {%- for option in product.options_with_values -%}
+            <fieldset class="option" data-option-position="{{ option.position }}">
+              <legend class="option__legend">
+                <span>{{ option.name }}: <strong data-option-current>{{ option.selected_value }}</strong></span>
+              </legend>
+              <div class="option__values">
+                {%- for value in option.values -%}
+                  <label class="option__tile">
+                    <input
+                      type="radio"
+                      name="{{ section.id }}-option-{{ option.position }}"
+                      value="{{ value | escape }}"
+                      {% if option.selected_value == value %}
+                        checked
+                      {% endif %}
+                      data-option-input
+                    >
+                    <span>{{ value }}</span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+
+      {%- form 'product', product, id: form_id, class: 'product__form', novalidate: 'novalidate', data-product-form: '' -%}
+        <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
+        <div class="product__buy" data-reveal style="--i: 4">
+          {%- if s.show_quantity -%}
+            <div class="quantity" data-quantity>
+              <button type="button" aria-label="Decrease quantity" data-quantity-minus>{% render 'icon', name: 'minus' %}</button>
+              <input type="number" name="quantity" value="1" min="1" aria-label="{{ 'products.quantity' | t }}" inputmode="numeric">
+              <button type="button" aria-label="Increase quantity" data-quantity-plus>{% render 'icon', name: 'plus' %}</button>
+            </div>
+          {%- endif -%}
+          <button class="button button--large product__add" type="submit" data-add-button {% unless current.available %}disabled{% endunless %}>
+            <span data-add-label>
+              {%- if current.available -%}
+                {{ 'products.add_to_bag' | t }}
+              {%- else -%}
+                {{ 'products.sold_out' | t }}
+              {%- endif -%}
+            </span>
+            <span class="button__spinner" aria-hidden="true"></span>
+          </button>
+        </div>
+        <p class="form-message form-message--error" data-form-error hidden role="alert"></p>
+        {%- if s.show_dynamic_checkout -%}
+          <div class="product__dynamic" data-reveal style="--i: 5">{{ form | payment_button }}</div>
+        {%- endif -%}
+      {%- endform -%}
+
+      <ul class="product__badges" role="list" data-reveal style="--i: 5">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'badge' -%}
+            <li class="trust-badge trust-badge--compact" {{ block.shopify_attributes }}>
+              <span class="trust-badge__icon">{% render 'icon', name: block.settings.icon %}</span>
+              <span class="trust-badge__text">
+                <strong>{{ block.settings.title | escape }}</strong>
+                {%- if block.settings.text != blank -%}
+                  <span>{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+              </span>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- if s.show_payment_icons -%}
+        <div class="product__secure" data-reveal style="--i: 6">
+          <p>{% render 'icon', name: 'lock' %}Secure checkout</p>
+          <ul role="list" aria-label="Payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- if s.show_addons -%}
+        {%- comment -%}
+          Add-ons. Shopify's complementary products (set in the Search & Discovery app)
+          replace this list when they exist; until then it shows matching pieces from
+          the product's colourway collection.
+        {%- endcomment -%}
+        <div
+          class="product__addons"
+          data-addons
+          data-url="{{ routes.product_recommendations_url }}?section_id=product-addons&product_id={{ product.id }}&limit={{ s.addons_limit }}&intent=complementary"
+        >
+          {%- assign set_collection = s.addons_collection -%}
+          {%- if set_collection != blank and set_collection.products.size > 0 -%}
+            <div class="addons" data-addons-content>
+              <p class="addons__heading">{{ s.addons_heading | escape }}</p>
+              <ul class="addons__list" role="list">
+                {%- assign shown = 0 -%}
+                {%- for item in set_collection.products limit: 12 -%}
+                  {%- if item.id == product.id or shown >= s.addons_limit or item.available == false -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  {% render 'addon-row', product: item %}
+                  {%- assign shown = shown | plus: 1 -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == '@app' -%}
+          <div class="product__app">{% render block %}</div>
+        {%- endif -%}
+      {%- endfor -%}
+
+      <div class="accordion product__accordion" data-reveal style="--i: 7">
+        {%- if ingredients_field.value != blank -%}
+          <details class="accordion__item" open>
+            <summary class="accordion__summary">{{ s.ingredients_label | escape }}{% render 'icon', name: 'plus' %}</summary>
+            <div class="accordion__content rte">{{ ingredients_field | metafield_tag }}</div>
+          </details>
+        {%- endif -%}
+        {%- if nutrition_field.value != blank -%}
+          <details class="accordion__item">
+            <summary class="accordion__summary">{{ s.nutrition_label | escape }}{% render 'icon', name: 'plus' %}</summary>
+            <div class="accordion__content rte">{{ nutrition_field | metafield_tag }}</div>
+          </details>
+        {%- endif -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'collapsible' -%}
+            <details class="accordion__item" {{ block.shopify_attributes }}>
+              <summary class="accordion__summary">{{ block.settings.heading | escape }}{% render 'icon', name: 'plus' %}</summary>
+              <div class="accordion__content rte">
+                {{ block.settings.text }}
+                {{ block.settings.page.content }}
+              </div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'review' -%}
+          {%- if block.settings.text != blank -%}
+            <figure class="product__quote" data-reveal {{ block.shopify_attributes }}>
+              {% render 'stars', rating: block.settings.rating %}
+              <blockquote>{{ block.settings.text | escape }}</blockquote>
+              {%- if block.settings.author != blank -%}
+                <figcaption>{{ block.settings.author | escape }}</figcaption>
+              {%- endif -%}
+            </figure>
+          {%- elsif request.design_mode -%}
+            <figure class="product__quote product__quote--empty" {{ block.shopify_attributes }}>
+              <blockquote>Paste a real customer review here. An empty review is only visible in the editor.</blockquote>
+            </figure>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="buy-bar" data-buy-bar aria-hidden="true">
+    <div class="page-width buy-bar__inner">
+      <p class="buy-bar__title">{{ product.title }}</p>
+      <div class="buy-bar__price" data-product-price>{% render 'price', product: product, variant: current %}</div>
+      <button class="button" type="submit" form="{{ form_id }}" tabindex="-1" data-add-button {% unless current.available %}disabled{% endunless %}>
+        <span data-add-label>
+          {%- if current.available -%}
+            {{ 'products.add_to_bag' | t }}
+          {%- else -%}
+            {{ 'products.sold_out' | t }}
+          {%- endif -%}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  {%- if s.show_ribbon -%}
+    <div class="product__ribbon" aria-hidden="true">
+      <div class="product__ribbon-track">
+        {%- for n in (1..10) -%}
+          <span>{{ product.title | escape }}</span>
+          <span class="product__ribbon-dot">{% render 'icon', name: 'leaf' %}</span>
+        {%- endfor -%}
+      </div>
+    </div>
+  {%- endif -%}
+
+  <script type="application/json" data-variants>
+    [
+      {%- for variant in product.variants -%}
+        {%- capture price_html -%}
+          {% render 'price', product: product, variant: variant %}
+        {%- endcapture -%}
+        {%- capture stock_html -%}
+          {% render 'stock', variant: variant, threshold: s.low_stock_threshold %}
+        {%- endcapture -%}
+        {
+          "id": {{ variant.id }},
+          "options": {{ variant.options | json }},
+          "available": {{ variant.available | json }},
+          "media": {{ variant.featured_media.id | json }},
+          "price": {{ price_html | strip | json }},
+          "stock": {{ stock_html | strip | json }}
+        }
+        {%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  </script>
+
+  <script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "checkbox", "id": "show_reviews", "label": "Show review score", "default": true },
+    { "type": "checkbox", "id": "show_quantity", "label": "Show quantity selector", "default": true },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout button", "info": "Shop Pay, Apple Pay and similar express options.", "default": true },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show secure checkout and payment icons", "default": true },
+    { "type": "header", "content": "Availability" },
+    { "type": "checkbox", "id": "show_stock", "label": "Show availability", "default": true },
+    { "type": "range", "id": "low_stock_threshold", "label": "Show “Only N left” at or below", "info": "Uses Shopify's real stock count, and only for variants that track stock and cannot be oversold. Set to 0 to turn off.", "min": 0, "max": 10, "step": 1, "default": 5 },
+    { "type": "text", "id": "dispatch_text", "label": "Dispatch message" },
+    { "type": "header", "content": "Label colour" },
+    { "type": "paragraph", "content": "The page takes the colour of the product's label. Set it per product with a Colour metafield called custom.label_colour, or list colours in Theme settings → Label colours. With neither, the colour is read from the first product photo." },
+    { "type": "checkbox", "id": "show_ribbon", "label": "Show the scrolling flavour name band", "default": true },
+    { "type": "header", "content": "Details" },
+    { "type": "text", "id": "claims", "label": "Line under the title", "default": "100% natural · Gluten free · Vegan · No refined sugar" },
+    { "type": "checkbox", "id": "show_stats", "label": "Show protein and fibre bubbles", "info": "Uses the custom.protein and custom.fibre metafields (numbers, in grams). When they are empty, figures written in the description such as “7.8g protein” are used.", "default": true },
+    { "type": "text", "id": "protein_label", "label": "Protein label", "default": "Protein" },
+    { "type": "text", "id": "fibre_label", "label": "Fibre label", "default": "Fibre" },
+    { "type": "text", "id": "ingredients_label", "label": "Ingredients row title", "info": "Shows the custom.ingredients metafield.", "default": "What's inside" },
+    { "type": "text", "id": "nutrition_label", "label": "Nutrition row title", "info": "Shows the custom.nutrition metafield.", "default": "How it's good for you" },
+    { "type": "header", "content": "Add-ons" },
+    { "type": "checkbox", "id": "show_addons", "label": "Show add-ons under the add to basket button", "info": "Uses the complementary products set for each product in Shopify's Search & Discovery app. Until those are set, it shows products from the collection below.", "default": true },
+    { "type": "collection", "id": "addons_collection", "label": "Fallback add-ons collection" },
+    { "type": "text", "id": "addons_heading", "label": "Add-ons heading", "default": "Goes well with" },
+    { "type": "range", "id": "addons_limit", "label": "Add-ons to show", "min": 1, "max": 4, "step": 1, "default": 3 }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "badge",
+      "name": "Trust badge",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Delivery" },
+            { "value": "return", "label": "Returns" },
+            { "value": "star", "label": "Star" },
+            { "value": "award", "label": "Award" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "lock", "label": "Secure" },
+            { "value": "gift", "label": "Parcel" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "heart", "label": "Heart" },
+                        { "value": "chat", "label": "Chat" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free UK delivery" },
+        { "type": "text", "id": "text", "label": "Text", "default": "On orders over £40" }
+      ]
+    },
+    {
+      "type": "collapsible",
+      "name": "Collapsible row",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Delivery & returns" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "page", "id": "page", "label": "Or show content from a page" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Featured review",
+      "limit": 1,
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Review", "info": "Paste a real customer's words. Left empty, nothing is shown on the live store." },
+        { "type": "text", "id": "author", "label": "Customer name" }
+      ]
+    }
+  ]
+}
+{% endschema %}

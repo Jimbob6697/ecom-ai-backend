@@ -1,0 +1,47 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "shop": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu",
+            "limit": 10
+          }
+        },
+        "help": {
+          "type": "menu",
+          "settings": {
+            "heading": "Learn",
+            "menu": "footer",
+            "limit": 8
+          }
+        },
+        "sizing": {
+          "type": "text",
+          "settings": {
+            "heading": "Say hello",
+            "text": "<p>Questions about your order or our jars? <a href=\"/pages/contact\">Get in touch</a>, or find us on Instagram at @thegoodgrain_.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "shop",
+        "help",
+        "sizing"
+      ],
+      "settings": {
+        "tagline": "Decadent taste. Vibrant nutrition.",
+        "show_payment": true,
+        "show_wordmark": true
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

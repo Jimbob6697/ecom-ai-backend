@@ -1,0 +1,24 @@
+{%- comment -%}
+  One floating jar in the "Hero with jars" section.
+  Usage: {% render 'hero-jar', product: product, position: 0, loading: 'eager' %}
+{%- endcomment -%}
+{%- capture label_vars -%}{% render 'label-vars', product: product %}{%- endcapture -%}
+{%- assign label_vars = label_vars | strip -%}
+<a
+  class="hero-jar{% if position == 0 %} is-active{% endif %}"
+  href="{{ product.url }}"
+  data-hero-jar
+  style="--n: {{ position }}; {{ label_vars }}"
+  {% if label_vars == blank %}
+    data-label-auto
+  {% endif %}
+>
+  <span class="hero-jar__float">
+    {{
+      product.featured_media
+      | image_url: width: 900
+      | image_tag: widths: '300, 450, 600, 900', sizes: '(min-width: 990px) 22vw, 40vw', loading: loading, alt: product.title, crossorigin: 'anonymous'
+    }}
+  </span>
+  <span class="hero-jar__name">{{ product.title | escape }}</span>
+</a>

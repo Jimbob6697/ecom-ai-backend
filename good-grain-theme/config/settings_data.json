@@ -1,0 +1,43 @@
+{
+  "current": {
+    "type_builtin": true,
+    "animations_reveal": true,
+    "animations_page": true,
+    "animations_hover": true,
+    "cart_type": "drawer",
+    "cart_note": false,
+    "card_show_type": false,
+    "label_colours": "apple-crumble: #139650\nbanana-nut-the-protein-edition: #4e328c\nbrownie-batter: #8978b6\ncacao-chia: #c17371\ncarrot-cake: #da5c26\nchunky-monkey: #bc5f28\ncinnamon-swirl: #983f2c\ncookie-dough: #de9c45\ncookie-dough-bites: #67381b\ncookies-cream: #a6226e\ngolden-chai: #835836\nmango-tropic: #faac28\nmaple-tahini: #7e2c3e\npistachio: #b8d19f\npistachio-chia-pudding: #a9c994\nsalted-date: #094468\nstrawberries-cream: #eb7b6f\nthe-good-grain-gift-card: #093755\ntiramisu-limited-edition: #45271f\nvanilla-chai: #ce3a34\nvanilla-matcha-x-perfect-ted: #136938",
+    "color_label_default": "#0e3a5c",
+    "social_instagram": "https://www.instagram.com/thegoodgrain_",
+    "color_background": "#fbf5ea",
+    "color_surface": "#f4ead8",
+    "color_text": "#0e3a5c",
+    "color_muted": "#56697a",
+    "color_accent": "#0e3a5c",
+    "color_dark": "#0e3a5c",
+    "color_on_dark": "#fdf3d7",
+    "color_announcement": "#0e3a5c",
+    "color_footer": "#0e3a5c",
+    "color_highlight": "#139650",
+    "color_brass": "#d8bd5c",
+    "color_sale": "#da5c26",
+    "page_width": 1440,
+    "card_radius": 24,
+    "card_ratio": "0.8",
+    "card_second_image": false,
+    "free_shipping_threshold": 0,
+    "review_label": "Excellent",
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "upsell_collection": "bundles",
+          "upsell_heading": "Add a little extra",
+          "upsell_limit": 2,
+          "show_trust": true
+        }
+      }
+    }
+  }
+}

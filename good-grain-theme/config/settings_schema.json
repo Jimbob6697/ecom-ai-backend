@@ -1,0 +1,340 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Good Grain",
+    "theme_version": "1.0.0",
+    "theme_author": "In House",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/manual/online-store/themes"
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background",
+        "default": "#fbf5ea",
+        "info": "Brand white."
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Soft panels",
+        "default": "#f4ead8",
+        "info": "A light tint of brand Beige, used behind product photos and quiet bands."
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text",
+        "default": "#0e3a5c",
+        "info": "Brand Midnight."
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Secondary text",
+        "default": "#56697a",
+        "info": "Brand Bark."
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Buttons",
+        "default": "#0e3a5c",
+        "info": "Brand Midnight."
+      },
+      {
+        "type": "color",
+        "id": "color_dark",
+        "label": "Dark sections",
+        "default": "#0e3a5c",
+        "info": "Brand Midnight."
+      },
+      {
+        "type": "color",
+        "id": "color_on_dark",
+        "label": "Text on dark sections, footer and accent sections",
+        "default": "#fdf3d7"
+      },
+      {
+        "type": "color",
+        "id": "color_announcement",
+        "label": "Announcement bar",
+        "default": "#0e3a5c",
+        "info": "Brand Beige."
+      },
+      {
+        "type": "color",
+        "id": "color_footer",
+        "label": "Footer",
+        "default": "#0e3a5c",
+        "info": "Brand Bark."
+      },
+      {
+        "type": "color",
+        "id": "color_highlight",
+        "label": "Accent sections",
+        "default": "#139650",
+        "info": "Brand Lawn."
+      },
+      {
+        "type": "color",
+        "id": "color_brass",
+        "label": "Review stars",
+        "default": "#d8bd5c",
+        "info": "Brand Lawn."
+      },
+      {
+        "type": "color",
+        "id": "color_sale",
+        "label": "Sale price and “New” label",
+        "default": "#da5c26",
+        "info": "Brand Lawn."
+      }
+    ]
+  },
+  {
+    "name": "Label colours",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Product cards and product pages take the colour of each jar's label. A product's custom.label_colour metafield (type: Colour) wins; otherwise the list below is used; otherwise the colour is read from the product photo."
+      },
+      {
+        "type": "textarea",
+        "id": "label_colours",
+        "label": "Label colours",
+        "info": "One per line: product-handle: #hex. The handle is the last part of the product's web address.",
+        "default": "apple-crumble: #139650\nbanana-nut-the-protein-edition: #4e328c\nbrownie-batter: #8978b6\ncacao-chia: #c17371\ncarrot-cake: #da5c26\nchunky-monkey: #bc5f28\ncinnamon-swirl: #983f2c\ncookie-dough: #de9c45\ncookie-dough-bites: #67381b\ncookies-cream: #a6226e\ngolden-chai: #835836\nmango-tropic: #faac28\nmaple-tahini: #7e2c3e\npistachio: #b8d19f\npistachio-chia-pudding: #a9c994\nsalted-date: #094468\nstrawberries-cream: #eb7b6f\nthe-good-grain-gift-card: #093755\ntiramisu-limited-edition: #45271f\nvanilla-chai: #ce3a34\nvanilla-matcha-x-perfect-ted: #136938"
+      },
+      {
+        "type": "color",
+        "id": "color_label_default",
+        "label": "Colour when none is found",
+        "default": "#0e3a5c"
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "type_builtin",
+        "label": "Use the brand fonts",
+        "info": "Headings in Fraunces, labels and buttons in Josefin Sans, text in Poppins.",
+        "default": true
+      },
+      {
+        "type": "header",
+        "content": "Or choose other fonts"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Heading font",
+        "default": "alegreya_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "josefin_sans_n4"
+      }
+    ]
+  },
+  {
+    "name": "Layout and motion",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Page width",
+        "min": 980,
+        "max": 1600,
+        "step": 20,
+        "unit": "px",
+        "default": 1440
+      },
+      {
+        "type": "range",
+        "id": "card_radius",
+        "label": "Corner radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "default": 24
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_reveal",
+        "label": "Reveal sections on scroll",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_page",
+        "label": "Smooth transitions between pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_hover",
+        "label": "Hover effects on cards",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Reviews and trust",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Shown in the header bar, trust strip, reviews section and product pages. Keep these in line with your live review profile."
+      },
+      {
+        "type": "text",
+        "id": "review_score",
+        "label": "Review score"
+      },
+      {
+        "type": "text",
+        "id": "review_label",
+        "label": "Score label",
+        "default": "Excellent"
+      },
+      {
+        "type": "text",
+        "id": "review_count",
+        "label": "Number of reviews",
+        "info": "Optional, e.g. “312 reviews”."
+      },
+      {
+        "type": "text",
+        "id": "review_source",
+        "label": "Review platform"
+      },
+      {
+        "type": "url",
+        "id": "review_url",
+        "label": "Link to your review profile"
+      },
+      {
+        "type": "text",
+        "id": "pay_later_text",
+        "label": "Pay-later message",
+        "info": "Shown under the price on product pages. Leave empty to hide."
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "card_second_image",
+        "label": "Show second image on hover",
+        "default": false
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_type",
+        "label": "Show product type",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "card_ratio",
+        "label": "Image shape",
+        "options": [
+          {
+            "value": "1",
+            "label": "Square"
+          },
+          {
+            "value": "0.8",
+            "label": "Portrait"
+          }
+        ],
+        "default": "0.8"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Slide-out drawer"
+          },
+          {
+            "value": "page",
+            "label": "Cart page"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_note",
+        "label": "Allow order notes",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "free_shipping_threshold",
+        "label": "Free delivery threshold",
+        "info": "In your store currency. Set to 0 to hide the progress bar.",
+        "min": 0,
+        "max": 300,
+        "step": 5,
+        "default": 0
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram URL",
+        "default": "https://www.instagram.com/thegoodgrain_"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube URL"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Scaled down to 32 × 32px"
+      }
+    ]
+  }
+]

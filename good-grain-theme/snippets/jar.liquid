@@ -1,0 +1,58 @@
+{%- comment -%}
+  The illustrated jar used by the "Into the jar" section.
+  Usage: {% render 'jar', layers: layer_colours, id: section.id %}
+  layers: comma-separated colours, bottom layer first.
+{%- endcomment -%}
+{%- liquid
+  assign layer_list = layers | split: ','
+  assign layer_count = layer_list.size | at_least: 1
+  assign layer_height = 250.0 | divided_by: layer_count
+-%}
+<svg class="jar" viewBox="0 0 300 390" role="img" aria-label="{{ label | default: 'A jar of overnight oats' | escape }}">
+  <defs>
+    <clipPath id="jar-inside-{{ id }}">
+      <path d="M58 84c-14 6-20 20-20 40v196c0 26 16 42 42 42h140c26 0 42-16 42-42V124c0-20-6-34-20-40z"/>
+    </clipPath>
+    <pattern id="jar-specks-{{ id }}" width="26" height="22" patternUnits="userSpaceOnUse">
+      <ellipse cx="5" cy="6" rx="2.2" ry="1.4" fill="#2e2a2b" opacity="0.5" transform="rotate(20 5 6)"/>
+      <ellipse cx="17" cy="14" rx="2" ry="1.3" fill="#2e2a2b" opacity="0.4" transform="rotate(-30 17 14)"/>
+      <ellipse cx="22" cy="4" rx="3.4" ry="2" fill="#fff" opacity="0.35" transform="rotate(12 22 4)"/>
+      <ellipse cx="9" cy="18" rx="3.6" ry="2" fill="#fff" opacity="0.3" transform="rotate(-18 9 18)"/>
+    </pattern>
+  </defs>
+
+  <rect class="jar__neck" x="52" y="54" width="196" height="34" rx="10"/>
+  <path class="jar__glass" d="M54 78c-16 6-24 22-24 46v196c0 30 20 50 50 50h140c30 0 50-20 50-50V124c0-24-8-40-24-46z"/>
+
+  <g clip-path="url(#jar-inside-{{ id }})">
+    {%- for colour in layer_list -%}
+      {%- liquid
+        assign offset = forloop.index | times: layer_height
+        assign y = 366 | minus: offset
+      -%}
+      {%- capture layer_box -%}x="30" y="{{ y | round: 1 }}" width="240" height="{{ layer_height | plus: 1 | round: 1 }}" style="--l: var(--l{{ forloop.index0 }}, 1)"{%- endcapture -%}
+      <rect class="jar__layer" fill="{{ colour | strip }}" {{ layer_box }}/>
+      <rect class="jar__layer jar__layer--specks" fill="url(#jar-specks-{{ id }})" {{ layer_box }}/>
+    {%- endfor -%}
+  </g>
+
+  <g class="jar__label">
+    <rect x="30" y="168" width="240" height="126" fill="var(--jar-label)"/>
+    <g fill="none" stroke="var(--jar-on-label)" stroke-width="1.6">
+      <circle cx="150" cy="190" r="10"/>
+      <path d="M145 193c0-5 3-7 6-7 0 5-3 7-6 7zM151 195c1-4 4-5 6-4-1 4-3 5-6 4z"/>
+    </g>
+    <text x="150" y="226" text-anchor="middle" fill="var(--jar-on-label)" font-size="21" letter-spacing="3">THE</text>
+    <text x="150" y="254" text-anchor="middle" fill="var(--jar-on-label)" font-size="27" letter-spacing="4">GOOD GRAIN</text>
+    <text x="150" y="276" text-anchor="middle" fill="var(--jar-on-label)" font-size="9.5" letter-spacing="1.6">{{ caption | default: 'OVERNIGHT OATS' | upcase | escape }}</text>
+  </g>
+
+  <path class="jar__shine" d="M50 128c0-14 3-24 10-30v236c-7-6-10-14-10-24z"/>
+  <path class="jar__outline" d="M54 78c-16 6-24 22-24 46v196c0 30 20 50 50 50h140c30 0 50-20 50-50V124c0-24-8-40-24-46z"/>
+
+  <g class="jar__lid">
+    <rect x="46" y="20" width="208" height="58" rx="12" fill="#d8bd5c"/>
+    <rect x="46" y="20" width="208" height="16" rx="8" fill="#e9d382"/>
+    <rect x="46" y="62" width="208" height="16" rx="8" fill="#bfa145"/>
+  </g>
+</svg>

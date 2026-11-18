@@ -1,0 +1,54 @@
+<section class="section image-with-text{% if section.settings.surface %} section--surface{% endif %}{% if section.settings.flip %} image-with-text--flip{% endif %}">
+  <div class="page-width image-with-text__grid">
+    <div class="image-with-text__media" data-reveal="curtain">
+      <div class="image-with-text__frame image-with-text__frame--{{ section.settings.shape }}" data-parallax>
+        {%- if section.settings.image != blank -%}
+          {{ section.settings.image | image_url: width: 2000 | image_tag: widths: '600, 900, 1200, 1600, 2000', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: section.settings.image.alt }}
+        {%- else -%}
+          {% render 'art', index: 3, icon: 'leaf' %}
+        {%- endif -%}
+      </div>
+    </div>
+    <div class="image-with-text__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="image-with-text__heading" data-reveal data-split>{{ section.settings.heading | escape }}</h2>
+      {%- if section.settings.text != blank -%}
+        <div class="rte" data-reveal style="--i: 2">{{ section.settings.text }}</div>
+      {%- endif -%}
+      {%- if section.settings.link_label != blank -%}
+        <a class="link-arrow" href="{{ section.settings.link | default: routes.all_products_collection_url }}" data-reveal style="--i: 3">
+          {{- section.settings.link_label | escape -}}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Image with text",
+  "settings": [
+    { "type": "image_picker", "id": "image", "label": "Image" },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our story" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Elegant yet adventurous" },
+    { "type": "richtext", "id": "text", "label": "Text", "default": "<p>We soak jumbo oats and chia seeds overnight in creamy plant milk, then pair them with decadent flavours.</p>" },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Learn more" },
+    { "type": "url", "id": "link", "label": "Link" },
+    {
+      "type": "select",
+      "id": "shape",
+      "label": "Image shape",
+      "options": [
+        { "value": "rect", "label": "Rectangle" },
+        { "value": "arch", "label": "Arch" }
+      ],
+      "default": "rect"
+    },
+    { "type": "checkbox", "id": "flip", "label": "Image on the right", "default": false },
+    { "type": "checkbox", "id": "surface", "label": "Grey background", "default": false }
+  ],
+  "presets": [{ "name": "Image with text" }]
+}
+{% endschema %}

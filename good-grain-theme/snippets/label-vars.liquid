@@ -1,0 +1,44 @@
+{%- comment -%}
+  Outputs the CSS variables that tint a card or page in a product's label colour.
+  The colour comes from, in order:
+    1. the product metafield custom.label_colour (type: Colour)
+    2. the "Label colours" list in Theme settings (one "product-handle: #hex" per line)
+  When neither is set nothing is output, and the script reads the colour from the product photo instead.
+
+  Usage:
+    {%- capture label_vars -%}{% render 'label-vars', product: product %}{%- endcapture -%}
+    <div style="{{ label_vars }}"{% if label_vars == blank %} data-label-auto{% endif %}>
+{%- endcomment -%}
+{%- liquid
+  assign label = ''
+  assign field = product.metafields.custom.label_colour.value
+  if field != blank
+    assign label = field | append: ''
+  endif
+  if label == ''
+    assign rows = settings.label_colours | newline_to_br | split: '<br />'
+    for row in rows
+      assign pair = row | strip | split: ':'
+      assign key = pair[0] | strip
+      if key == product.handle
+        assign label = pair[1] | strip
+        break
+      endif
+    endfor
+  endif
+  if label != ''
+    assign brightness = label | color_brightness
+    comment
+      on_label is the text colour used on top of the label colour.
+      label_ink is the label colour made dark enough to use for headings on a pale page.
+    endcomment
+    if brightness > 165
+      assign on_label = settings.color_text
+      assign label_ink = label | color_mix: settings.color_text, 45
+    else
+      assign on_label = settings.color_on_dark
+      assign label_ink = label
+    endif
+    echo '--label: ' | append: label | append: '; --on-label: ' | append: on_label | append: '; --label-ink: ' | append: label_ink | append: ';'
+  endif
+-%}

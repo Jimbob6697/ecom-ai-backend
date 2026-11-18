@@ -1,0 +1,169 @@
+{%- liquid
+  assign s = section.settings
+  assign ingredients = section.blocks | where: 'type', 'ingredient'
+  assign count = ingredients.size
+  capture layer_colours
+    for block in ingredients
+      echo block.settings.colour
+      unless forloop.last
+        echo ','
+      endunless
+    endfor
+  endcapture
+
+  assign jar_vars = ''
+  if s.product != blank
+    capture jar_vars
+      render 'label-vars', product: s.product
+    endcapture
+  endif
+  assign jar_vars = jar_vars | strip | replace: '--label', '--jar-label' | replace: '--on-label', '--jar-on-label'
+
+  assign button_link = s.button_link
+  if button_link == blank and s.product != blank
+    assign button_link = s.product.url
+  endif
+-%}
+{%- if count > 0 -%}
+  <section
+    class="jar-story"
+    data-jar-story
+    style="--steps: {{ count }}; --jar-label: {{ s.label_colour }}; --jar-on-label: {{ s.label_text }}; {{ jar_vars }}"
+  >
+    <div class="jar-story__sticky">
+      <header class="jar-story__intro page-width">
+        {%- if s.eyebrow != blank -%}
+          <p class="eyebrow">{{ s.eyebrow | escape }}</p>
+        {%- endif -%}
+        {%- if s.heading != blank -%}
+          <h2 class="jar-story__heading">{{ s.heading | escape }}</h2>
+        {%- endif -%}
+      </header>
+
+      <div class="jar-story__stage">
+        <div class="jar-story__rain" aria-hidden="true">
+          {%- for block in ingredients -%}
+            {%- assign step = forloop.index0 -%}
+            <div class="jar-story__drops" style="--l: var(--l{{ step }}, 0)">
+              {%- for n in (0..15) -%}
+                {%- liquid
+                  assign seed = step | times: 37 | plus: n | times: 53
+                  assign x0 = seed | modulo: 90 | minus: 45
+                  assign x1 = n | times: 71 | plus: step | modulo: 100 | minus: 50
+                  assign r = seed | times: 7 | modulo: 360
+                  assign size = n | times: 29 | plus: step | modulo: 50 | plus: 70
+                  assign delay = n | times: 3.5
+                -%}
+                <span class="drop" style="--x0: {{ x0 }}; --x1: {{ x1 }}; --r: {{ r }}; --s: {{ size | divided_by: 100.0 }}; --d: {{ delay | divided_by: 100.0 }}">
+                  {%- if block.settings.image != blank -%}
+                    {{ block.settings.image | image_url: width: 160 | image_tag: loading: 'lazy', alt: '', class: 'ingredient' }}
+                  {%- else -%}
+                    {% render 'ingredient', name: block.settings.illustration %}
+                  {%- endif -%}
+                </span>
+              {%- endfor -%}
+            </div>
+          {%- endfor -%}
+        </div>
+        {% render 'jar', layers: layer_colours, id: section.id, caption: s.caption %}
+      </div>
+
+      <ol class="jar-story__steps" role="list">
+        {%- for block in ingredients -%}
+          <li class="jar-story__step{% if forloop.first %} is-active{% endif %}" data-jar-step style="--swatch: {{ block.settings.colour }}" {{ block.shopify_attributes }}>
+            <span class="jar-story__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+            <span class="jar-story__icon" aria-hidden="true">
+              {%- if block.settings.image != blank -%}
+                {{ block.settings.image | image_url: width: 160 | image_tag: loading: 'lazy', alt: '', class: 'ingredient' }}
+              {%- else -%}
+                {% render 'ingredient', name: block.settings.illustration %}
+              {%- endif -%}
+            </span>
+            <h3 class="jar-story__name">{{ block.settings.name | escape }}</h3>
+            {%- if block.settings.text != blank -%}
+              <p class="jar-story__text">{{ block.settings.text | escape }}</p>
+            {%- endif -%}
+          </li>
+        {%- endfor -%}
+        <li class="jar-story__step jar-story__step--finale" data-jar-step>
+          <h3 class="jar-story__name">{{ s.finale_heading | escape }}</h3>
+          {%- if s.finale_text != blank -%}
+            <p class="jar-story__text">{{ s.finale_text | escape }}</p>
+          {%- endif -%}
+          {%- if s.button_label != blank and button_link != blank -%}
+            <a class="button" href="{{ button_link }}">{{ s.button_label | escape }}</a>
+          {%- endif -%}
+        </li>
+      </ol>
+
+      <div class="jar-story__progress" aria-hidden="true"><span></span></div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Into the jar",
+  "tag": "div",
+  "max_blocks": 8,
+  "settings": [
+    { "type": "paragraph", "content": "As the visitor scrolls, each ingredient falls into the jar and adds a layer. Then the lid goes on. With animations turned off it shows as a simple list." },
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "What's inside" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Good things, into the jar" },
+    { "type": "header", "content": "Jar label" },
+    { "type": "product", "id": "product", "label": "Match this product's label colour", "info": "Optional. The button then links to it too." },
+    { "type": "color", "id": "label_colour", "label": "Label colour", "default": "#0e3a5c" },
+    { "type": "color", "id": "label_text", "label": "Label text colour", "default": "#fdf3d7" },
+    { "type": "text", "id": "caption", "label": "Label caption", "default": "Overnight oats" },
+    { "type": "header", "content": "Last step" },
+    { "type": "text", "id": "finale_heading", "label": "Heading", "default": "Soaked overnight. Ready when you are." },
+    { "type": "text", "id": "finale_text", "label": "Text", "default": "No shopping, no prep, no clean-up." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop the flavours" },
+    { "type": "url", "id": "button_link", "label": "Button link" }
+  ],
+  "blocks": [
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Jumbo oats" },
+        { "type": "textarea", "id": "text", "label": "Text" },
+        {
+          "type": "select",
+          "id": "illustration",
+          "label": "Illustration",
+          "options": [
+            { "value": "oat", "label": "Oats" },
+            { "value": "chia", "label": "Chia seeds" },
+            { "value": "date", "label": "Date" },
+            { "value": "cashew", "label": "Cashew" },
+            { "value": "cacao", "label": "Cacao" },
+            { "value": "vanilla", "label": "Vanilla" },
+            { "value": "maple", "label": "Maple" },
+            { "value": "peanut", "label": "Peanut" },
+            { "value": "banana", "label": "Banana" },
+            { "value": "cinnamon", "label": "Cinnamon" },
+            { "value": "berry", "label": "Strawberry" },
+            { "value": "coffee", "label": "Coffee" },
+            { "value": "pistachio", "label": "Pistachio" },
+            { "value": "coconut", "label": "Coconut" }
+          ],
+          "default": "oat"
+        },
+        { "type": "image_picker", "id": "image", "label": "Your own cut-out photo", "info": "Optional. A small transparent PNG replaces the illustration." },
+        { "type": "color", "id": "colour", "label": "Layer colour in the jar", "default": "#ead9b5" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Into the jar",
+      "blocks": [
+        { "type": "ingredient", "settings": { "name": "Jumbo oats", "illustration": "oat", "colour": "#ead9b5" } },
+        { "type": "ingredient", "settings": { "name": "Chia seeds", "illustration": "chia", "colour": "#cfc3b0" } },
+        { "type": "ingredient", "settings": { "name": "Medjool dates", "illustration": "date", "colour": "#b9895c" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

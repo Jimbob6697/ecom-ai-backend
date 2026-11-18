@@ -1,0 +1,174 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_reviews": true,
+        "show_quantity": true,
+        "show_dynamic_checkout": true,
+        "show_payment_icons": true,
+        "show_stock": true,
+        "low_stock_threshold": 0,
+        "show_ribbon": true,
+        "claims": "100% natural · Gluten free · Vegan · No refined sugar",
+        "show_stats": true,
+        "show_addons": true,
+        "addons_collection": "bundles",
+        "addons_heading": "Goes well with",
+        "addons_limit": 2
+      },
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "100% natural",
+            "text": "Nothing artificial"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "icon": "heart",
+            "title": "Vegan and gluten free",
+            "text": "No refined sugars"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "icon": "award",
+            "title": "Made in the UK",
+            "text": "With British oats"
+          }
+        },
+        "collapsible-4": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "How to enjoy",
+            "text": "<p>Ready to eat straight from the jar. Keep refrigerated.</p>"
+          }
+        },
+        "collapsible-5": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Delivery",
+            "text": "<p>Delivery options and costs are shown at checkout.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "badge-1",
+        "badge-2",
+        "badge-3",
+        "collapsible-4",
+        "collapsible-5"
+      ]
+    },
+    "story": {
+      "type": "jar-story",
+      "settings": {
+        "eyebrow": "What's inside",
+        "heading": "Good things, into the jar",
+        "caption": "Overnight oats",
+        "finale_heading": "Soaked overnight. Ready when you are.",
+        "finale_text": "No shopping, no prep, no clean-up.",
+        "button_label": "Shop all flavours",
+        "button_link": "shopify://collections/all"
+      },
+      "blocks": {
+        "ingredient-1": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Jumbo oats",
+            "text": "British-sourced and gluten free, cold-soaked overnight.",
+            "illustration": "oat",
+            "colour": "#ead9b5"
+          }
+        },
+        "ingredient-2": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Chia seeds",
+            "text": "Soaked alongside the oats, never gloopy.",
+            "illustration": "chia",
+            "colour": "#d4c8b4"
+          }
+        },
+        "ingredient-3": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Creamy plant milk",
+            "text": "A silky cashew base. Always dairy free.",
+            "illustration": "cashew",
+            "colour": "#f3e6c8"
+          }
+        }
+      },
+      "block_order": [
+        "ingredient-1",
+        "ingredient-2",
+        "ingredient-3"
+      ]
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "eyebrow": "Good gut feelings",
+        "heading": "What our customers say",
+        "subheading": "",
+        "scheme": "light"
+      },
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Most delicious!",
+            "text": "The Good Grain’s oats are truly the most delicious things I’ve ever tasted.",
+            "author": "Richard L.",
+            "verified": false
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Absolute time saver!",
+            "text": "The Good Grain has saved me a solid 15 minutes in the morning — didn’t need to put the stove on and stir oats. Also didn’t need to go out and source the individual high quality ingredients that you use!",
+            "author": "Sarah H.",
+            "verified": false
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "So convenient!",
+            "text": "I truly look forward to breakfast now thanks to The Good Grain. I think about them whilst I’m in bed in the morning, and I’m like YES they’re all waiting for me in my fridge. So convenient and absolutely delicious.",
+            "author": "Rachel R.",
+            "verified": false
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3"
+      ]
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "We think you'll also love",
+        "limit": 8
+      }
+    }
+  },
+  "order": [
+    "main",
+    "story",
+    "reviews",
+    "recommendations"
+  ]
+}

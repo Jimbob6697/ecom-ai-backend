@@ -1,0 +1,106 @@
+{%- liquid
+  assign s = section.settings
+  assign picked = section.blocks | where: 'type', 'product'
+  assign heading_tag = 'h2'
+  if section.index == 1
+    assign heading_tag = 'h1'
+  endif
+-%}
+<section class="hero-jars" data-hero-jars>
+  <div class="hero-jars__wash" aria-hidden="true"></div>
+  <div class="page-width hero-jars__inner">
+    <div class="hero-jars__copy">
+      {%- if s.eyebrow != blank -%}
+        <p class="eyebrow" data-hero-line style="--i: 0">{{ s.eyebrow | escape }}</p>
+      {%- endif -%}
+      <{{ heading_tag }} class="hero-jars__heading">
+        {%- if s.heading != blank -%}
+          <span class="hero-jars__line" data-hero-line style="--i: 1">{{ s.heading | escape }}</span>
+        {%- endif -%}
+        {%- if s.heading_accent != blank -%}
+          <span class="hero-jars__line hero-jars__line--accent" data-hero-line style="--i: 2">{{ s.heading_accent | escape }}</span>
+        {%- endif -%}
+      </{{ heading_tag }}>
+      {%- if s.text != blank -%}
+        <p class="hero-jars__text" data-hero-line style="--i: 3">{{ s.text | escape }}</p>
+      {%- endif -%}
+      <div class="hero-jars__actions" data-hero-line style="--i: 4">
+        {%- if s.button_label != blank -%}
+          <a class="button button--label" href="{{ s.button_link | default: routes.all_products_collection_url }}">{{ s.button_label | escape }}</a>
+        {%- endif -%}
+        {%- if s.link_label != blank and s.link != blank -%}
+          <a class="link-arrow" href="{{ s.link }}">{{ s.link_label | escape }}</a>
+        {%- endif -%}
+      </div>
+      {%- if s.show_reviews -%}
+        <div class="hero-jars__reviews" data-hero-line style="--i: 5">{% render 'review-summary' %}</div>
+      {%- endif -%}
+    </div>
+
+    <div class="hero-jars__cluster">
+      {%- if s.badge_text != blank -%}
+        <div class="hero-jars__badge" aria-hidden="true">
+          <svg viewBox="0 0 200 200">
+            <defs><path id="hero-ring-{{ section.id }}" d="M100 100m-78 0a78 78 0 1 1 156 0a78 78 0 1 1-156 0"/></defs>
+            <text><textPath href="#hero-ring-{{ section.id }}" textLength="484">{{ s.badge_text | upcase | escape }}</textPath></text>
+          </svg>
+          {% render 'icon', name: 'leaf' %}
+        </div>
+      {%- endif -%}
+
+      {%- liquid
+        assign shown = 0
+        assign loading = 'lazy'
+        if section.index == 1
+          assign loading = 'eager'
+        endif
+        if picked.size > 0
+          for block in picked
+            if block.settings.product != blank and block.settings.product.featured_media != blank
+              render 'hero-jar', product: block.settings.product, position: shown, loading: loading
+              assign shown = shown | plus: 1
+            endif
+          endfor
+        else
+          assign hero_collection = s.collection | default: collections.all
+          for product in hero_collection.products limit: 12
+            if shown < 5 and product.featured_media != blank
+              render 'hero-jar', product: product, position: shown, loading: loading
+              assign shown = shown | plus: 1
+            endif
+          endfor
+        endif
+      -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero with jars",
+  "tag": "div",
+  "max_blocks": 5,
+  "settings": [
+    { "type": "paragraph", "content": "Up to five jars float beside the headline, and the background drifts through each jar's label colour. Use product photos with a transparent background." },
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Overnight oats and chia puddings" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Decadent taste." },
+    { "type": "text", "id": "heading_accent", "label": "Heading, second line", "info": "Shown in italics.", "default": "Vibrant nutrition." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "100% natural overnight oats for a fast breakfast, with slow-release energy." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Order now" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "link_label", "label": "Second link label" },
+    { "type": "url", "id": "link", "label": "Second link" },
+    { "type": "checkbox", "id": "show_reviews", "label": "Show review score", "info": "Set the score in Theme settings → Reviews and trust.", "default": false },
+    { "type": "text", "id": "badge_text", "label": "Rotating badge text", "default": "Gluten free · Vegan · No refined sugar · 100% natural ·" },
+    { "type": "collection", "id": "collection", "label": "Jars from this collection", "info": "Used when no Product blocks are added: the first five products are shown." }
+  ],
+  "blocks": [
+    {
+      "type": "product",
+      "name": "Jar",
+      "settings": [{ "type": "product", "id": "product", "label": "Product" }]
+    }
+  ],
+  "presets": [{ "name": "Hero with jars" }]
+}
+{% endschema %}

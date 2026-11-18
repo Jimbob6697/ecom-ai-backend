@@ -1,0 +1,104 @@
+<section class="section section--tight promo-tiles">
+  <div class="promo-tiles__grid">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign b = block.settings
+        assign tile_url = b.link | default: routes.all_products_collection_url
+      -%}
+      <article
+        class="promo-tile promo-tile--{{ b.scheme }} promo-tile--{{ b.size }}{% if b.image != blank %} promo-tile--has-image{% endif %}"
+        data-reveal
+        style="--i: {{ forloop.index0 | modulo: 2 }}"
+        {{ block.shopify_attributes }}
+      >
+        <div class="promo-tile__media" data-parallax>
+          {%- if b.image != blank -%}
+            {{ b.image | image_url: width: 2400 | image_tag: widths: '600, 900, 1200, 1800, 2400', sizes: '(min-width: 750px) 50vw, 100vw', loading: 'lazy', alt: b.image.alt }}
+          {%- else -%}
+            {% render 'art', index: forloop.index, icon: b.icon %}
+          {%- endif -%}
+        </div>
+        <div class="promo-tile__content">
+          {%- if b.eyebrow != blank -%}
+            <p class="eyebrow">{{ b.eyebrow | escape }}</p>
+          {%- endif -%}
+          <h2 class="promo-tile__heading">{{ b.heading | escape }}</h2>
+          {%- if b.text != blank -%}
+            <p class="promo-tile__text">{{ b.text | escape }}</p>
+          {%- endif -%}
+          <div class="promo-tile__actions">
+            {%- if b.button_label != blank -%}
+              <a class="button button--small" href="{{ tile_url }}">{{ b.button_label | escape }}</a>
+            {%- endif -%}
+            {%- if b.link_label != blank -%}
+              <a class="link-arrow" href="{{ b.link_2 | default: tile_url }}">{{ b.link_label | escape }}</a>
+            {%- endif -%}
+          </div>
+        </div>
+      </article>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Promo tiles",
+  "max_blocks": 8,
+  "blocks": [
+    {
+      "type": "tile",
+      "name": "Tile",
+      "settings": [
+        { "type": "text", "id": "eyebrow", "label": "Eyebrow" },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Overnight oats" },
+        { "type": "text", "id": "text", "label": "Text", "default": "Soaked overnight, ready when you are." },
+        { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop" },
+        { "type": "url", "id": "link", "label": "Button link" },
+        { "type": "text", "id": "link_label", "label": "Second link label", "default": "Learn more" },
+        { "type": "url", "id": "link_2", "label": "Second link" },
+        { "type": "image_picker", "id": "image", "label": "Image", "info": "The text sits at the top of the tile, so keep the subject in the lower two-thirds." },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Placeholder icon",
+          "info": "Shown until an image is added.",
+          "options": [
+            { "value": "bolt", "label": "Bolt" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "ruler", "label": "Ruler" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "star", "label": "Star" }
+          ],
+          "default": "leaf"
+        },
+        {
+          "type": "select",
+          "id": "scheme",
+          "label": "Colour scheme",
+          "options": [
+            { "value": "light", "label": "Light" },
+            { "value": "dark", "label": "Dark" }
+          ],
+          "default": "light"
+        },
+        {
+          "type": "select",
+          "id": "size",
+          "label": "Width",
+          "options": [
+            { "value": "half", "label": "Half" },
+            { "value": "full", "label": "Full" }
+          ],
+          "default": "half"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Promo tiles",
+      "blocks": [{ "type": "tile" }, { "type": "tile", "settings": { "scheme": "dark", "heading": "Chia puddings", "text": "Silky, creamy, never gloopy.", "icon": "leaf" } }]
+    }
+  ]
+}
+{% endschema %}

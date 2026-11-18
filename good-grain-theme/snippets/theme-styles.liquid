@@ -1,0 +1,108 @@
+{%- liquid
+  assign body_font = settings.type_body_font
+  assign heading_font = settings.type_heading_font
+  assign heading_italic = heading_font | font_modify: 'style', 'italic'
+-%}
+{%- if settings.type_builtin -%}
+  {{ 'fraunces.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {{ 'poppins-400.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{%- else -%}
+  <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+{%- endif -%}
+{% style %}
+  {%- if settings.type_builtin -%}
+    {%- comment -%}
+      Brand fonts, shipped with the theme (all open licence):
+      Fraunces for headings, Josefin Sans for labels and buttons, Poppins for text.
+    {%- endcomment -%}
+    @font-face {
+      font-family: 'Fraunces';
+      src: url('{{ 'fraunces.woff2' | asset_url }}') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Fraunces';
+      src: url('{{ 'fraunces-italic.woff2' | asset_url }}') format('woff2');
+      font-weight: 100 900;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Josefin Sans';
+      src: url('{{ 'josefin-sans.woff2' | asset_url }}') format('woff2');
+      font-weight: 100 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Poppins';
+      src: url('{{ 'poppins-300.woff2' | asset_url }}') format('woff2');
+      font-weight: 300;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Poppins';
+      src: url('{{ 'poppins-400.woff2' | asset_url }}') format('woff2');
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Poppins';
+      src: url('{{ 'poppins-500.woff2' | asset_url }}') format('woff2');
+      font-weight: 500 700;
+      font-style: normal;
+      font-display: swap;
+    }
+  {%- else -%}
+    {{ body_font | font_face: font_display: 'swap' }}
+    {{ body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+    {{ heading_font | font_face: font_display: 'swap' }}
+    {{ heading_italic | font_face: font_display: 'swap' }}
+  {%- endif -%}
+
+  :root {
+    --color-bg: {{ settings.color_background }};
+    --color-surface: {{ settings.color_surface }};
+    --color-text: {{ settings.color_text }};
+    --color-text-rgb: {{ settings.color_text.red }}, {{ settings.color_text.green }}, {{ settings.color_text.blue }};
+    --color-bg-rgb: {{ settings.color_background.red }}, {{ settings.color_background.green }}, {{ settings.color_background.blue }};
+    --color-muted: {{ settings.color_muted }};
+    --color-accent: {{ settings.color_accent }};
+    --color-dark: {{ settings.color_dark }};
+    --color-on-dark: {{ settings.color_on_dark }};
+    --color-on-dark-rgb: {{ settings.color_on_dark.red }}, {{ settings.color_on_dark.green }}, {{ settings.color_on_dark.blue }};
+    --color-announcement: {{ settings.color_announcement }};
+    --color-footer: {{ settings.color_footer }};
+    --color-highlight: {{ settings.color_highlight }};
+    --color-brass: {{ settings.color_brass }};
+    --color-sale: {{ settings.color_sale }};
+    --label: {{ settings.color_label_default }};
+    --on-label: {{ settings.color_on_dark }};
+    --page-width: {{ settings.page_width }}px;
+    --radius-card: {{ settings.card_radius }}px;
+    --card-ratio: {{ settings.card_ratio }};
+    {%- if settings.type_builtin %}
+      --font-body: 'Poppins', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --font-heading: 'Fraunces', Georgia, 'Times New Roman', serif;
+      --font-label: 'Josefin Sans', 'Poppins', 'Helvetica Neue', Arial, sans-serif;
+      --font-heading-weight: 400;
+      --font-body-weight: 400;
+      --font-strong: 500;
+    {%- else %}
+      --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+      --font-heading: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+      --font-label: {{ body_font.family }}, {{ body_font.fallback_families }};
+      --font-heading-weight: {{ heading_font.weight }};
+      --font-body-weight: {{ body_font.weight }};
+      --font-strong: 700;
+    {%- endif %}
+  }
+
+  {%- if settings.animations_page %}
+    @view-transition { navigation: auto; }
+  {%- endif %}
+{% endstyle %}

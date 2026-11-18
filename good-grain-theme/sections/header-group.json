@@ -1,0 +1,45 @@
+{
+  "type": "header",
+  "name": "Header group",
+  "sections": {
+    "announcement": {
+      "type": "announcement-bar",
+      "blocks": {
+        "a": {
+          "type": "message",
+          "settings": {
+            "text": "100% natural · Gluten free · Vegan · No refined sugar"
+          }
+        },
+        "b": {
+          "type": "message",
+          "settings": {
+            "text": "Made in the UK with British oats"
+          }
+        }
+      },
+      "block_order": [
+        "a",
+        "b"
+      ],
+      "settings": {
+        "show_reviews": false
+      }
+    },
+    "header": {
+      "type": "header",
+      "settings": {
+        "logo": "shopify://shop_images/Main_Logo_blue.png",
+        "logo_height": 46,
+        "menu": "main-menu",
+        "search_menu": "main-menu",
+        "sticky": true,
+        "logo_dark": false
+      }
+    }
+  },
+  "order": [
+    "announcement",
+    "header"
+  ]
+}

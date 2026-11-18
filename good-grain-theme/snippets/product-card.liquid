@@ -1,0 +1,82 @@
+{%- comment -%}
+  Product card used in shelves, grids, search and recommendations.
+  The tile behind the jar takes the product's label colour (see snippets/label-vars.liquid).
+  Usage: {% render 'product-card', product: product, index: forloop.index, sizes: '...' %}
+  Pass nil as the product to render a placeholder card.
+  Pass quick_add: false to hide the add button.
+{%- endcomment -%}
+{%- liquid
+  assign card_sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
+  assign badge = ''
+  assign badge_class = ''
+  assign label_vars = ''
+  assign cutout = false
+  if product != blank
+    capture label_vars
+      render 'label-vars', product: product
+    endcapture
+    assign label_vars = label_vars | strip
+    assign image_src = product.featured_media.preview_image.src | downcase
+    if image_src contains '.png' or image_src contains '.webp'
+      assign cutout = true
+    endif
+    assign now_s = 'now' | date: '%s' | plus: 0
+    assign published_s = product.published_at | date: '%s' | plus: 0
+    assign age_days = now_s | minus: published_s | divided_by: 86400
+    if product.available == false
+      assign badge = 'products.sold_out' | t
+      assign badge_class = 'badge--muted'
+    elsif product.compare_at_price > product.price
+      assign badge = 'products.sale' | t
+      assign badge_class = 'badge--sale'
+    elsif age_days < 30
+      assign badge = 'products.new' | t
+    endif
+  endif
+  assign show_quick = true
+  if quick_add == false
+    assign show_quick = false
+  endif
+-%}
+<article
+  class="product-card{% if cutout %} product-card--cutout{% endif %}"
+  data-reveal
+  style="--i: {{ index | default: 0 }}; {{ label_vars }}"
+  {% if label_vars == blank and product != blank %}
+    data-label-auto
+  {% endif %}
+>
+  <a class="product-card__link" href="{{ product.url | default: '#' }}">
+    <div class="product-card__media">
+      <span class="product-card__sun" aria-hidden="true"></span>
+      {%- if product.featured_media -%}
+        {{
+          product.featured_media
+          | image_url: width: 900
+          | image_tag: widths: '300, 450, 600, 900', sizes: card_sizes, loading: 'lazy', class: 'product-card__image', alt: product.featured_media.alt, crossorigin: 'anonymous'
+        }}
+      {%- else -%}
+        {% render 'art', index: index, icon: 'leaf' %}
+      {%- endif -%}
+      {%- if badge != blank -%}
+        <span class="badge {{ badge_class }}">{{ badge }}</span>
+      {%- endif -%}
+    </div>
+    <div class="product-card__info">
+      {%- if settings.card_show_type and product.type != blank -%}
+        <p class="product-card__type">{{ product.type }}</p>
+      {%- endif -%}
+      <h3 class="product-card__title">{{ product.title | default: 'Your flavour' }}</h3>
+      <p class="product-card__price">
+        {%- if product != blank -%}
+          {% render 'price', product: product, show_from: true %}
+        {%- else -%}
+          {{ 495 | money }}
+        {%- endif -%}
+      </p>
+    </div>
+  </a>
+  {%- if show_quick and product != blank -%}
+    <div class="product-card__quick">{% render 'quick-add', product: product %}</div>
+  {%- endif -%}
+</article>
