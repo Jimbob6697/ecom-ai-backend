@@ -1224,8 +1224,10 @@ a.rating .rating__count {
 
 @media (max-width: 989px) {
   .site-header__logo-image {
-    width: auto;
-    max-width: 50vw;
-    height: auto;
+    width: auto !important;
+    max-width: 44vw;
+    height: auto !important;
+    max-height: 22px;
+    object-fit: contain;
   }
 }
