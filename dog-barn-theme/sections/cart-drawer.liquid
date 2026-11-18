@@ -1,3 +1,7 @@
+{%- liquid
+  assign upsell_collection = section.settings.upsell_collection
+  assign upsell_limit = section.settings.upsell_limit
+-%}
 <aside
   class="drawer"
   id="cart-drawer"
@@ -19,9 +23,43 @@
     {%- if cart.item_count > 0 -%}
       <div class="drawer__scroll">
         {% render 'cart-items', cart: cart %}
+
+        {%- if upsell_collection != blank and upsell_limit > 0 -%}
+          {%- liquid
+            assign in_cart = ''
+            for item in cart.items
+              assign in_cart = in_cart | append: '|' | append: item.product_id | append: '|'
+            endfor
+            assign shown = 0
+          -%}
+          {%- capture upsell_rows -%}
+            {%- for product in upsell_collection.products limit: 16 -%}
+              {%- liquid
+                assign needle = '|' | append: product.id | append: '|'
+                if in_cart contains needle or product.available == false or shown >= upsell_limit
+                  continue
+                endif
+                assign shown = shown | plus: 1
+              -%}
+              {% render 'addon-row', product: product, no_form: true %}
+            {%- endfor -%}
+          {%- endcapture -%}
+          {%- if shown > 0 -%}
+            <div class="addons addons--cart">
+              <p class="addons__heading">{{ section.settings.upsell_heading | escape }}</p>
+              <ul class="addons__list" role="list">{{ upsell_rows }}</ul>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
       </div>
       <div class="drawer__footer">
         {% render 'cart-summary', cart: cart, context: 'drawer' %}
+        {%- if section.settings.show_trust -%}
+          <ul class="drawer__trust" role="list">
+            <li>{% render 'icon', name: 'lock' %}Secure checkout</li>
+            <li>{% render 'icon', name: 'truck' %}Sent with Royal Mail</li>
+          </ul>
+        {%- endif -%}
       </div>
     {%- else -%}
       <div class="empty-state">
@@ -35,6 +73,13 @@
 
 {% schema %}
 {
-  "name": "Cart drawer"
+  "name": "Cart drawer",
+  "settings": [
+    { "type": "header", "content": "Add-ons in the bag" },
+    { "type": "collection", "id": "upsell_collection", "label": "Add-on collection", "info": "Small extras work best. Products already in the bag are skipped." },
+    { "type": "text", "id": "upsell_heading", "label": "Heading", "default": "Add a little extra" },
+    { "type": "range", "id": "upsell_limit", "label": "Add-ons to show", "min": 0, "max": 4, "step": 1, "default": 2 },
+    { "type": "checkbox", "id": "show_trust", "label": "Show secure checkout line", "default": true }
+  ]
 }
 {% endschema %}

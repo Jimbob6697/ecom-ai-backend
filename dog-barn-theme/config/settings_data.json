@@ -29,6 +29,17 @@
     "type_builtin": true,
     "color_announcement": "#d2ccbe",
     "color_footer": "#6f6259",
-    "color_highlight": "#6f755c"
+    "color_highlight": "#6f755c",
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "upsell_collection": "poo-bag-holders",
+          "upsell_heading": "Add a little extra",
+          "upsell_limit": 2,
+          "show_trust": true
+        }
+      }
+    }
   }
 }

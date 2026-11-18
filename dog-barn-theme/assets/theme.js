@@ -531,6 +531,45 @@
     }
   }
 
+  async function quickAdd(button) {
+    const holder = button.closest('[data-quick-add]');
+    const field = holder && $('[data-quick-id]', holder);
+    if (!field) return;
+    button.classList.add('is-loading');
+    const body = new FormData();
+    body.append('id', field.value);
+    body.append('quantity', '1');
+    body.append('sections', cartSections().join(','));
+    body.append('sections_url', window.location.pathname);
+    try {
+      const response = await fetch(theme.routes.cartAdd, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.description || data.message || 'Could not add to bag');
+      renderCartSections(data.sections);
+      openDrawer();
+    } catch (problem) {
+      button.classList.remove('is-loading');
+      showAddError(holder, problem.message);
+    }
+  }
+
+  // Shows an add-to-bag error beside the control that caused it.
+  function showAddError(anchor, message) {
+    let note = anchor.nextElementSibling;
+    if (!note || !note.matches('[data-add-error]')) {
+      note = document.createElement('p');
+      note.className = 'form-message form-message--error';
+      note.setAttribute('data-add-error', '');
+      note.setAttribute('role', 'alert');
+      anchor.after(note);
+    }
+    note.textContent = message;
+  }
+
   function initCart() {
     document.addEventListener('click', (event) => {
       const toggle = event.target.closest('[data-cart-toggle]');
@@ -561,6 +600,30 @@
           input.value = value;
           input.dispatchEvent(new Event('change', { bubbles: true }));
         }
+        return;
+      }
+
+      const quick = event.target.closest('[data-quick-add-button]');
+      if (quick) {
+        quickAdd(quick);
+        return;
+      }
+
+      const modalOpener = event.target.closest('[data-modal-open]');
+      if (modalOpener) {
+        const modal = document.getElementById(modalOpener.dataset.modalOpen);
+        if (modal && typeof modal.showModal === 'function') modal.showModal();
+        return;
+      }
+
+      if (event.target.matches('.modal__image')) {
+        event.target.classList.toggle('is-zoomed');
+        return;
+      }
+
+      const modal = event.target.closest('[data-modal]');
+      if (modal && (event.target === modal || event.target.closest('[data-modal-close]'))) {
+        modal.close();
         return;
       }
 
@@ -608,6 +671,8 @@
         if (error) {
           error.textContent = problem.message;
           error.hidden = false;
+        } else {
+          showAddError(form, problem.message);
         }
       } finally {
         buttons.forEach((button) => button.classList.remove('is-loading'));
@@ -681,7 +746,8 @@
         markAvailability();
         const variant = variants.find((item) => item.options.every((value, index) => value === selected[index]));
         const labels = $$('[data-add-label]', product);
-        const buttons = $$('[data-add-button]', product);
+        const mainForm = $('.product__form', product);
+        const buttons = $$('[data-add-button]', product).filter((button) => button.form === mainForm);
 
         if (!variant) {
           buttons.forEach((button) => (button.disabled = true));
@@ -693,6 +759,7 @@
         buttons.forEach((button) => (button.disabled = !variant.available));
         labels.forEach((label) => (label.textContent = variant.available ? theme.strings.addToBag : theme.strings.soldOut));
         $$('[data-product-price]', product).forEach((element) => (element.innerHTML = variant.price));
+        if (variant.stock) $$('[data-product-stock]', product).forEach((element) => (element.innerHTML = variant.stock));
 
         if (variant.media) {
           const index = slides.findIndex((slide) => slide.dataset.mediaId === String(variant.media));
@@ -1047,6 +1114,22 @@
     }
   }
 
+  function initAddons(root = document) {
+    $$('[data-addons]', root).forEach(async (container) => {
+      if (container.dataset.ready || !container.dataset.url) return;
+      container.dataset.ready = 'true';
+      try {
+        const response = await fetch(container.dataset.url);
+        if (!response.ok) return;
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const fresh = $('[data-addons-content]', html);
+        if (fresh) container.innerHTML = fresh.outerHTML;
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
+
   /* ---------------------------------------------------------------------
      Collection filters
      --------------------------------------------------------------------- */
@@ -1088,6 +1171,7 @@
     initRecommendations(root);
     initFilters(root);
     initDirectory(root);
+    initAddons(root);
     initTours(root);
     initUgc(root);
     collectScrollTargets();

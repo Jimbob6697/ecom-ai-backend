@@ -2,6 +2,7 @@
   Product card used in shelves, grids, search and recommendations.
   Usage: {% render 'product-card', product: product, index: forloop.index, sizes: '...' %}
   Pass nil as the product to render a placeholder card.
+  Pass quick_add: true to add a one-tap add to bag beneath the card.
 {%- endcomment -%}
 {%- liquid
   assign card_sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
@@ -60,4 +61,7 @@
       </p>
     </div>
   </a>
+  {%- if quick_add and product != blank -%}
+    <div class="product-card__quick">{% render 'quick-add', product: product %}</div>
+  {%- endif -%}
 </article>

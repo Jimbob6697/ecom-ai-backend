@@ -61,6 +61,33 @@ The home page has a **Product tour** section for the Adventurer Harness: the pic
 
 Each selling point has a “turn to” angle and a distance for the 3D model, so you can point the camera at the handle, the buckle or the AirTag pouch. The section can be added to any page, including product templates.
 
+## Product page
+
+**From your product metafields** (each is hidden on products where it is empty):
+
+| Metafield | Where it shows |
+| --- | --- |
+| `custom.size_guide_image` | A full-width **Size guide** button directly above the add to bag button. It opens a pop-up with the image; tap the image to enlarge it. |
+| `custom.materials` | Its own **Materials** row under Details. |
+| `custom.care` | Its own **Care** row under Details. |
+| `custom.video` | The second tile in the photo gallery, playing silently on a loop with controls. |
+
+The theme accepts each metafield in whichever form it was created: text, multi-line text or rich text for care and materials; an uploaded file or a link for the size guide image; an uploaded video file, a link to a video file, or a YouTube or Vimeo link for the video. Products without a size guide image use the fallback page chosen in the Product section, if any.
+
+**Upsells**
+
+- **Pairs well with** — up to three add-ons under the add to bag button, each with a size picker and a one-tap Add. It uses the *complementary products* you set per product in Shopify's free Search & Discovery app. Until those are set, it shows other pieces from the same colourway automatically.
+- **Complete the set** — a row below the product showing the rest of its colourway, each with a one-tap add. The colourway is found from the product's collections: the collection whose name the product title starts with (so “Chestnut Trail Adventurer Harness” matches the “Chestnut Trail” collection). It hides itself when nothing matches.
+- **Add a little extra** — add-ons inside the bag, from the collection chosen in Customize → Cart drawer (set to Accessories). Items already in the bag are skipped.
+- **You may also like** — Shopify's related products, further down the page.
+
+**Trust**
+
+- Live availability under the price: “In stock, ready to dispatch”, or “Only 3 left” when Shopify's real stock for the chosen size is at or below the number set in the Product section. It never invents scarcity: it only appears for sizes that track stock and cannot be oversold.
+- A dispatch line, four trust badges, secure checkout with payment icons, and the review score beside the title.
+- An optional **Featured review** block for one real customer quote; left empty, nothing shows.
+- A secure checkout line in the bag.
+
 ## What's in it
 
 **Trust** — rotating announcement bar with review score, a “Why Dog Barn” trust band, award band, product-page trust badges, secure checkout and payment icons, free-delivery progress in the bag.

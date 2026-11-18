@@ -1,0 +1,57 @@
+{%- comment -%}
+  Shows the product's custom.video metafield, whichever way it was set up:
+  an uploaded video file, a link to a video file, or a YouTube or Vimeo link.
+  Usage: {% render 'product-video', product: product %}
+{%- endcomment -%}
+{%- liquid
+  assign video_field = product.metafields.custom.video
+  assign video_value = video_field.value
+-%}
+{%- if video_value != blank -%}
+  {%- if video_field.type == 'file_reference' -%}
+    {%- if video_value.media_type == 'video' -%}
+      {{ video_value | video_tag: image_size: '1100x', autoplay: true, loop: true, muted: true, controls: true, playsinline: true }}
+    {%- elsif video_value.url != blank -%}
+      <video src="{{ video_value.url }}" autoplay loop muted playsinline controls></video>
+    {%- endif -%}
+  {%- else -%}
+    {%- liquid
+      assign video_url = video_value | append: ''
+      assign video_id = ''
+      assign video_host = 'file'
+      if video_url contains 'youtube.com/watch'
+        assign video_host = 'youtube'
+        assign video_id = video_url | split: 'v=' | last | split: '&' | first
+      elsif video_url contains 'youtu.be/'
+        assign video_host = 'youtube'
+        assign video_id = video_url | split: 'youtu.be/' | last | split: '?' | first
+      elsif video_url contains 'youtube.com/shorts/'
+        assign video_host = 'youtube'
+        assign video_id = video_url | split: 'shorts/' | last | split: '?' | first
+      elsif video_url contains 'vimeo.com/'
+        assign video_host = 'vimeo'
+        assign video_id = video_url | split: 'vimeo.com/' | last | split: '?' | first | split: '/' | last
+      endif
+    -%}
+    {%- case video_host -%}
+      {%- when 'youtube' -%}
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/{{ video_id | url_encode }}?rel=0&playsinline=1"
+          title="{{ product.title | escape }}"
+          loading="lazy"
+          allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen"
+          allowfullscreen
+        ></iframe>
+      {%- when 'vimeo' -%}
+        <iframe
+          src="https://player.vimeo.com/video/{{ video_id | url_encode }}"
+          title="{{ product.title | escape }}"
+          loading="lazy"
+          allow="fullscreen; picture-in-picture"
+          allowfullscreen
+        ></iframe>
+      {%- else -%}
+        <video src="{{ video_url | escape }}" autoplay loop muted playsinline controls></video>
+    {%- endcase -%}
+  {%- endif -%}
+{%- endif -%}

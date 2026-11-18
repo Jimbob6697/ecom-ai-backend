@@ -11,14 +11,6 @@
             "text": "On accessory orders over £50"
           }
         },
-        "express": {
-          "type": "badge",
-          "settings": {
-            "icon": "gift",
-            "title": "Tracked Express",
-            "text": "Order by 1pm, Mon to Fri"
-          }
-        },
         "sizing": {
           "type": "badge",
           "settings": {
@@ -45,20 +37,51 @@
         "care": {
           "type": "collapsible",
           "settings": {
-            "heading": "Fit & care",
-            "text": "<p>Every dog is different, so please check the measurements before ordering. If you need help with sizing, email info@dogbarnyorkshire.com or message @dogbarn.yorkshire on Instagram.</p><p>We recommend hand washing, or a delicate wash at no more than 30 degrees.</p>"
+            "heading": "Fit & sizing help",
+            "text": "<p>Every dog is different, so please check the size guide before ordering. If you need help with sizing, email info@dogbarnyorkshire.com or message @dogbarn.yorkshire on Instagram.</p>"
+          }
+        },
+        "returns": {
+          "type": "badge",
+          "settings": {
+            "icon": "return",
+            "title": "Returns accepted",
+            "text": "See delivery & returns"
+          }
+        },
+        "quote": {
+          "type": "review",
+          "settings": {
+            "rating": 5
           }
         }
       },
       "block_order": [
         "delivery",
-        "express",
+        "returns",
         "sizing",
         "award",
         "shipping",
-        "care"
+        "care",
+        "quote"
       ],
-      "settings": {}
+      "settings": {
+        "show_reviews": true,
+        "show_quantity": true,
+        "show_dynamic_checkout": true,
+        "show_payment_icons": true,
+        "show_stock": true,
+        "low_stock_threshold": 5,
+        "dispatch_text": "Order by 1pm, Mon to Fri, for Tracked Express",
+        "guide_label": "Size guide",
+        "guide_help": "Between sizes? Email info@dogbarnyorkshire.com and we'll help you find the right fit.",
+        "materials_label": "Materials",
+        "care_label": "Care",
+        "video_label": "Watch",
+        "show_addons": true,
+        "addons_heading": "Pairs well with",
+        "addons_limit": 3
+      }
     },
     "videos": {
       "type": "ugc-videos",
@@ -130,7 +153,7 @@
       "type": "product-recommendations",
       "settings": {
         "heading": "You may also like",
-        "subheading": ""
+        "limit": 8
       }
     },
     "trust": {
@@ -179,10 +202,21 @@
         "label": "Why Dog Barn",
         "scheme": "light"
       }
+    },
+    "set": {
+      "type": "product-set",
+      "settings": {
+        "heading": "Complete the set",
+        "show_name": true,
+        "text": "Matching pieces in the same colourway.",
+        "limit": 8,
+        "surface": true
+      }
     }
   },
   "order": [
     "main",
+    "set",
     "videos",
     "reviews",
     "recommendations",

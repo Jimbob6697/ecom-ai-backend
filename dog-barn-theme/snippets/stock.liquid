@@ -1,0 +1,25 @@
+{%- comment -%}
+  Availability line for a variant, using Shopify's real stock figures.
+  "Only N left" shows only when Shopify tracks stock for the variant, it
+  cannot be oversold, and the quantity is at or under the threshold.
+  Usage: {% render 'stock', variant: variant, threshold: 5 %}
+{%- endcomment -%}
+{%- liquid
+  assign stock_state = 'in'
+  if variant.available == false
+    assign stock_state = 'out'
+  elsif threshold > 0 and variant.inventory_management == 'shopify' and variant.inventory_policy == 'deny' and variant.inventory_quantity > 0 and variant.inventory_quantity <= threshold
+    assign stock_state = 'low'
+  endif
+-%}
+<span class="stock stock--{{ stock_state }}">
+  <span class="stock__dot" aria-hidden="true"></span>
+  {%- case stock_state -%}
+    {%- when 'out' -%}
+      {{ 'products.sold_out' | t }}
+    {%- when 'low' -%}
+      {{ 'products.low_stock' | t: count: variant.inventory_quantity }}
+    {%- else -%}
+      {{ 'products.in_stock' | t }}
+  {%- endcase -%}
+</span>

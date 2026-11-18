@@ -1,0 +1,18 @@
+{%- comment -%}
+  A compact upsell row: photo, name, price and a one-tap add.
+  Usage: {% render 'addon-row', product: product, no_form: false %}
+{%- endcomment -%}
+<li class="addon">
+  <a class="addon__media" href="{{ product.url }}" tabindex="-1" aria-hidden="true">
+    {%- if product.featured_media -%}
+      {{ product.featured_media | image_url: width: 240 | image_tag: loading: 'lazy', sizes: '72px', alt: '' }}
+    {%- else -%}
+      {% render 'art', index: 1, icon: 'paw' %}
+    {%- endif -%}
+  </a>
+  <div class="addon__info">
+    <a class="addon__title" href="{{ product.url }}">{{ product.title }}</a>
+    <p class="addon__price">{% render 'price', product: product, show_from: true %}</p>
+  </div>
+  {% render 'quick-add', product: product, no_form: no_form %}
+</li>

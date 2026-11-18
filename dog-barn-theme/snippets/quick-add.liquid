@@ -1,0 +1,49 @@
+{%- comment -%}
+  One-tap add to bag for upsells. Products with several variants get a compact
+  size picker beside the button.
+
+  Usage: {% render 'quick-add', product: product %}
+  Pass no_form: true where a form is not allowed (inside the bag's own form);
+  the button then adds through JavaScript only.
+{%- endcomment -%}
+{%- liquid
+  assign first_variant = product.selected_or_first_available_variant
+  assign quick_label = 'products.add' | t
+-%}
+{%- if product.available -%}
+  {%- capture quick_fields -%}
+    {%- if product.has_only_default_variant -%}
+      <input type="hidden" name="id" value="{{ first_variant.id }}" data-quick-id>
+    {%- else -%}
+      <label class="quick-add__select">
+        <span class="visually-hidden">{{ product.options.first | default: 'Option' }}</span>
+        <select name="id" data-quick-id>
+          {%- for variant in product.variants -%}
+            <option value="{{ variant.id }}"{% unless variant.available %} disabled{% endunless %}{% if variant.id == first_variant.id %} selected{% endif %}>
+              {{- variant.title | escape }}{% unless variant.available %} – {{ 'products.sold_out' | t }}{% endunless -%}
+            </option>
+          {%- endfor -%}
+        </select>
+        {% render 'icon', name: 'chevron-down' %}
+      </label>
+    {%- endif -%}
+  {%- endcapture -%}
+  {%- if no_form -%}
+    <div class="quick-add" data-quick-add>
+      {{ quick_fields }}
+      <button class="quick-add__button" type="button" data-quick-add-button aria-label="{{ quick_label }}: {{ product.title | escape }}">
+        <span>{{ quick_label }}</span>
+      </button>
+    </div>
+  {%- else -%}
+    <form class="quick-add" method="post" action="{{ routes.cart_add_url }}" accept-charset="UTF-8" data-product-form>
+      {{ quick_fields }}
+      <input type="hidden" name="quantity" value="1">
+      <button class="quick-add__button" type="submit" data-add-button aria-label="{{ quick_label }}: {{ product.title | escape }}">
+        <span>{{ quick_label }}</span>
+      </button>
+    </form>
+  {%- endif -%}
+{%- else -%}
+  <p class="quick-add quick-add--sold-out">{{ 'products.sold_out' | t }}</p>
+{%- endif -%}

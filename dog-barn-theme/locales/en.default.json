@@ -20,7 +20,13 @@
     "new": "New",
     "fits": "Fits",
     "quantity": "Quantity",
-    "view": "View product"
+    "view": "View product",
+    "add": "Add",
+    "in_stock": "In stock, ready to dispatch",
+    "low_stock": {
+      "one": "Only {{ count }} left",
+      "other": "Only {{ count }} left"
+    }
   },
   "cart": {
     "title": "Your Bag",
