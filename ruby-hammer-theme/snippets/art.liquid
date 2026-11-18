@@ -1,0 +1,13 @@
+{%- comment -%}
+  Abstract placeholder artwork shown wherever an image has not been added yet.
+  Usage: {% render 'art', index: forloop.index, icon: 'bolt' %}
+{%- endcomment -%}
+{%- liquid
+  assign art_index = index | default: 1 | modulo: 6
+  assign icons = 'leaf,heart,star,leaf,heart,award' | split: ','
+  assign art_icon = icon | default: icons[art_index]
+-%}
+<div class="art art--{{ art_index }}" aria-hidden="true">
+  <span class="art__glow"></span>
+  {% render 'icon', name: art_icon, class: 'art__icon' %}
+</div>

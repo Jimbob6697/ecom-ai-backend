@@ -1,0 +1,493 @@
+{%- liquid
+  assign s = section.settings
+  assign current = product.selected_or_first_available_variant
+  assign form_id = 'product-form-' | append: section.id
+
+  comment
+    Optional product metafields, each skipped where empty:
+    custom.subtitle, custom.ingredients, custom.how_to_use, custom.ruby_tip
+    Review ratings come from the standard reviews.rating metafields.
+  endcomment
+  assign subtitle_field = product.metafields.custom.subtitle.value
+  assign ingredients_field = product.metafields.custom.ingredients
+  assign how_field = product.metafields.custom.how_to_use
+  assign tip_field = product.metafields.custom.ruby_tip.value
+
+  assign saving = 0
+  if current.compare_at_price > current.price
+    assign saving = current.compare_at_price | minus: current.price | times: 100 | divided_by: current.compare_at_price | round
+  endif
+
+  comment
+    Free delivery nudge: what is already in the basket plus this product.
+  endcomment
+  assign threshold = settings.free_shipping_threshold | times: 100
+  assign basket_with_this = cart.total_price | plus: current.price
+  assign remaining = threshold | minus: basket_with_this
+-%}
+<section class="section product" data-product>
+  <div class="page-width product__grid">
+    <div class="product__gallery" data-gallery>
+      <div class="product__stage" data-gallery-track>
+        {%- for media in product.media -%}
+          <div class="product__slide" data-media-id="{{ media.id }}">
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- liquid
+                  assign loading = 'lazy'
+                  if forloop.first
+                    assign loading = 'eager'
+                  endif
+                -%}
+                {{
+                  media
+                  | image_url: width: 2000
+                  | image_tag: widths: '500, 800, 1100, 1500, 2000', sizes: '(min-width: 990px) 55vw, 100vw', loading: loading, alt: media.alt
+                }}
+              {%- when 'video' -%}
+                {{ media | video_tag: controls: true, image_size: '1500x' }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag: loading: 'lazy' }}
+              {%- when 'model' -%}
+                {{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}
+            {%- endcase -%}
+          </div>
+        {%- else -%}
+          <div class="product__slide">{% render 'art', index: 1, icon: 'heart' %}</div>
+        {%- endfor -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="product__thumbs" role="tablist" aria-label="Gallery">
+          {%- for media in product.media -%}
+            <button
+              class="product__thumb{% if forloop.first %} is-active{% endif %}"
+              type="button"
+              role="tab"
+              aria-label="{{ 'products.view' | t }} {{ forloop.index }}"
+              data-gallery-thumb="{{ forloop.index0 }}"
+            >
+              {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product__info">
+      <div class="product__top" data-reveal>
+        {%- if product.tags contains 'Bestseller' -%}
+          <p class="product__flag">{{ 'products.bestseller' | t }}</p>
+        {%- endif -%}
+        {%- if s.show_reviews -%}
+          {% render 'rating', product: product, link: '#reviews' %}
+        {%- endif -%}
+      </div>
+      <h1 class="product__title" data-reveal style="--i: 1">{{ product.title }}</h1>
+      {%- if subtitle_field != blank -%}
+        <p class="product__subtitle" data-reveal style="--i: 1">{{ subtitle_field | escape }}</p>
+      {%- endif -%}
+
+      <div class="product__price-row" data-reveal style="--i: 2">
+        <div class="product__price" data-product-price>
+          {% render 'price', product: product, variant: current %}
+        </div>
+        {%- if saving > 0 -%}
+          <span class="product__saving">{{ 'products.save_percent' | t: percent: saving }}</span>
+        {%- endif -%}
+      </div>
+      {%- if settings.pay_later_text != blank -%}
+        <p class="product__note" data-reveal style="--i: 2">{{ settings.pay_later_text | escape }}</p>
+      {%- endif -%}
+
+      {%- if s.intro != blank -%}
+        <div class="product__intro rte" data-reveal style="--i: 2">{{ s.intro }}</div>
+      {%- endif -%}
+
+      {%- unless product.has_only_default_variant -%}
+        <div class="product__options" data-reveal style="--i: 3">
+          {%- for option in product.options_with_values -%}
+            {%- liquid
+              assign option_name = option.name | downcase
+              assign is_shade = false
+              if option_name contains 'colo' or option_name contains 'shade'
+                assign is_shade = true
+              endif
+              assign option_key = 'option' | append: option.position
+            -%}
+            <fieldset class="option{% if is_shade %} option--shade{% endif %}" data-option-position="{{ option.position }}">
+              <legend class="option__legend">
+                <span>{{ option.name }}: <strong data-option-current>{{ option.selected_value }}</strong></span>
+              </legend>
+              <div class="option__values">
+                {%- for value in option.values -%}
+                  {%- liquid
+                    comment
+                      A shade shows its swatch colour or image from Shopify when one is set,
+                      otherwise the photo of the first variant in that shade.
+                    endcomment
+                    assign shade_image = blank
+                    if is_shade and value.swatch == blank
+                      for variant in product.variants
+                        if variant[option_key] == value and variant.featured_media != blank
+                          assign shade_image = variant.featured_media.preview_image
+                          break
+                        endif
+                      endfor
+                    endif
+                  -%}
+                  <label class="option__tile">
+                    <input
+                      type="radio"
+                      name="{{ section.id }}-option-{{ option.position }}"
+                      value="{{ value | escape }}"
+                      {% if option.selected_value == value %}
+                        checked
+                      {% endif %}
+                      data-option-input
+                    >
+                    <span>
+                      {%- if is_shade -%}
+                        {%- if value.swatch.image -%}
+                          <span class="option__swatch">{{ value.swatch.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}</span>
+                        {%- elsif value.swatch.color -%}
+                          <span class="option__swatch" style="background: {{ value.swatch.color }}"></span>
+                        {%- elsif shade_image != blank -%}
+                          <span class="option__swatch">{{ shade_image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}</span>
+                        {%- endif -%}
+                      {%- endif -%}
+                      <span class="option__name">{{ value }}</span>
+                    </span>
+                  </label>
+                {%- endfor -%}
+              </div>
+            </fieldset>
+          {%- endfor -%}
+        </div>
+      {%- endunless -%}
+
+      {%- if s.show_stock -%}
+        <div class="product__availability" data-reveal style="--i: 3">
+          <span data-product-stock>{% render 'stock', variant: current, threshold: s.low_stock_threshold %}</span>
+          {%- if s.dispatch_text != blank -%}
+            <span class="product__dispatch">{% render 'icon', name: 'truck' %}{{ s.dispatch_text | escape }}</span>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- form 'product', product, id: form_id, class: 'product__form', novalidate: 'novalidate', data-product-form: '' -%}
+        <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
+        <div class="product__buy" data-reveal style="--i: 4">
+          {%- if s.show_quantity -%}
+            <div class="quantity" data-quantity>
+              <button type="button" aria-label="Decrease quantity" data-quantity-minus>{% render 'icon', name: 'minus' %}</button>
+              <input type="number" name="quantity" value="1" min="1" aria-label="{{ 'products.quantity' | t }}" inputmode="numeric">
+              <button type="button" aria-label="Increase quantity" data-quantity-plus>{% render 'icon', name: 'plus' %}</button>
+            </div>
+          {%- endif -%}
+          <button class="button button--large product__add" type="submit" data-add-button {% unless current.available %}disabled{% endunless %}>
+            <span data-add-label>
+              {%- if current.available -%}
+                {{ 'products.add_to_bag' | t }}
+              {%- else -%}
+                {{ 'products.sold_out' | t }}
+              {%- endif -%}
+            </span>
+            <span class="button__spinner" aria-hidden="true"></span>
+          </button>
+        </div>
+        <p class="form-message form-message--error" data-form-error hidden role="alert"></p>
+        {%- if s.show_dynamic_checkout -%}
+          <div class="product__dynamic" data-reveal style="--i: 5">{{ form | payment_button }}</div>
+        {%- endif -%}
+      {%- endform -%}
+
+      {%- if s.show_delivery_note and threshold > 0 -%}
+        <p
+          class="product__delivery{% if remaining <= 0 %} is-free{% endif %}"
+          data-delivery-note
+          data-threshold="{{ threshold }}"
+          data-basket="{{ cart.total_price }}"
+          data-free="{{ 'products.free_delivery_reached' | t | escape }}"
+          data-reveal
+          style="--i: 5"
+        >
+          {% render 'icon', name: 'truck' %}
+          <span data-delivery-text>
+            {%- if remaining <= 0 -%}
+              {{ 'products.free_delivery_reached' | t }}
+            {%- else -%}
+              {%- assign remaining_money = remaining | money -%}
+              {{ 'products.free_delivery_remaining_html' | t: amount: remaining_money }}
+            {%- endif -%}
+          </span>
+        </p>
+        <template data-delivery-template>{{ 'products.free_delivery_remaining_html' | t: amount: '[amount]' }}</template>
+      {%- endif -%}
+
+      <ul class="product__badges" role="list" data-reveal style="--i: 5">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'badge' -%}
+            <li class="trust-badge trust-badge--compact" {{ block.shopify_attributes }}>
+              <span class="trust-badge__icon">{% render 'icon', name: block.settings.icon %}</span>
+              <span class="trust-badge__text">
+                <strong>{{ block.settings.title | escape }}</strong>
+                {%- if block.settings.text != blank -%}
+                  <span>{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+              </span>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- if s.show_payment_icons -%}
+        <div class="product__secure" data-reveal style="--i: 6">
+          <p>{% render 'icon', name: 'lock' %}Secure checkout</p>
+          <ul role="list" aria-label="Payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      {%- if s.show_addons -%}
+        {%- comment -%}
+          Pairs well with. Shopify's complementary products (set per product in the
+          Search & Discovery app) replace this list when they exist; until then it
+          shows products from the fallback collection.
+        {%- endcomment -%}
+        <div
+          class="product__addons"
+          data-addons
+          data-url="{{ routes.product_recommendations_url }}?section_id=product-addons&product_id={{ product.id }}&limit={{ s.addons_limit }}&intent=complementary"
+        >
+          {%- assign fallback = s.addons_collection -%}
+          {%- if fallback != blank and fallback.products.size > 0 -%}
+            <div class="addons" data-addons-content>
+              <p class="addons__heading">{{ s.addons_heading | escape }}</p>
+              <ul class="addons__list" role="list">
+                {%- assign shown = 0 -%}
+                {%- for item in fallback.products limit: 12 -%}
+                  {%- if item.id == product.id or shown >= s.addons_limit or item.available == false -%}
+                    {%- continue -%}
+                  {%- endif -%}
+                  {% render 'addon-row', product: item %}
+                  {%- assign shown = shown | plus: 1 -%}
+                {%- endfor -%}
+              </ul>
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            <div class="product__app">{% render block %}</div>
+          {%- when 'tip' -%}
+            {%- assign tip_text = tip_field | default: block.settings.text -%}
+            {%- if tip_text != blank -%}
+              <figure class="product__tip" data-reveal {{ block.shopify_attributes }}>
+                {%- if block.settings.image != blank -%}
+                  {{ block.settings.image | image_url: width: 240 | image_tag: loading: 'lazy', sizes: '72px', class: 'product__tip-photo', alt: '' }}
+                {%- endif -%}
+                <div>
+                  <figcaption>{{ block.settings.heading | escape }}</figcaption>
+                  <blockquote>{{ tip_text | escape }}</blockquote>
+                </div>
+              </figure>
+            {%- elsif request.design_mode -%}
+              <figure class="product__tip product__tip--empty" {{ block.shopify_attributes }}>
+                <div>
+                  <figcaption>{{ block.settings.heading | escape }}</figcaption>
+                  <blockquote>Add a tip here, or fill in the product's custom.ruby_tip metafield. Left empty, this is only visible in the editor.</blockquote>
+                </div>
+              </figure>
+            {%- endif -%}
+        {%- endcase -%}
+      {%- endfor -%}
+
+      <div class="accordion product__accordion" data-reveal style="--i: 7">
+        {%- if product.description != blank -%}
+          <details class="accordion__item" open>
+            <summary class="accordion__summary">{{ s.description_label | escape }}{% render 'icon', name: 'plus' %}</summary>
+            <div class="accordion__content rte">{{ product.description }}</div>
+          </details>
+        {%- endif -%}
+        {%- if how_field.value != blank -%}
+          <details class="accordion__item">
+            <summary class="accordion__summary">{{ s.how_label | escape }}{% render 'icon', name: 'plus' %}</summary>
+            <div class="accordion__content rte">{{ how_field | metafield_tag }}</div>
+          </details>
+        {%- endif -%}
+        {%- if ingredients_field.value != blank -%}
+          <details class="accordion__item">
+            <summary class="accordion__summary">{{ s.ingredients_label | escape }}{% render 'icon', name: 'plus' %}</summary>
+            <div class="accordion__content rte">{{ ingredients_field | metafield_tag }}</div>
+          </details>
+        {%- endif -%}
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'collapsible' -%}
+            <details class="accordion__item" {{ block.shopify_attributes }}>
+              <summary class="accordion__summary">{{ block.settings.heading | escape }}{% render 'icon', name: 'plus' %}</summary>
+              <div class="accordion__content rte">
+                {{ block.settings.text }}
+                {{ block.settings.page.content }}
+              </div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'review' -%}
+          {%- if block.settings.text != blank -%}
+            <figure class="product__quote" data-reveal {{ block.shopify_attributes }}>
+              {% render 'stars', rating: block.settings.rating %}
+              <blockquote>{{ block.settings.text | escape }}</blockquote>
+              {%- if block.settings.author != blank -%}
+                <figcaption>{{ block.settings.author | escape }}</figcaption>
+              {%- endif -%}
+            </figure>
+          {%- elsif request.design_mode -%}
+            <figure class="product__quote product__quote--empty" {{ block.shopify_attributes }}>
+              <blockquote>Paste a real customer review here. An empty review is only visible in the editor.</blockquote>
+            </figure>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+
+  <div class="buy-bar" data-buy-bar aria-hidden="true">
+    <div class="page-width buy-bar__inner">
+      <p class="buy-bar__title">{{ product.title }}</p>
+      <div class="buy-bar__price" data-product-price>{% render 'price', product: product, variant: current %}</div>
+      <button class="button" type="submit" form="{{ form_id }}" tabindex="-1" data-add-button {% unless current.available %}disabled{% endunless %}>
+        <span data-add-label>
+          {%- if current.available -%}
+            {{ 'products.add_to_bag' | t }}
+          {%- else -%}
+            {{ 'products.sold_out' | t }}
+          {%- endif -%}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <script type="application/json" data-variants>
+    [
+      {%- for variant in product.variants -%}
+        {%- capture price_html -%}
+          {% render 'price', product: product, variant: variant %}
+        {%- endcapture -%}
+        {%- capture stock_html -%}
+          {% render 'stock', variant: variant, threshold: s.low_stock_threshold %}
+        {%- endcapture -%}
+        {
+          "id": {{ variant.id }},
+          "options": {{ variant.options | json }},
+          "available": {{ variant.available | json }},
+          "media": {{ variant.featured_media.id | json }},
+          "cents": {{ variant.price | json }},
+          "price": {{ price_html | strip | json }},
+          "stock": {{ stock_html | strip | json }}
+        }
+        {%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  </script>
+
+  <script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "checkbox", "id": "show_reviews", "label": "Show review rating", "info": "Uses the rating your reviews app saves on each product. Nothing shows for products with no reviews.", "default": true },
+    { "type": "richtext", "id": "intro", "label": "Line under the price", "info": "Optional. Shown on every product." },
+    { "type": "checkbox", "id": "show_quantity", "label": "Show quantity selector", "default": true },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout button", "info": "Shop Pay, Apple Pay and similar express options.", "default": true },
+    { "type": "checkbox", "id": "show_delivery_note", "label": "Show free delivery message", "info": "Tells the customer how much more to spend for free delivery, counting what is already in the bag. Set the amount in Theme settings → Cart.", "default": true },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show secure checkout and payment icons", "default": true },
+    { "type": "header", "content": "Availability" },
+    { "type": "checkbox", "id": "show_stock", "label": "Show availability", "default": true },
+    { "type": "range", "id": "low_stock_threshold", "label": "Show “Only N left” at or below", "info": "Uses Shopify's real stock count, and only for variants that track stock and cannot be oversold. Set to 0 to turn off.", "min": 0, "max": 10, "step": 1, "default": 0 },
+    { "type": "text", "id": "dispatch_text", "label": "Dispatch message" },
+    { "type": "header", "content": "Pairs well with" },
+    { "type": "checkbox", "id": "show_addons", "label": "Show “Pairs well with” under the add to bag button", "info": "Uses the complementary products set for each product in Shopify's Search & Discovery app. Until those are set, it shows products from the collection below.", "default": true },
+    { "type": "collection", "id": "addons_collection", "label": "Fallback collection" },
+    { "type": "text", "id": "addons_heading", "label": "Heading", "default": "Pairs well with" },
+    { "type": "range", "id": "addons_limit", "label": "Products to show", "min": 1, "max": 4, "step": 1, "default": 3 },
+    { "type": "header", "content": "Details" },
+    { "type": "paragraph", "content": "Rows for How to use and Ingredients appear when a product has the custom.how_to_use or custom.ingredients metafield filled in." },
+    { "type": "text", "id": "description_label", "label": "Description row title", "default": "Description" },
+    { "type": "text", "id": "how_label", "label": "How to use row title", "default": "How to use" },
+    { "type": "text", "id": "ingredients_label", "label": "Ingredients row title", "default": "Ingredients" }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "badge",
+      "name": "Trust badge",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Delivery" },
+            { "value": "return", "label": "Returns" },
+            { "value": "star", "label": "Star" },
+            { "value": "award", "label": "Award" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "lock", "label": "Secure" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "chat", "label": "Chat" }
+          ],
+          "default": "truck"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free UK delivery" },
+        { "type": "text", "id": "text", "label": "Text", "default": "When you spend £35" }
+      ]
+    },
+    {
+      "type": "tip",
+      "name": "Artist's tip",
+      "limit": 1,
+      "settings": [
+        { "type": "paragraph", "content": "A short tip in the founder's own words. Each product can have its own in the custom.ruby_tip metafield; the text below is used for products without one. Left empty, nothing is shown." },
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Ruby's tip" },
+        { "type": "textarea", "id": "text", "label": "Tip" },
+        { "type": "image_picker", "id": "image", "label": "Photo" }
+      ]
+    },
+    {
+      "type": "collapsible",
+      "name": "Collapsible row",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "Shipping" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "page", "id": "page", "label": "Or show content from a page" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Featured review",
+      "limit": 1,
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Review", "info": "Paste a real customer's words. Left empty, nothing is shown on the live store." },
+        { "type": "text", "id": "author", "label": "Customer name" }
+      ]
+    }
+  ]
+}
+{% endschema %}

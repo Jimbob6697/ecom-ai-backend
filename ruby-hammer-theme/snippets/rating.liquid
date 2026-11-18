@@ -1,0 +1,29 @@
+{%- comment -%}
+  A product's real review rating, read from the standard metafields that review
+  apps (Judge.me, Shopify Product Reviews, Okendo, Yotpo and others) fill in:
+  reviews.rating and reviews.rating_count. Nothing is shown for products with no reviews.
+
+  Usage: {% render 'rating', product: product %}
+  Pass link: '#reviews' to make it a link, and show_count: false to hide the number of reviews.
+{%- endcomment -%}
+{%- liquid
+  assign rating_value = product.metafields.reviews.rating.value.rating
+  assign rating_count = product.metafields.reviews.rating_count.value | default: 0
+-%}
+{%- if rating_value != blank and rating_count > 0 -%}
+  {%- if link != blank -%}
+    <a class="rating" href="{{ link }}">
+  {%- else -%}
+    <span class="rating">
+  {%- endif -%}
+  {% render 'stars', rating: rating_value %}
+  <span class="rating__value">{{ rating_value | round: 1 }}</span>
+  {%- unless show_count == false -%}
+    <span class="rating__count">({{ 'products.reviews' | t: count: rating_count }})</span>
+  {%- endunless -%}
+  {%- if link != blank -%}
+    </a>
+  {%- else -%}
+    </span>
+  {%- endif -%}
+{%- endif -%}

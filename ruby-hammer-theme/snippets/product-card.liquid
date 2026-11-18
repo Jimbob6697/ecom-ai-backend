@@ -1,0 +1,102 @@
+{%- comment -%}
+  Product card used in shelves, grids, search and recommendations.
+  Shows the review rating, the saving on sets, and the shades a product comes in.
+  Usage: {% render 'product-card', product: product, index: forloop.index, sizes: '...' %}
+  Pass nil as the product to render a placeholder card.
+  Pass quick_add: false to hide the add button.
+{%- endcomment -%}
+{%- liquid
+  assign card_sizes = sizes | default: '(min-width: 990px) 25vw, (min-width: 750px) 33vw, 50vw'
+  assign badge = ''
+  assign badge_class = ''
+  if product != blank
+    assign now_s = 'now' | date: '%s' | plus: 0
+    assign published_s = product.published_at | date: '%s' | plus: 0
+    assign age_days = now_s | minus: published_s | divided_by: 86400
+    if product.available == false
+      assign badge = 'products.sold_out' | t
+      assign badge_class = 'badge--muted'
+    elsif product.compare_at_price > product.price
+      assign saving = product.compare_at_price | minus: product.price | times: 100 | divided_by: product.compare_at_price | round
+      assign badge = 'products.save_percent' | t: percent: saving
+      assign badge_class = 'badge--sale'
+    elsif product.tags contains 'Bestseller'
+      assign badge = 'products.bestseller' | t
+    elsif age_days < 30
+      assign badge = 'products.new' | t
+    endif
+  endif
+  assign show_quick = true
+  if quick_add == false
+    assign show_quick = false
+  endif
+
+  comment
+    The option that holds shades: one named Colour, Color or Shade.
+  endcomment
+  assign shade_option = blank
+  for option in product.options_with_values
+    assign option_name = option.name | downcase
+    if option_name contains 'colo' or option_name contains 'shade'
+      assign shade_option = option
+      break
+    endif
+  endfor
+-%}
+<article class="product-card" data-reveal style="--i: {{ index | default: 0 }}">
+  <a class="product-card__link" href="{{ product.url | default: '#' }}">
+    <div class="product-card__media">
+      {%- if product.featured_media -%}
+        {{
+          product.featured_media
+          | image_url: width: 1000
+          | image_tag: widths: '300, 450, 600, 800, 1000', sizes: card_sizes, loading: 'lazy', class: 'product-card__image', alt: product.featured_media.alt
+        }}
+        {%- if settings.card_second_image and product.media[1] -%}
+          {{
+            product.media[1]
+            | image_url: width: 1000
+            | image_tag: widths: '300, 450, 600, 800, 1000', sizes: card_sizes, loading: 'lazy', class: 'product-card__image product-card__image--hover', alt: ''
+          }}
+        {%- endif -%}
+      {%- else -%}
+        {% render 'art', index: index, icon: 'heart' %}
+      {%- endif -%}
+      {%- if badge != blank -%}
+        <span class="badge {{ badge_class }}">{{ badge }}</span>
+      {%- endif -%}
+    </div>
+    <div class="product-card__info">
+      {%- if product != blank -%}
+        {% render 'rating', product: product %}
+      {%- endif -%}
+      <h3 class="product-card__title">{{ product.title | default: 'Your product name' }}</h3>
+      <p class="product-card__price">
+        {%- if product != blank -%}
+          {% render 'price', product: product, show_from: true %}
+        {%- else -%}
+          {{ 1800 | money }}
+        {%- endif -%}
+      </p>
+      {%- if shade_option != blank and shade_option.values.size > 1 -%}
+        <p class="product-card__shades">
+          {%- for value in shade_option.values limit: 6 -%}
+            {%- if value.swatch.color -%}
+              <span class="shade-dot" style="--shade: {{ value.swatch.color }}" title="{{ value | escape }}"></span>
+            {%- endif -%}
+          {%- endfor -%}
+          <span>{{ 'products.shades' | t: count: shade_option.values.size }}</span>
+        </p>
+      {%- endif -%}
+    </div>
+  </a>
+  {%- if show_quick and product != blank -%}
+    <div class="product-card__quick">
+      {%- if product.has_only_default_variant -%}
+        {% render 'quick-add', product: product %}
+      {%- else -%}
+        <a class="quick-add__button quick-add__button--link" href="{{ product.url }}">{{ 'products.choose' | t }}</a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</article>

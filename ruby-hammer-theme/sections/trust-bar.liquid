@@ -1,0 +1,86 @@
+<section class="trust-bar trust-bar--{{ section.settings.scheme }}" aria-label="Why shop with us">
+  {%- if section.settings.label != blank -%}
+    <p class="trust-bar__label">{{ section.settings.label | escape }}</p>
+  {%- endif -%}
+  <ul class="page-width trust-bar__list" role="list">
+    {%- for block in section.blocks -%}
+      <li class="trust-badge" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+        <span class="trust-badge__icon">
+          {%- if block.settings.image != blank -%}
+            {{ block.settings.image | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}
+          {%- else -%}
+            {% render 'icon', name: block.settings.icon %}
+          {%- endif -%}
+        </span>
+        <span class="trust-badge__text">
+          <strong>{{ block.settings.title | escape }}</strong>
+          {%- if block.settings.text != blank -%}
+            <span>{{ block.settings.text | escape }}</span>
+          {%- endif -%}
+        </span>
+      </li>
+    {%- endfor -%}
+  </ul>
+</section>
+
+{% schema %}
+{
+  "name": "Trust badges",
+  "max_blocks": 5,
+  "settings": [
+    { "type": "text", "id": "label", "label": "Small label", "default": "Good to know" },
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour scheme",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "surface", "label": "Grey" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "surface"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "badge",
+      "name": "Badge",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Delivery" },
+            { "value": "return", "label": "Returns" },
+            { "value": "star", "label": "Star" },
+            { "value": "award", "label": "Award" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "lock", "label": "Secure" },
+            { "value": "gift", "label": "Parcel" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "ruler", "label": "Sizing" },
+            { "value": "chat", "label": "Chat" },
+            { "value": "leaf", "label": "Leaf" }
+          ],
+          "default": "truck"
+        },
+        { "type": "image_picker", "id": "image", "label": "Custom badge image", "info": "Optional. Replaces the icon — use for award or review-platform logos." },
+        { "type": "text", "id": "title", "label": "Title", "default": "Free UK delivery" },
+        { "type": "text", "id": "text", "label": "Text", "default": "When you spend £35" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trust badges",
+      "blocks": [
+        { "type": "badge" },
+        { "type": "badge", "settings": { "icon": "star", "title": "Rated excellent", "text": "By our customers" } },
+        { "type": "badge", "settings": { "icon": "return", "title": "Easy returns", "text": "See our returns policy" } },
+        { "type": "badge", "settings": { "icon": "lock", "title": "Secure checkout", "text": "All major cards accepted" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

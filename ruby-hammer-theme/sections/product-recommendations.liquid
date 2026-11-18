@@ -1,0 +1,40 @@
+<div
+  class="recommendations"
+  data-recommendations
+  data-url="{{ routes.product_recommendations_url }}?section_id={{ section.id }}&product_id={{ product.id }}&limit={{ section.settings.limit }}"
+>
+  {%- if recommendations.performed and recommendations.products_count > 0 -%}
+    <section class="section product-shelf">
+      <div class="page-width product-shelf__header">
+        <h2 class="section-heading" data-reveal data-split>
+          {{ section.settings.heading | escape }}
+          {%- if section.settings.subheading != blank %} <span>{{ section.settings.subheading | escape }}</span>{% endif -%}
+        </h2>
+      </div>
+      <div class="scroller" data-scroller>
+        <ul class="scroller__track product-shelf__track" role="list" data-scroller-track>
+          {%- for product in recommendations.products -%}
+            <li class="product-shelf__item">
+              {% render 'product-card', product: product, index: forloop.index0, sizes: '(min-width: 990px) 320px, 62vw' %}
+            </li>
+          {%- endfor -%}
+        </ul>
+        <div class="scroller__nav page-width">
+          <button class="scroller__button" type="button" data-scroller-prev aria-label="{{ 'general.previous' | t }}">{% render 'icon', name: 'chevron-left' %}</button>
+          <button class="scroller__button" type="button" data-scroller-next aria-label="{{ 'general.next' | t }}">{% render 'icon', name: 'chevron-right' %}</button>
+        </div>
+      </div>
+    </section>
+  {%- endif -%}
+</div>
+
+{% schema %}
+{
+  "name": "Recommendations",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Complete the look" },
+    { "type": "text", "id": "subheading", "label": "Heading (muted part)" },
+    { "type": "range", "id": "limit", "label": "Products to show", "min": 2, "max": 10, "step": 1, "default": 8 }
+  ]
+}
+{% endschema %}

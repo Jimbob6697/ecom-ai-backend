@@ -1,0 +1,85 @@
+{%- liquid
+  assign body_font = settings.type_body_font
+  assign heading_font = settings.type_heading_font
+  assign heading_italic = heading_font | font_modify: 'style', 'italic'
+-%}
+{%- if settings.type_builtin -%}
+  {{ 'jost.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+  {{ 'cormorant-italic.woff2' | asset_url | preload_tag: as: 'font', type: 'font/woff2', crossorigin: 'anonymous' }}
+{%- else -%}
+  <link rel="preconnect" href="https://fonts.shopifycdn.com" crossorigin>
+{%- endif -%}
+{% style %}
+  {%- if settings.type_builtin -%}
+    {%- comment -%}
+      Brand fonts, shipped with the theme (open licence):
+      Cormorant Garamond for headings, Jost for everything else.
+    {%- endcomment -%}
+    @font-face {
+      font-family: 'Cormorant Garamond';
+      src: url('{{ 'cormorant.woff2' | asset_url }}') format('woff2');
+      font-weight: 300 700;
+      font-style: normal;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Cormorant Garamond';
+      src: url('{{ 'cormorant-italic.woff2' | asset_url }}') format('woff2');
+      font-weight: 300 700;
+      font-style: italic;
+      font-display: swap;
+    }
+    @font-face {
+      font-family: 'Jost';
+      src: url('{{ 'jost.woff2' | asset_url }}') format('woff2');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: swap;
+    }
+  {%- else -%}
+    {{ body_font | font_face: font_display: 'swap' }}
+    {{ body_font | font_modify: 'weight', 'bold' | font_face: font_display: 'swap' }}
+    {{ heading_font | font_face: font_display: 'swap' }}
+    {{ heading_italic | font_face: font_display: 'swap' }}
+  {%- endif -%}
+
+  :root {
+    --color-bg: {{ settings.color_background }};
+    --color-surface: {{ settings.color_surface }};
+    --color-text: {{ settings.color_text }};
+    --color-text-rgb: {{ settings.color_text.red }}, {{ settings.color_text.green }}, {{ settings.color_text.blue }};
+    --color-bg-rgb: {{ settings.color_background.red }}, {{ settings.color_background.green }}, {{ settings.color_background.blue }};
+    --color-muted: {{ settings.color_muted }};
+    --color-accent: {{ settings.color_accent }};
+    --color-dark: {{ settings.color_dark }};
+    --color-on-dark: {{ settings.color_on_dark }};
+    --color-on-dark-rgb: {{ settings.color_on_dark.red }}, {{ settings.color_on_dark.green }}, {{ settings.color_on_dark.blue }};
+    --color-announcement: {{ settings.color_announcement }};
+    --color-footer: {{ settings.color_footer }};
+    --color-highlight: {{ settings.color_highlight }};
+    --color-brass: {{ settings.color_brass }};
+    --color-sale: {{ settings.color_sale }};
+    --page-width: {{ settings.page_width }}px;
+    --radius-card: {{ settings.card_radius }}px;
+    --card-ratio: {{ settings.card_ratio }};
+    {%- if settings.type_builtin %}
+      --font-body: 'Jost', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      --font-heading: 'Cormorant Garamond', 'Baskerville', Georgia, 'Times New Roman', serif;
+      --font-label: 'Jost', 'Helvetica Neue', Arial, sans-serif;
+      --font-heading-weight: 500;
+      --font-body-weight: 400;
+      --font-strong: 500;
+    {%- else %}
+      --font-body: {{ body_font.family }}, {{ body_font.fallback_families }};
+      --font-heading: {{ heading_font.family }}, {{ heading_font.fallback_families }};
+      --font-label: {{ body_font.family }}, {{ body_font.fallback_families }};
+      --font-heading-weight: {{ heading_font.weight }};
+      --font-body-weight: {{ body_font.weight }};
+      --font-strong: 700;
+    {%- endif %}
+  }
+
+  {%- if settings.animations_page %}
+    @view-transition { navigation: auto; }
+  {%- endif %}
+{% endstyle %}

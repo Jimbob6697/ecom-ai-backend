@@ -1,0 +1,23 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-cart",
+      "settings": {}
+    },
+    "shelf": {
+      "type": "product-shelf",
+      "settings": {
+        "eyebrow": "",
+        "heading": "Most loved",
+        "subheading": "",
+        "collection": "best-sellers",
+        "show_view_all": false,
+        "surface": false
+      }
+    }
+  },
+  "order": [
+    "main",
+    "shelf"
+  ]
+}

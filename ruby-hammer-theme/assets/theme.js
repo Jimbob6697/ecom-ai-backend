@@ -1,0 +1,1477 @@
+/* Dog Barn Yorkshire theme — interactions and motion. Vanilla JS, no dependencies. */
+(() => {
+  'use strict';
+
+  const $ = (selector, root = document) => root.querySelector(selector);
+  const $$ = (selector, root = document) => Array.from(root.querySelectorAll(selector));
+  const clamp = (value, min = 0, max = 1) => Math.min(max, Math.max(min, value));
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const designMode = Boolean(window.Shopify && window.Shopify.designMode);
+  const theme = window.theme || { routes: {}, strings: {} };
+
+  const debounce = (fn, wait) => {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), wait);
+    };
+  };
+
+  /* ---------------------------------------------------------------------
+     Reveal on scroll
+     --------------------------------------------------------------------- */
+  const revealObserver =
+    'IntersectionObserver' in window
+      ? new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (!entry.isIntersecting) return;
+              entry.target.classList.add('is-visible');
+              revealObserver.unobserve(entry.target);
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.08 }
+        )
+      : null;
+
+  // Wraps each word of a headline so the words can rise into place in turn.
+  function splitHeading(element) {
+    if (element.dataset.splitDone) return;
+    element.dataset.splitDone = 'true';
+    let count = 0;
+    const walk = (node) => {
+      Array.from(node.childNodes).forEach((child) => {
+        if (child.nodeType === Node.ELEMENT_NODE) {
+          walk(child);
+          return;
+        }
+        if (child.nodeType !== Node.TEXT_NODE) return;
+        const fragment = document.createDocumentFragment();
+        child.textContent.split(' ').forEach((raw) => {
+          const word = raw.trim();
+          if (!word) return;
+          const outer = document.createElement('span');
+          const inner = document.createElement('span');
+          outer.className = 'split';
+          inner.textContent = word;
+          inner.style.setProperty('--w', count);
+          count += 1;
+          outer.append(inner);
+          fragment.append(outer, ' ');
+        });
+        child.replaceWith(fragment);
+      });
+    };
+    walk(element);
+  }
+
+  function initReveal(root = document) {
+    const elements = $$('[data-reveal]', root);
+    const animate = document.body.classList.contains('has-reveal') && revealObserver && !reduceMotion && !designMode;
+    elements.forEach((element) => {
+      if (animate) {
+        if (element.hasAttribute('data-split')) splitHeading(element);
+        revealObserver.observe(element);
+      } else element.classList.add('is-visible');
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Scroll-linked effects: hero scale/fade, parallax, word-by-word text
+     --------------------------------------------------------------------- */
+  let scrollTargets = { heroes: [], parallax: [], words: [] };
+  let ticking = false;
+  let lastScrollY = window.scrollY;
+
+  function splitWords(element) {
+    if (element.dataset.split) return;
+    element.dataset.split = 'true';
+    const words = element.textContent.trim().split(/\s+/);
+    element.textContent = '';
+    words.forEach((word, index) => {
+      const span = document.createElement('span');
+      span.className = 'word';
+      span.textContent = word;
+      element.append(span);
+      if (index < words.length - 1) element.append(' ');
+    });
+  }
+
+  function collectScrollTargets() {
+    scrollTargets = {
+      heroes: $$('[data-scroll-fx]'),
+      parallax: $$('[data-parallax]'),
+      words: $$('[data-word-reveal]'),
+    };
+    scrollTargets.words.forEach((element) => {
+      splitWords(element);
+      if (reduceMotion || designMode) $$('.word', element).forEach((word) => word.classList.add('is-lit'));
+    });
+  }
+
+  function updateScroll() {
+    ticking = false;
+    const viewport = window.innerHeight;
+    const header = $('[data-header]');
+    if (header) {
+      const y = window.scrollY;
+      header.classList.toggle('is-scrolled', y > 4);
+      // Slide the header away on the way down; bring it back on the way up.
+      if (y < 140 || y < lastScrollY - 6) header.classList.remove('is-compact');
+      else if (
+        y > 260 &&
+        y > lastScrollY + 6 &&
+        !header.classList.contains('is-open') &&
+        !$('[data-mobile-menu]:not([hidden])', header)
+      ) {
+        header.classList.add('is-compact');
+      }
+      lastScrollY = y;
+    }
+    if (reduceMotion) return;
+
+    scrollTargets.heroes.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > viewport) return;
+      const start = Math.min(rect.top + window.scrollY, viewport);
+      const progress = clamp((start - rect.top) / rect.height);
+      element.style.setProperty('--p', progress.toFixed(4));
+    });
+
+    scrollTargets.parallax.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      if (rect.bottom < -100 || rect.top > viewport + 100) return;
+      const progress = clamp((viewport - rect.top) / (viewport + rect.height));
+      element.style.setProperty('--p', progress.toFixed(4));
+    });
+
+    tours.forEach(updateTour);
+
+    if (designMode) return;
+    scrollTargets.words.forEach((element) => {
+      const rect = element.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > viewport) return;
+      const start = viewport * 0.82;
+      const end = viewport * 0.38;
+      const progress = clamp((start - rect.top) / (start - end + rect.height));
+      const words = $$('.word', element);
+      const lit = Math.round(progress * words.length);
+      words.forEach((word, index) => word.classList.toggle('is-lit', index < lit));
+    });
+  }
+
+  function requestScrollUpdate() {
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(updateScroll);
+  }
+
+  /* ---------------------------------------------------------------------
+     Count-up numbers
+     --------------------------------------------------------------------- */
+  function initCountUp(root = document) {
+    $$('[data-count-up]', root).forEach((element) => {
+      const match = element.textContent.trim().match(/^(\D*)(\d+(?:\.\d+)?)(.*)$/);
+      if (!match || reduceMotion || designMode || !('IntersectionObserver' in window)) return;
+      const [, prefix, number, suffix] = match;
+      const target = parseFloat(number);
+      const decimals = (number.split('.')[1] || '').length;
+      const render = (value) => {
+        element.textContent = prefix + value.toFixed(decimals) + suffix;
+      };
+      render(0);
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (!entry.isIntersecting) return;
+          observer.disconnect();
+          const started = performance.now();
+          const duration = 1400;
+          const tick = (now) => {
+            const t = clamp((now - started) / duration);
+            render(target * (1 - Math.pow(1 - t, 4)));
+            if (t < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        },
+        { threshold: 0.6 }
+      );
+      observer.observe(element);
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Page dim (shared by the header flyout and the cart drawer)
+     --------------------------------------------------------------------- */
+  const dim = $('[data-page-dim]');
+  let dimTimer;
+
+  function showDim(above = false) {
+    if (!dim) return;
+    clearTimeout(dimTimer);
+    dim.hidden = false;
+    dim.classList.toggle('is-above', above);
+    requestAnimationFrame(() => dim.classList.add('is-active'));
+  }
+
+  function hideDim() {
+    if (!dim) return;
+    dim.classList.remove('is-active');
+    dimTimer = setTimeout(() => {
+      dim.hidden = true;
+      dim.classList.remove('is-above');
+    }, 400);
+  }
+
+  /* ---------------------------------------------------------------------
+     Header: flyout navigation, search panel and mobile menu
+     --------------------------------------------------------------------- */
+  function initHeader() {
+    const header = $('[data-header]');
+    if (!header || header.dataset.ready) return;
+    header.dataset.ready = 'true';
+
+    const panels = $$('[data-flyout-panel]', header);
+    const triggers = $$('[data-flyout-trigger]', header);
+    const mobileMenu = $('[data-mobile-menu]', header);
+    const menuToggle = $('[data-menu-toggle]', header);
+    const hoverCapable = window.matchMedia('(hover: hover)').matches;
+    const navLists = $$('.site-nav__list', header);
+    let activeId = null;
+    let closeTimer;
+
+    // If the menus have more top-level links than fit either side of the logo,
+    // fall back to the menu button and panel on desktop too.
+    const fitNavigation = () => {
+      header.classList.remove('is-condensed');
+      const overflowing = navLists.some((list) => list.scrollWidth > list.clientWidth + 2);
+      if (window.innerWidth >= 990 && overflowing) header.classList.add('is-condensed');
+    };
+    fitNavigation();
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitNavigation);
+
+    const setHeaderOffset = () => {
+      const bottom = header.getBoundingClientRect().bottom;
+      document.documentElement.style.setProperty('--header-offset', `${Math.max(bottom, 0)}px`);
+    };
+
+    const open = (id) => {
+      clearTimeout(closeTimer);
+      if (activeId === id) return;
+      closeMobileMenu();
+      activeId = id;
+      panels.forEach((panel) => (panel.hidden = panel.id !== id));
+      triggers.forEach((trigger) => trigger.setAttribute('aria-expanded', String(trigger.dataset.flyoutTrigger === id)));
+      header.classList.add('is-open');
+      showDim();
+      if (id === 'flyout-search') {
+        const input = $('[data-predictive-input]', header);
+        if (input) setTimeout(() => input.focus(), 120);
+      }
+    };
+
+    const close = () => {
+      clearTimeout(closeTimer);
+      if (!activeId) return;
+      activeId = null;
+      triggers.forEach((trigger) => trigger.setAttribute('aria-expanded', 'false'));
+      header.classList.remove('is-open');
+      if (!$('[data-cart-drawer].is-open, [data-drawer].is-open')) hideDim();
+    };
+
+    const scheduleClose = () => {
+      clearTimeout(closeTimer);
+      closeTimer = setTimeout(close, 180);
+    };
+
+    function closeMobileMenu() {
+      if (!mobileMenu || mobileMenu.hidden) return;
+      mobileMenu.hidden = true;
+      menuToggle.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+    }
+
+    triggers.forEach((trigger) => {
+      const id = trigger.dataset.flyoutTrigger;
+      const clickOnly = trigger.hasAttribute('data-flyout-click');
+
+      if (hoverCapable && !clickOnly) {
+        trigger.addEventListener('mouseenter', () => open(id));
+      }
+
+      trigger.addEventListener('click', (event) => {
+        if (clickOnly) {
+          event.preventDefault();
+          activeId === id ? close() : open(id);
+        } else if (!hoverCapable && activeId !== id) {
+          // Touch devices: first tap opens the flyout, second tap follows the link.
+          event.preventDefault();
+          open(id);
+        }
+      });
+
+      trigger.addEventListener('keydown', (event) => {
+        if (clickOnly || (event.key !== 'ArrowDown' && event.key !== ' ')) return;
+        event.preventDefault();
+        open(id);
+        const first = $(`#${id} a`);
+        if (first) first.focus();
+      });
+    });
+
+    // Plain links (no flyout) close any open panel when hovered.
+    $$('.site-nav__link:not([data-flyout-trigger])', header).forEach((link) => {
+      link.addEventListener('mouseenter', () => {
+        if (activeId && activeId !== 'flyout-search') scheduleClose();
+      });
+    });
+
+    header.addEventListener('mouseleave', () => {
+      if (activeId && activeId !== 'flyout-search') scheduleClose();
+    });
+    header.addEventListener('mouseenter', () => clearTimeout(closeTimer));
+    header.addEventListener('focusout', (event) => {
+      if (activeId && event.relatedTarget && !header.contains(event.relatedTarget)) close();
+    });
+
+    if (dim) dim.addEventListener('click', close);
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      if (activeId) {
+        const trigger = triggers.find((item) => item.dataset.flyoutTrigger === activeId);
+        close();
+        if (trigger) trigger.focus();
+      }
+      closeMobileMenu();
+    });
+
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener('click', () => {
+        if (mobileMenu.hidden) {
+          close();
+          setHeaderOffset();
+          if (window.innerWidth >= 990) $$('details', mobileMenu).forEach((details) => (details.open = true));
+          mobileMenu.hidden = false;
+          menuToggle.setAttribute('aria-expanded', 'true');
+          document.documentElement.style.overflow = 'hidden';
+        } else {
+          closeMobileMenu();
+        }
+      });
+      window.addEventListener(
+        'resize',
+        debounce(() => {
+          fitNavigation();
+          if (window.innerWidth >= 990 && !header.classList.contains('is-condensed')) closeMobileMenu();
+        }, 150)
+      );
+    }
+
+    initPredictiveSearch(header);
+  }
+
+  function initAnnouncements() {
+    $$('[data-announcement]').forEach((bar) => {
+      if (bar.dataset.ready) return;
+      bar.dataset.ready = 'true';
+      const items = $$('[data-announcement-item]', bar);
+      if (items.length < 2 || reduceMotion || designMode) return;
+      let index = 0;
+      let paused = false;
+      bar.addEventListener('mouseenter', () => (paused = true));
+      bar.addEventListener('mouseleave', () => (paused = false));
+      setInterval(() => {
+        if (paused || document.hidden) return;
+        items[index].classList.remove('is-active');
+        index = (index + 1) % items.length;
+        items[index].classList.add('is-active');
+      }, 4500);
+    });
+  }
+
+  function initPredictiveSearch(header) {
+    const input = $('[data-predictive-input]', header);
+    const results = $('[data-predictive-results]', header);
+    const fallback = $('[data-predictive-default]', header);
+    if (!input || !results || !theme.routes.predictiveSearch) return;
+    let controller;
+
+    const search = debounce(async () => {
+      const query = input.value.trim();
+      if (controller) controller.abort();
+      if (query.length < 2) {
+        results.innerHTML = '';
+        if (fallback) fallback.hidden = false;
+        return;
+      }
+      controller = new AbortController();
+      const params = new URLSearchParams({
+        q: query,
+        'resources[type]': 'product',
+        'resources[limit]': '6',
+        section_id: 'predictive-search',
+      });
+      try {
+        const response = await fetch(`${theme.routes.predictiveSearch}?${params}`, { signal: controller.signal });
+        if (!response.ok) return;
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const content = $('[data-predictive-content]', html);
+        results.innerHTML = content ? content.outerHTML : '';
+        if (fallback) fallback.hidden = Boolean(content);
+      } catch (error) {
+        if (error.name !== 'AbortError') console.error(error);
+      }
+    }, 220);
+
+    input.addEventListener('input', search);
+  }
+
+  /* ---------------------------------------------------------------------
+     Horizontal scrollers (product shelves, model picker)
+     --------------------------------------------------------------------- */
+  function initScrollers(root = document) {
+    $$('[data-scroller]', root).forEach((scroller) => {
+      if (scroller.dataset.ready) return;
+      scroller.dataset.ready = 'true';
+      const track = $('[data-scroller-track]', scroller);
+      const prev = $('[data-scroller-prev]', scroller);
+      const next = $('[data-scroller-next]', scroller);
+      if (!track || !prev || !next) return;
+
+      const update = () => {
+        const max = track.scrollWidth - track.clientWidth;
+        scroller.classList.toggle('is-scrollable', max > 4);
+        prev.disabled = track.scrollLeft <= 4;
+        next.disabled = track.scrollLeft >= max - 4;
+      };
+
+      const move = (direction) => {
+        track.scrollBy({ left: direction * track.clientWidth * 0.8, behavior: reduceMotion ? 'auto' : 'smooth' });
+      };
+
+      prev.addEventListener('click', () => move(-1));
+      next.addEventListener('click', () => move(1));
+      track.addEventListener('scroll', debounce(update, 60), { passive: true });
+      window.addEventListener('resize', debounce(update, 150));
+      update();
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Cart: drawer, AJAX add, quantity changes
+     --------------------------------------------------------------------- */
+  const cartSections = () => $$('[data-cart-section]').map((element) => element.dataset.cartSection);
+  let lastFocused = null;
+
+  function openDrawer(drawer = $('[data-cart-drawer]')) {
+    if (!drawer || drawer.classList.contains('is-open')) return;
+    closeDrawer();
+    lastFocused = document.activeElement;
+    drawer.inert = false;
+    drawer.classList.add('is-open');
+    $$('.cart-item', drawer).forEach((item, index) => item.style.setProperty('--i', index));
+    showDim(true);
+    document.documentElement.style.overflow = 'hidden';
+    setTimeout(() => drawer.focus({ preventScroll: true }), 60);
+  }
+
+  function closeDrawer() {
+    const open = $$('[data-cart-drawer].is-open, [data-drawer].is-open');
+    if (!open.length) return;
+    open.forEach((drawer) => {
+      drawer.classList.remove('is-open');
+      drawer.inert = true;
+    });
+    hideDim();
+    document.documentElement.style.overflow = '';
+    if (lastFocused && document.contains(lastFocused)) lastFocused.focus({ preventScroll: true });
+  }
+
+  function renderCartSections(sections) {
+    if (!sections) return;
+    let count = null;
+    Object.entries(sections).forEach(([id, html]) => {
+      if (!html) return;
+      const fresh = $(`[data-cart-section="${id}"]`, new DOMParser().parseFromString(html, 'text/html'));
+      const current = $(`[data-cart-section="${id}"]`);
+      if (!fresh || !current) return;
+      current.innerHTML = fresh.innerHTML;
+      current.dataset.itemCount = fresh.dataset.itemCount;
+      count = Number(fresh.dataset.itemCount);
+    });
+    if (count !== null && !Number.isNaN(count)) updateCartCount(count);
+  }
+
+  function updateCartCount(count) {
+    $$('[data-cart-count]').forEach((badge) => {
+      badge.textContent = count;
+      badge.hidden = count === 0;
+      badge.classList.remove('is-bumped');
+      void badge.offsetWidth;
+      badge.classList.add('is-bumped');
+    });
+  }
+
+  async function changeLine(line, quantity) {
+    const containers = $$('[data-cart-content]');
+    containers.forEach((element) => element.classList.add('is-updating'));
+    try {
+      const response = await fetch(theme.routes.cartChange, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({ line, quantity, sections: cartSections(), sections_url: window.location.pathname }),
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.description || data.message || 'Cart error');
+      renderCartSections(data.sections);
+    } catch (error) {
+      console.error(error);
+      window.location.reload();
+    } finally {
+      containers.forEach((element) => element.classList.remove('is-updating'));
+    }
+  }
+
+  async function quickAdd(button) {
+    const holder = button.closest('[data-quick-add]');
+    const field = holder && $('[data-quick-id]', holder);
+    if (!field) return;
+    button.classList.add('is-loading');
+    const body = new FormData();
+    body.append('id', field.value);
+    body.append('quantity', '1');
+    body.append('sections', cartSections().join(','));
+    body.append('sections_url', window.location.pathname);
+    try {
+      const response = await fetch(theme.routes.cartAdd, {
+        method: 'POST',
+        headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+        body,
+      });
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.description || data.message || 'Could not add to bag');
+      renderCartSections(data.sections);
+      openDrawer();
+    } catch (problem) {
+      button.classList.remove('is-loading');
+      showAddError(holder, problem.message);
+    }
+  }
+
+  // Shows an add-to-bag error beside the control that caused it.
+  function showAddError(anchor, message) {
+    let note = anchor.nextElementSibling;
+    if (!note || !note.matches('[data-add-error]')) {
+      note = document.createElement('p');
+      note.className = 'form-message form-message--error';
+      note.setAttribute('data-add-error', '');
+      note.setAttribute('role', 'alert');
+      anchor.after(note);
+    }
+    note.textContent = message;
+  }
+
+  function initCart() {
+    document.addEventListener('click', (event) => {
+      const toggle = event.target.closest('[data-cart-toggle]');
+      if (toggle && $('[data-cart-drawer]')) {
+        event.preventDefault();
+        openDrawer();
+        return;
+      }
+
+      if (event.target.closest('[data-drawer-close]')) {
+        closeDrawer();
+        return;
+      }
+
+      const opener = event.target.closest('[data-drawer-open]');
+      if (opener) {
+        openDrawer(document.getElementById(opener.dataset.drawerOpen));
+        return;
+      }
+
+      const step = event.target.closest('[data-quantity-minus], [data-quantity-plus]');
+      if (step) {
+        const input = $('input', step.closest('[data-quantity]'));
+        const min = Number(input.min || 0);
+        const delta = step.hasAttribute('data-quantity-plus') ? 1 : -1;
+        const value = Math.max(min, (Number(input.value) || 0) + delta);
+        if (String(value) !== input.value) {
+          input.value = value;
+          input.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        return;
+      }
+
+      const quick = event.target.closest('[data-quick-add-button]');
+      if (quick) {
+        quickAdd(quick);
+        return;
+      }
+
+      const modalOpener = event.target.closest('[data-modal-open]');
+      if (modalOpener) {
+        const modal = document.getElementById(modalOpener.dataset.modalOpen);
+        if (modal && typeof modal.showModal === 'function') modal.showModal();
+        return;
+      }
+
+      if (event.target.matches('.modal__image')) {
+        event.target.classList.toggle('is-zoomed');
+        return;
+      }
+
+      const modal = event.target.closest('[data-modal]');
+      if (modal && (event.target === modal || event.target.closest('[data-modal-close]'))) {
+        modal.close();
+        return;
+      }
+
+      const remove = event.target.closest('[data-cart-remove]');
+      if (remove) {
+        event.preventDefault();
+        changeLine(Number(remove.closest('[data-cart-item]').dataset.line), 0);
+      }
+    });
+
+    document.addEventListener('change', (event) => {
+      const input = event.target.closest('[data-cart-quantity]');
+      if (!input) return;
+      changeLine(Number(input.closest('[data-cart-item]').dataset.line), Math.max(0, Number(input.value) || 0));
+    });
+
+    if (dim) dim.addEventListener('click', closeDrawer);
+    document.addEventListener('keydown', (event) => event.key === 'Escape' && closeDrawer());
+
+    document.addEventListener('submit', async (event) => {
+      const form = event.target.closest('[data-product-form]');
+      if (!form || theme.cartType !== 'drawer' || !$('[data-cart-drawer]')) return;
+      event.preventDefault();
+
+      const buttons = $$(`[data-add-button]`).filter((button) => button.form === form);
+      const error = $('[data-form-error]', form);
+      if (error) error.hidden = true;
+      buttons.forEach((button) => button.classList.add('is-loading'));
+
+      const body = new FormData(form);
+      body.append('sections', cartSections().join(','));
+      body.append('sections_url', window.location.pathname);
+
+      try {
+        const response = await fetch(theme.routes.cartAdd, {
+          method: 'POST',
+          headers: { Accept: 'application/json', 'X-Requested-With': 'XMLHttpRequest' },
+          body,
+        });
+        const data = await response.json();
+        if (!response.ok) throw new Error(data.description || data.message || 'Could not add to bag');
+        renderCartSections(data.sections);
+        openDrawer();
+      } catch (problem) {
+        if (error) {
+          error.textContent = problem.message;
+          error.hidden = false;
+        } else {
+          showAddError(form, problem.message);
+        }
+      } finally {
+        buttons.forEach((button) => button.classList.remove('is-loading'));
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Product page: gallery, variant picker, sticky buy bar
+     --------------------------------------------------------------------- */
+  function initProduct(root = document) {
+    $$('[data-product]', root).forEach((product) => {
+      if (product.dataset.ready) return;
+      product.dataset.ready = 'true';
+
+      // Gallery
+      const track = $('[data-gallery-track]', product);
+      const thumbs = $$('[data-gallery-thumb]', product);
+      const slides = track ? Array.from(track.children) : [];
+
+      const goTo = (index, smooth = true) => {
+        const slide = slides[index];
+        if (!slide) return;
+        track.scrollTo({ left: slide.offsetLeft - track.offsetLeft, behavior: smooth && !reduceMotion ? 'smooth' : 'auto' });
+      };
+
+      thumbs.forEach((thumb) => thumb.addEventListener('click', () => goTo(Number(thumb.dataset.galleryThumb))));
+      if (track && thumbs.length) {
+        track.addEventListener(
+          'scroll',
+          debounce(() => {
+            const index = Math.round(track.scrollLeft / track.clientWidth);
+            thumbs.forEach((thumb, i) => thumb.classList.toggle('is-active', i === index));
+          }, 50),
+          { passive: true }
+        );
+      }
+
+      // Variants
+      const dataElement = $('[data-variants]', product);
+      const variants = dataElement ? JSON.parse(dataElement.textContent) : [];
+      const idInput = $('[data-variant-id]', product);
+
+      const fieldsets = $$('[data-option-position]', product);
+      const readSelection = () =>
+        fieldsets.map((fieldset) => {
+          const checked = $('input:checked', fieldset);
+          return checked ? checked.value : null;
+        });
+
+      // Strike through option values that are sold out for the current selection.
+      const markAvailability = () => {
+        const selected = readSelection();
+        fieldsets.forEach((fieldset, position) => {
+          const current = $('[data-option-current]', fieldset);
+          if (current && selected[position]) current.textContent = selected[position];
+          $$('[data-option-input]', fieldset).forEach((input) => {
+            const available = variants.some(
+              (item) =>
+                item.available &&
+                item.options.every((value, index) => (index === position ? value === input.value : value === selected[index]))
+            );
+            input.closest('.option__tile').classList.toggle('is-unavailable', !available);
+          });
+        });
+      };
+      if (variants.length) markAvailability();
+
+      const updateVariant = () => {
+        const selected = readSelection();
+        markAvailability();
+        const variant = variants.find((item) => item.options.every((value, index) => value === selected[index]));
+        const labels = $$('[data-add-label]', product);
+        const mainForm = $('.product__form', product);
+        const buttons = $$('[data-add-button]', product).filter((button) => button.form === mainForm);
+
+        if (!variant) {
+          buttons.forEach((button) => (button.disabled = true));
+          labels.forEach((label) => (label.textContent = theme.strings.unavailable));
+          return;
+        }
+
+        idInput.value = variant.id;
+        buttons.forEach((button) => (button.disabled = !variant.available));
+        labels.forEach((label) => (label.textContent = variant.available ? theme.strings.addToBag : theme.strings.soldOut));
+        $$('[data-product-price]', product).forEach((element) => (element.innerHTML = variant.price));
+        if (variant.stock) $$('[data-product-stock]', product).forEach((element) => (element.innerHTML = variant.stock));
+
+        if (variant.media) {
+          const index = slides.findIndex((slide) => slide.dataset.mediaId === String(variant.media));
+          if (index > -1) goTo(index);
+        }
+
+        const url = new URL(window.location.href);
+        url.searchParams.set('variant', variant.id);
+        window.history.replaceState({}, '', url);
+      };
+
+      product.addEventListener('change', (event) => {
+        if (event.target.matches('[data-option-input]')) updateVariant();
+      });
+
+      // Sticky buy bar appears once the main button has scrolled out of view.
+      const bar = $('[data-buy-bar]', product);
+      const mainButton = $('.product__add', product);
+      if (bar && mainButton && 'IntersectionObserver' in window) {
+        new IntersectionObserver(([entry]) => {
+          const passed = !entry.isIntersecting && entry.boundingClientRect.top < 0;
+          bar.classList.toggle('is-visible', passed);
+          bar.setAttribute('aria-hidden', String(!passed));
+          $$('button', bar).forEach((button) => (button.tabIndex = passed ? 0 : -1));
+        }).observe(mainButton);
+      }
+    });
+  }
+
+  function initRecommendations(root = document) {
+    $$('[data-recommendations]', root).forEach(async (container) => {
+      if (container.dataset.ready || container.children.length || !container.dataset.url) return;
+      container.dataset.ready = 'true';
+      try {
+        const response = await fetch(container.dataset.url);
+        if (!response.ok) return;
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const fresh = $('[data-recommendations]', html);
+        if (!fresh || !fresh.children.length) return;
+        container.innerHTML = fresh.innerHTML;
+        initScrollers(container);
+        initReveal(container);
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Customer videos: silent previews in view, full-screen viewer on tap
+     --------------------------------------------------------------------- */
+  function initUgc(root = document) {
+    $$('[data-ugc]', root).forEach((section) => {
+      if (section.dataset.ready) return;
+      section.dataset.ready = 'true';
+
+      const cards = $$('[data-ugc-card]', section);
+      const previews = $$('.ugc-card__media video', section);
+      const viewer = $('[data-ugc-viewer]', section);
+      const saveData = Boolean(navigator.connection && navigator.connection.saveData);
+      const inView = new Set();
+
+      if (previews.length && 'IntersectionObserver' in window && !reduceMotion && !saveData && !designMode) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              const video = entry.target;
+              if (entry.isIntersecting) {
+                inView.add(video);
+                video.muted = true;
+                if (!viewer || !viewer.open) video.play().catch(() => {});
+              } else {
+                inView.delete(video);
+                video.pause();
+              }
+            });
+          },
+          { threshold: 0.6 }
+        );
+        previews.forEach((video) => observer.observe(video));
+      }
+
+      if (!viewer || typeof viewer.showModal !== 'function') return;
+
+      const stage = $('[data-ugc-stage]', viewer);
+      const meta = $('[data-ugc-meta]', viewer);
+      const cta = $('[data-ugc-cta]', viewer);
+      const progress = $('[data-ugc-progress]', viewer);
+      const mute = $('[data-ugc-mute]', viewer);
+      const prev = $('[data-ugc-prev]', viewer);
+      const next = $('[data-ugc-next]', viewer);
+      let index = 0;
+      let muted = false;
+      let playing = null;
+
+      const syncMute = () => {
+        mute.setAttribute('aria-pressed', String(muted));
+        if (playing) playing.muted = muted;
+      };
+
+      const show = (target) => {
+        index = clamp(target, 0, cards.length - 1);
+        const card = cards[index];
+        const source = $('.ugc-card__media video', card);
+        const still = $('.ugc-card__media > *', card);
+        stage.innerHTML = '';
+        playing = null;
+        progress.style.setProperty('--progress', source ? 0 : 1);
+
+        if (source) {
+          const video = document.createElement('video');
+          video.playsInline = true;
+          video.muted = muted;
+          if (source.poster) video.poster = source.poster;
+          $$('source', source).forEach((item) => video.append(item.cloneNode()));
+          if (!video.children.length && source.currentSrc) video.src = source.currentSrc;
+          video.addEventListener('timeupdate', () => {
+            progress.style.setProperty('--progress', video.duration ? video.currentTime / video.duration : 0);
+          });
+          video.addEventListener('ended', () => {
+            if (index < cards.length - 1) show(index + 1);
+            else {
+              video.currentTime = 0;
+              video.play().catch(() => {});
+            }
+          });
+          video.addEventListener('click', () => (video.paused ? video.play().catch(() => {}) : video.pause()));
+          stage.append(video);
+          playing = video;
+          // Browsers may refuse sound without a gesture; fall back to muted playback.
+          video.play().catch(() => {
+            muted = true;
+            syncMute();
+            video.play().catch(() => {});
+          });
+        } else if (still) {
+          stage.append(still.cloneNode(true));
+        }
+
+        mute.hidden = !source;
+        const cardMeta = $('.ugc-card__meta', card);
+        meta.innerHTML = cardMeta ? cardMeta.innerHTML : '';
+        const product = $('[data-ugc-product]', card);
+        cta.innerHTML = product ? product.outerHTML : '';
+        prev.disabled = index === 0;
+        next.disabled = index === cards.length - 1;
+      };
+
+      section.addEventListener('click', (event) => {
+        const opener = event.target.closest('[data-ugc-open]');
+        if (!opener) return;
+        previews.forEach((video) => video.pause());
+        viewer.showModal();
+        show(cards.indexOf(opener.closest('[data-ugc-card]')));
+      });
+
+      prev.addEventListener('click', () => show(index - 1));
+      next.addEventListener('click', () => show(index + 1));
+      mute.addEventListener('click', () => {
+        muted = !muted;
+        syncMute();
+      });
+      $('[data-ugc-close]', viewer).addEventListener('click', () => viewer.close());
+      viewer.addEventListener('click', (event) => event.target === viewer && viewer.close());
+      viewer.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowRight') show(index + 1);
+        if (event.key === 'ArrowLeft') show(index - 1);
+      });
+      viewer.addEventListener('close', () => {
+        stage.innerHTML = '';
+        playing = null;
+        inView.forEach((video) => video.play().catch(() => {}));
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Collections page: category tiles open a panel of sub-collections
+     --------------------------------------------------------------------- */
+  function initDirectory(root = document) {
+    $$('[data-directory]', root).forEach((directory) => {
+      if (directory.dataset.ready) return;
+      directory.dataset.ready = 'true';
+      const toggles = $$('[data-directory-toggle]', directory);
+
+      const setOpen = (toggle, open) => {
+        const panel = document.getElementById(toggle.getAttribute('aria-controls'));
+        if (!panel) return;
+        toggle.setAttribute('aria-expanded', String(open));
+        panel.classList.toggle('is-open', open);
+      };
+
+      const openOnly = (target, scroll = true) => {
+        toggles.forEach((toggle) => setOpen(toggle, toggle === target));
+        if (!target || !scroll) return;
+        const panel = document.getElementById(target.getAttribute('aria-controls'));
+        // Bring the panel into view if it opened below the fold.
+        requestAnimationFrame(() => {
+          const rect = panel.getBoundingClientRect();
+          if (rect.bottom > window.innerHeight || rect.top < 0) {
+            panel.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', block: 'nearest' });
+          }
+        });
+      };
+
+      toggles.forEach((toggle) => {
+        toggle.addEventListener('click', () => {
+          const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+          openOnly(isOpen ? null : toggle);
+        });
+      });
+
+      directory.addEventListener('keydown', (event) => {
+        if (event.key !== 'Escape') return;
+        const current = toggles.find((toggle) => toggle.getAttribute('aria-expanded') === 'true');
+        if (!current) return;
+        openOnly(null);
+        current.focus();
+      });
+
+      // A link such as /collections#fleeces opens that category straight away.
+      const openFromHash = () => {
+        const id = decodeURIComponent(window.location.hash.slice(1));
+        const target = id && toggles.find((toggle) => toggle.id === id);
+        if (target) openOnly(target);
+      };
+      openFromHash();
+      window.addEventListener('hashchange', openFromHash);
+
+      // Theme editor: selecting a sub-collection block reveals its panel.
+      directory.addEventListener('shopify:block:select', (event) => {
+        const panel = event.target.closest('[data-directory-panel]');
+        if (!panel) return;
+        openOnly(toggles.find((toggle) => toggle.getAttribute('aria-controls') === panel.id), false);
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Product tour: a pinned visual that turns as selling points scroll past
+     --------------------------------------------------------------------- */
+  const tours = [];
+
+  function initTours(root = document) {
+    $$('[data-tour]', root).forEach((section) => {
+      if (section.dataset.ready) return;
+      section.dataset.ready = 'true';
+
+      const tour = {
+        section,
+        mode: section.dataset.mode,
+        steps: $$('[data-tour-step]', section),
+        images: $$('[data-tour-image]', section),
+        frames: $$('[data-tour-frame]', section),
+        model: $('[data-tour-model]', section),
+        count: $('[data-tour-count]', section),
+        active: -1,
+        frame: -1,
+      };
+      tours.push(tour);
+
+      // The 3D viewer is large, so it is only fetched when the section is near.
+      if (tour.model && section.dataset.viewerSrc && 'IntersectionObserver' in window) {
+        const loader = new IntersectionObserver(
+          ([entry]) => {
+            if (!entry.isIntersecting) return;
+            loader.disconnect();
+            if (window.customElements && customElements.get('model-viewer')) return;
+            const script = document.createElement('script');
+            script.type = 'module';
+            script.src = section.dataset.viewerSrc;
+            document.head.append(script);
+          },
+          { rootMargin: '150% 0px' }
+        );
+        loader.observe(section);
+      }
+      updateTour(tour);
+    });
+  }
+
+  // Shortest way round from one angle to the next, so the model never spins back on itself.
+  const turnTo = (from, to) => from + ((((to - from) % 360) + 540) % 360) - 180;
+
+  function updateTour(tour) {
+    const { section, steps } = tour;
+    if (!steps.length) return;
+    const viewport = window.innerHeight;
+    const rect = section.getBoundingClientRect();
+    if (rect.bottom < -viewport || rect.top > viewport * 2) return;
+
+    // The reading line: mid-screen on desktop; on phones, the middle of the space under the pinned picture.
+    const focus = viewport * (window.innerWidth < 900 ? 0.76 : 0.55);
+    const centres = steps.map((step) => {
+      const box = step.getBoundingClientRect();
+      return box.top + box.height / 2;
+    });
+
+    // Which selling point is nearest the reading line.
+    let active = 0;
+    centres.forEach((centre, index) => {
+      if (Math.abs(centre - focus) < Math.abs(centres[active] - focus)) active = index;
+    });
+
+    // Continuous position between the first and last points: 0 → steps.length - 1.
+    let position = 0;
+    if (focus <= centres[0]) position = 0;
+    else if (focus >= centres[centres.length - 1]) position = centres.length - 1;
+    else {
+      for (let i = 0; i < centres.length - 1; i += 1) {
+        if (focus >= centres[i] && focus <= centres[i + 1]) {
+          position = i + (focus - centres[i]) / (centres[i + 1] - centres[i]);
+          break;
+        }
+      }
+    }
+    const progress = steps.length > 1 ? position / (steps.length - 1) : 0;
+    section.style.setProperty('--tour-p', progress.toFixed(4));
+
+    if (active !== tour.active) {
+      tour.active = active;
+      steps.forEach((step, index) => step.classList.toggle('is-active', index === active));
+      tour.images.forEach((image, index) => {
+        image.classList.toggle('is-active', index === active);
+        image.classList.toggle('is-past', index < active);
+      });
+      if (tour.count) tour.count.textContent = String(active + 1).padStart(2, '0');
+    }
+
+    if (tour.frames.length) {
+      const frame = Math.round(progress * (tour.frames.length - 1));
+      if (frame !== tour.frame) {
+        tour.frame = frame;
+        tour.frames.forEach((image, index) => image.classList.toggle('is-active', index === frame));
+      }
+    }
+
+    if (tour.model && !reduceMotion) {
+      // Blend the angle and distance set on the two nearest selling points.
+      const lower = Math.floor(position);
+      const upper = Math.min(lower + 1, steps.length - 1);
+      const blend = position - lower;
+      let angle = Number(steps[0].dataset.angle) || 0;
+      for (let i = 1; i <= lower; i += 1) angle = turnTo(angle, Number(steps[i].dataset.angle) || 0);
+      const next = turnTo(angle, Number(steps[upper].dataset.angle) || 0);
+      const theta = angle + (next - angle) * blend;
+      const zoomA = Number(steps[lower].dataset.zoom) || 100;
+      const zoomB = Number(steps[upper].dataset.zoom) || 100;
+      const zoom = zoomA + (zoomB - zoomA) * blend;
+      const tilt = Number(tour.model.dataset.tilt) || 75;
+      tour.model.setAttribute('camera-orbit', `${theta.toFixed(1)}deg ${tilt}deg ${zoom.toFixed(1)}%`);
+    }
+  }
+
+  function initAddons(root = document) {
+    $$('[data-addons]', root).forEach(async (container) => {
+      if (container.dataset.ready || !container.dataset.url) return;
+      container.dataset.ready = 'true';
+      try {
+        const response = await fetch(container.dataset.url);
+        if (!response.ok) return;
+        const html = new DOMParser().parseFromString(await response.text(), 'text/html');
+        const fresh = $('[data-addons-content]', html);
+        if (fresh) container.innerHTML = fresh.outerHTML;
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Find your fit: dog, size and colour questions, then matching products
+     --------------------------------------------------------------------- */
+  function initFinder(root = document) {
+    $$('[data-finder]', root).forEach((finder) => {
+      if (finder.dataset.ready) return;
+      finder.dataset.ready = 'true';
+
+      const dataNode = $('[data-finder-products]', finder);
+      let products = [];
+      try {
+        products = JSON.parse(dataNode.textContent);
+      } catch (error) {
+        console.error(error);
+      }
+
+      const words = (value) =>
+        (value || '')
+          .split(',')
+          .map((word) => word.trim().toLowerCase())
+          .filter(Boolean);
+      const hasAny = (text, list) => list.some((word) => text.includes(word));
+      const escapeHtml = (value) => {
+        const node = document.createElement('span');
+        node.textContent = value;
+        return node.innerHTML;
+      };
+
+      const steps = ['dog', 'size', 'colour', 'results'];
+      const panels = Object.fromEntries(steps.map((name) => [name, $(`[data-finder-step="${name}"]`, finder)]));
+      const dogs = $$('[data-finder-choice="dog"]', finder);
+      const sizes = $$('[data-finder-choice="size"]', finder);
+      const colours = $$('[data-finder-choice="colour"]', finder);
+      const universal = words(finder.dataset.universal);
+      const state = { dog: null, size: null, colours: [], type: null };
+
+      // Everything a product can be matched on, lower-cased once.
+      products.forEach((product) => {
+        product.text = `${product.t} ${product.y} ${product.g}`.toLowerCase();
+        product.title = product.t.toLowerCase();
+      });
+      // Sizes on a scale the answers do not cover (for example numbered sizes) are
+      // still shown, but the customer picks the size on the product page.
+      const known = sizes.flatMap((button) => words(button.dataset.values));
+      products.forEach((product) => {
+        if (product.s < 0) return;
+        const values = [...new Set(product.v.map((variant) => String(variant.o[product.s]).trim().toLowerCase()))];
+        product.one = values.length === 1 && !known.includes(values[0]);
+        product.other = !product.one && !values.some((value) => known.includes(value));
+      });
+      [dogs, sizes, colours].forEach((list) => list.forEach((button, index) => button.style.setProperty('--n', index)));
+
+      const passesDog = (product) => {
+        if (state.dog === null) return true;
+        const button = dogs[state.dog];
+        const include = words(button.dataset.include);
+        const exclude = words(button.dataset.exclude);
+        if (hasAny(product.text, universal)) return true;
+        if (exclude.length && hasAny(product.text, exclude)) return false;
+        return !include.length || hasAny(product.text, include);
+      };
+
+      // The variant to offer for a size answer, or null when the product does not come in it.
+      const variantFor = (product, sizeIndex) => {
+        if (product.s < 0 || product.one) return product.v.find((variant) => variant.a) || product.v[0];
+        if (product.other) return { other: true, a: product.v.some((variant) => variant.a), p: product.v[0].p };
+        if (sizeIndex === null) return product.v.find((variant) => variant.a) || product.v[0];
+        const wanted = words(sizes[sizeIndex].dataset.values);
+        const matches = product.v.filter((variant) => wanted.includes(String(variant.o[product.s]).trim().toLowerCase()));
+        if (!matches.length) return null;
+        return matches.find((variant) => variant.a) || matches[0];
+      };
+
+      const passesColour = (product) => {
+        if (!state.colours.length) return true;
+        return state.colours.some((index) => product.title.includes(colours[index].dataset.match.toLowerCase()));
+      };
+
+      const matches = () =>
+        products
+          .filter(passesDog)
+          .map((product) => ({ product, variant: variantFor(product, state.size) }))
+          .filter((item) => item.variant && passesColour(item.product));
+
+      const go = (name, back = false) => {
+        steps.forEach((step) => {
+          const active = step === name;
+          panels[step].hidden = !active;
+          panels[step].classList.toggle('is-active', active);
+          panels[step].classList.toggle('is-back', active && back);
+        });
+        finder.style.setProperty('--finder-p', (steps.indexOf(name) + 1) / steps.length);
+        const top = finder.getBoundingClientRect().top + window.scrollY - 90;
+        if (window.scrollY > top) window.scrollTo({ top, behavior: reduceMotion ? 'auto' : 'smooth' });
+      };
+
+      const syncUrl = () => {
+        const url = new URL(window.location.href);
+        ['dog', 'size', 'colours'].forEach((key) => url.searchParams.delete(key));
+        if (state.dog !== null) url.searchParams.set('dog', state.dog);
+        if (state.size !== null) url.searchParams.set('size', state.size);
+        if (state.colours.length) url.searchParams.set('colours', state.colours.join('-'));
+        window.history.replaceState({}, '', url);
+      };
+
+      // Only offer sizes that the chosen dog's products actually come in.
+      const refreshSizes = () => {
+        const pool = products.filter(passesDog);
+        sizes.forEach((button, index) => {
+          button.hidden = !pool.some((product) => product.s >= 0 && !product.one && !product.other && variantFor(product, index));
+        });
+      };
+
+      const render = () => {
+        const all = matches();
+        const types = [...new Set(all.map((item) => item.product.y).filter(Boolean))].sort();
+        if (state.type && !types.includes(state.type)) state.type = null;
+        const shown = state.type ? all.filter((item) => item.product.y === state.type) : all;
+
+        const parts = [];
+        if (state.dog !== null) parts.push(dogs[state.dog].dataset.label);
+        if (state.size !== null) parts.push(sizes[state.size].dataset.label);
+        parts.push(state.colours.length ? state.colours.map((index) => colours[index].dataset.label).join(', ') : 'Every colour');
+        $('[data-finder-summary]', finder).textContent = `${parts.join(' · ')} — ${all.length} ${all.length === 1 ? 'match' : 'matches'}`;
+
+        const filters = $('[data-finder-filters]', finder);
+        filters.innerHTML =
+          types.length > 1
+            ? [`<button class="finder-chip" type="button" data-finder-type="" aria-pressed="${!state.type}">All</button>`]
+                .concat(
+                  types.map(
+                    (type) =>
+                      `<button class="finder-chip" type="button" data-finder-type="${escapeHtml(type)}" aria-pressed="${state.type === type}">${escapeHtml(type)}</button>`
+                  )
+                )
+                .join('')
+            : '';
+
+        const sizeLabel = finder.dataset.sizeLabel || 'Size';
+        // In stock in the chosen size first.
+        const rank = (item) => (item.variant.a ? 0 : 2) + (item.variant.other ? 1 : 0);
+        shown.sort((a, b) => rank(a) - rank(b));
+        $('[data-finder-results]', finder).innerHTML = shown
+          .map(({ product, variant }, index) => {
+            const size = variant.other
+              ? escapeHtml(finder.dataset.otherSize)
+              : product.s < 0 || product.one
+                ? escapeHtml(finder.dataset.oneSize)
+                : `${escapeHtml(sizeLabel)} ${escapeHtml(String(variant.o[product.s]))}`;
+            const href = variant.other ? product.u : `${product.u}${product.u.includes('?') ? '&' : '?'}variant=${variant.id}`;
+            const image = product.i ? `<img src="${escapeHtml(product.i)}" alt="" loading="lazy" width="700" height="700">` : '';
+            const action = variant.a && !variant.other
+              ? `<div class="quick-add" data-quick-add><input type="hidden" value="${variant.id}" data-quick-id><button class="quick-add__button" type="button" data-quick-add-button aria-label="${escapeHtml(finder.dataset.addLabel)}: ${escapeHtml(product.t)}"><span>${escapeHtml(finder.dataset.addLabel)}</span></button></div>`
+              : '';
+            return `<li class="finder-card" style="--n: ${index}">
+              <a class="finder-card__link" href="${escapeHtml(href)}">
+                <span class="finder-card__media">${image}</span>
+                <span class="finder-card__title">${escapeHtml(product.t)}</span>
+              </a>
+              <p class="finder-card__meta"><span>${variant.p}</span><span class="finder-card__size${variant.a ? '' : ' is-sold-out'}">${variant.a ? size : `${size} · ${escapeHtml(finder.dataset.soldOut)}`}</span></p>
+              ${action}
+            </li>`;
+          })
+          .join('');
+        $('[data-finder-empty]', finder).hidden = shown.length > 0;
+        $('[data-finder-any-colour]', finder).hidden = !state.colours.length;
+      };
+
+      const showResults = () => {
+        render();
+        syncUrl();
+        go('results');
+        const heading = $('[data-finder-heading]', finder);
+        if (heading) heading.focus({ preventScroll: true });
+      };
+
+      const updateShowLabel = () => {
+        const label = $('[data-finder-show-label]', finder);
+        if (!label.dataset.base) label.dataset.base = label.textContent;
+        label.textContent = `${label.dataset.base} (${matches().length})`;
+      };
+
+      finder.addEventListener('click', (event) => {
+        const choice = event.target.closest('[data-finder-choice]');
+        if (choice) {
+          const kind = choice.dataset.finderChoice;
+          if (kind === 'dog') {
+            state.dog = dogs.indexOf(choice);
+            state.size = null;
+            refreshSizes();
+            go('size');
+          } else if (kind === 'size') {
+            state.size = sizes.indexOf(choice);
+            updateShowLabel();
+            go('colour');
+          } else {
+            const index = colours.indexOf(choice);
+            const on = !state.colours.includes(index);
+            state.colours = on ? state.colours.concat(index) : state.colours.filter((item) => item !== index);
+            choice.setAttribute('aria-pressed', String(on));
+            updateShowLabel();
+          }
+          return;
+        }
+
+        if (event.target.closest('[data-finder-show]')) return showResults();
+
+        if (event.target.closest('[data-finder-back]')) {
+          const current = steps.find((step) => !panels[step].hidden);
+          return go(steps[Math.max(0, steps.indexOf(current) - 1)], true);
+        }
+
+        if (event.target.closest('[data-finder-restart]')) {
+          state.dog = null;
+          state.size = null;
+          state.colours = [];
+          state.type = null;
+          colours.forEach((button) => button.setAttribute('aria-pressed', 'false'));
+          syncUrl();
+          return go('dog', true);
+        }
+
+        if (event.target.closest('[data-finder-any-colour]')) {
+          state.colours = [];
+          colours.forEach((button) => button.setAttribute('aria-pressed', 'false'));
+          return showResults();
+        }
+
+        const chip = event.target.closest('[data-finder-type]');
+        if (chip) {
+          state.type = chip.dataset.finderType || null;
+          render();
+        }
+      });
+
+      // A shared or revisited link opens straight on the results.
+      const params = new URLSearchParams(window.location.search);
+      const dog = Number(params.get('dog'));
+      const size = Number(params.get('size'));
+      if (params.has('dog') && dogs[dog] && params.has('size') && sizes[size]) {
+        state.dog = dog;
+        state.size = size;
+        state.colours = (params.get('colours') || '')
+          .split('-')
+          .filter(Boolean)
+          .map(Number)
+          .filter((index) => colours[index]);
+        state.colours.forEach((index) => colours[index].setAttribute('aria-pressed', 'true'));
+        refreshSizes();
+        render();
+        go('results');
+      }
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Collection filters
+     --------------------------------------------------------------------- */
+  function initFilters(root = document) {
+    $$('[data-filter-form]', root).forEach((form) => {
+      if (form.dataset.ready) return;
+      form.dataset.ready = 'true';
+      const toggle = $('[data-filter-toggle]', form);
+      const panel = $('[data-filters]', form);
+
+      if (toggle && panel) {
+        toggle.addEventListener('click', () => {
+          panel.hidden = !panel.hidden;
+          toggle.setAttribute('aria-expanded', String(!panel.hidden));
+        });
+      }
+
+      form.addEventListener('change', (event) => {
+        if (event.target.matches('[data-submit-on-change], input[type="checkbox"]')) form.requestSubmit();
+      });
+
+      // Keep URLs clean by not submitting empty fields.
+      form.addEventListener('submit', () => {
+        $$('input[type="number"]', form).forEach((input) => {
+          if (input.value === '') input.disabled = true;
+        });
+      });
+    });
+  }
+
+  /* ---------------------------------------------------------------------
+     Boot
+     --------------------------------------------------------------------- */
+  function initSection(root = document) {
+    initReveal(root);
+    initCountUp(root);
+    initScrollers(root);
+    initProduct(root);
+    initRecommendations(root);
+    initFilters(root);
+    initDirectory(root);
+    initFinder(root);
+    initAddons(root);
+    initTours(root);
+    initUgc(root);
+    collectScrollTargets();
+    requestScrollUpdate();
+  }
+
+  function boot() {
+    initHeader();
+    initAnnouncements();
+    initCart();
+    initSection();
+    window.addEventListener('scroll', requestScrollUpdate, { passive: true });
+    window.addEventListener('resize', requestScrollUpdate);
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
+  else boot();
+
+  // Theme editor: re-initialise sections as merchants add, move and edit them.
+  document.addEventListener('shopify:section:load', (event) => {
+    initHeader();
+    initAnnouncements();
+    initSection(event.target);
+  });
+  document.addEventListener('shopify:section:unload', (event) => {
+    for (let i = tours.length - 1; i >= 0; i -= 1) {
+      if (event.target.contains(tours[i].section)) tours.splice(i, 1);
+    }
+    setTimeout(collectScrollTargets, 0);
+  });
+  document.addEventListener('shopify:block:select', (event) => {
+    event.target.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+  });
+  document.addEventListener('shopify:section:select', (event) => {
+    if (event.target.querySelector('[data-cart-drawer]')) openDrawer();
+  });
+  document.addEventListener('shopify:section:deselect', (event) => {
+    if (event.target.querySelector('[data-cart-drawer]')) closeDrawer();
+  });
+
+  // Restore state when the page is returned to from the back/forward cache.
+  window.addEventListener('pageshow', (event) => {
+    if (!event.persisted) return;
+    closeDrawer();
+    $$('.is-loading').forEach((element) => element.classList.remove('is-loading'));
+  });
+})();

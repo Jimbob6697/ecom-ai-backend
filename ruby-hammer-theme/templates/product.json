@@ -1,0 +1,196 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_reviews": true,
+        "show_quantity": true,
+        "show_dynamic_checkout": true,
+        "show_delivery_note": true,
+        "show_payment_icons": true,
+        "show_stock": true,
+        "low_stock_threshold": 0,
+        "show_addons": true,
+        "addons_collection": "bestsellers",
+        "addons_heading": "Pairs well with",
+        "addons_limit": 3
+      },
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free UK delivery",
+            "text": "When you spend £35"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "icon": "gift",
+            "title": "Free beauty bag",
+            "text": "When you spend £50"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "icon": "heart",
+            "title": "Vegan and cruelty free",
+            "text": "Responsibly sourced"
+          }
+        },
+        "badge-4": {
+          "type": "badge",
+          "settings": {
+            "icon": "award",
+            "title": "Designed by an artist",
+            "text": "Ruby Hammer MBE"
+          }
+        },
+        "tip-5": {
+          "type": "tip",
+          "settings": {
+            "heading": "Ruby’s tip"
+          }
+        },
+        "collapsible-6": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Shipping",
+            "text": "<p>Free UK shipping when you spend over £35. Free global shipping when you spend £75 and use the code GLOBAL at checkout.</p>"
+          }
+        },
+        "review-7": {
+          "type": "review",
+          "settings": {
+            "rating": 5
+          }
+        }
+      },
+      "block_order": [
+        "badge-1",
+        "badge-2",
+        "badge-3",
+        "badge-4",
+        "tip-5",
+        "collapsible-6",
+        "review-7"
+      ]
+    },
+    "reviews": {
+      "type": "apps",
+      "settings": {
+        "heading": "",
+        "full_width": false
+      }
+    },
+    "quotes": {
+      "type": "reviews",
+      "settings": {
+        "eyebrow": "Designed by an artist, made for you",
+        "heading": "Reviews",
+        "subheading": "",
+        "scheme": "surface"
+      },
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "I’ve just added the red and Gold FX to my make up bag. I just want to say WOW! It’s like wearing a really moisturise lip balm with the fantastic colour of a rich coloured lipstick.",
+            "author": "Tricia N",
+            "verified": false,
+            "product": "lip-serum-balm"
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "As someone who constantly hunts for the best lip product - these are magical for me. I have spent so much £ on a variety of lipsticks & products, only to find that they dry out my lips. These lip balm serums are perfect!",
+            "author": "Aditi",
+            "verified": false,
+            "product": "lip-serum-balm"
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "I have been using eyeliner for 30+ years and this precision eyeliner is by far the best it’s intense black very smooth very precise and doesn’t dry up.",
+            "author": "Karen",
+            "verified": false,
+            "product": "liquid-eyeliner"
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3"
+      ]
+    },
+    "recommendations": {
+      "type": "product-recommendations",
+      "settings": {
+        "heading": "You may also like",
+        "limit": 8
+      }
+    },
+    "trust": {
+      "type": "trust-bar",
+      "settings": {
+        "label": "",
+        "scheme": "light"
+      },
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free UK delivery",
+            "text": "When you spend £35"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "icon": "heart",
+            "title": "Vegan and cruelty free",
+            "text": "Across the range"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Responsibly sourced",
+            "text": "Considered ingredients"
+          }
+        },
+        "badge-4": {
+          "type": "badge",
+          "settings": {
+            "icon": "award",
+            "title": "Designed by an artist",
+            "text": "Ruby Hammer MBE"
+          }
+        }
+      },
+      "block_order": [
+        "badge-1",
+        "badge-2",
+        "badge-3",
+        "badge-4"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "reviews",
+    "quotes",
+    "recommendations",
+    "trust"
+  ]
+}

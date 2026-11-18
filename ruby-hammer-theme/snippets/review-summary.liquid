@@ -1,0 +1,26 @@
+{%- comment -%}
+  Compact review score line driven by Theme settings → Reviews and trust.
+  Usage: {% render 'review-summary' %}
+{%- endcomment -%}
+{%- if settings.review_score != blank -%}
+  {%- liquid
+    assign summary_tag = 'span'
+    if settings.review_url != blank
+      assign summary_tag = 'a'
+    endif
+  -%}
+  <{{ summary_tag }}
+    class="review-summary{% if class %} {{ class }}{% endif %}"
+    {% if settings.review_url != blank %}
+      href="{{ settings.review_url }}" target="_blank" rel="noopener"
+    {% endif %}
+  >
+    {% render 'stars', rating: settings.review_score %}
+    <span class="review-summary__text">
+      <strong>{{ settings.review_score | escape }}</strong>
+      {{ settings.review_label | escape }}
+      {%- if settings.review_count != blank %} · {{ settings.review_count | escape }}{% endif -%}
+      {%- if settings.review_source != blank %} on {{ settings.review_source | escape }}{% endif -%}
+    </span>
+  </{{ summary_tag }}>
+{%- endif -%}

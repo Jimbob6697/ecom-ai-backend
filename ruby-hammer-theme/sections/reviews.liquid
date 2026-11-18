@@ -1,0 +1,159 @@
+{%- liquid
+  assign s = section.settings
+  assign filled = 0
+  for block in section.blocks
+    if block.type == 'review' and block.settings.text != blank
+      assign filled = filled | plus: 1
+    endif
+  endfor
+  assign show_slider = false
+  if filled > 0 or request.design_mode
+    assign show_slider = true
+  endif
+-%}
+<section{% if template.name == 'product' %} id="reviews"{% endif %} class="section reviews reviews--{{ s.scheme }}{% unless show_slider %} reviews--solo{% endunless %}">
+  <div class="page-width reviews__grid">
+    <div class="reviews__intro">
+      {%- if s.eyebrow != blank -%}
+        <p class="eyebrow" data-reveal>{{ s.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="section-heading" data-reveal data-split>
+        {{ s.heading | escape }}
+        {%- if s.subheading != blank %} <span>{{ s.subheading | escape }}</span>{% endif -%}
+      </h2>
+      {%- if settings.review_score != blank -%}
+        <div class="reviews__score" data-reveal style="--i: 1">
+          <p class="reviews__number">{{ settings.review_score | escape }}</p>
+          <div>
+            {% render 'stars', rating: settings.review_score %}
+            <p class="reviews__label">
+              {{ settings.review_label | escape }}
+              {%- if settings.review_count != blank %} · {{ settings.review_count | escape }}{% endif -%}
+              {%- if settings.review_source != blank %} on {{ settings.review_source | escape }}{% endif -%}
+            </p>
+          </div>
+        </div>
+        {%- if settings.review_url != blank -%}
+          <a class="link-arrow" href="{{ settings.review_url }}" target="_blank" rel="noopener" data-reveal style="--i: 2">Read all reviews</a>
+        {%- endif -%}
+      {%- endif -%}
+    </div>
+
+    {%- if show_slider -%}
+      <div class="reviews__slider scroller" data-scroller data-reveal style="--i: 2">
+        <ul class="scroller__track reviews__track" role="list" data-scroller-track>
+          {%- for block in section.blocks -%}
+            {%- if block.type != 'review' -%}
+              {%- continue -%}
+            {%- endif -%}
+            {%- liquid
+              assign b = block.settings
+              assign review_product = b.product
+            -%}
+            {%- if b.text != blank -%}
+              <li class="reviews__item" {{ block.shopify_attributes }}>
+                <figure class="review-quote">
+                  {%- if b.image != blank -%}
+                    <div class="review-quote__photo">
+                      {{ b.image | image_url: width: 500 | image_tag: widths: '200, 350, 500', sizes: '180px', loading: 'lazy', alt: b.image.alt }}
+                    </div>
+                  {%- endif -%}
+                  <div class="review-quote__body">
+                    {% render 'stars', rating: b.rating %}
+                    <blockquote class="review-quote__text">
+                      {%- if b.title != blank -%}<strong>{{ b.title | escape }}</strong> {% endif -%}
+                      {{- b.text | escape -}}
+                    </blockquote>
+                    <figcaption class="review-quote__author">
+                      <span>{{ b.author | escape }}</span>
+                      {%- if b.detail != blank -%}
+                        <span class="review-quote__detail">{{ b.detail | escape }}</span>
+                      {%- endif -%}
+                      {%- if b.verified -%}
+                        <span class="review-quote__detail">{% render 'icon', name: 'check' %}Verified buyer</span>
+                      {%- endif -%}
+                    </figcaption>
+                    {%- if review_product != blank -%}
+                      <a class="review-quote__product" href="{{ review_product.url }}">
+                        {%- if review_product.featured_media -%}
+                          {{ review_product.featured_media | image_url: width: 120 | image_tag: loading: 'lazy', alt: '' }}
+                        {%- endif -%}
+                        <span>{{ review_product.title }}</span>
+                        {% render 'icon', name: 'arrow-right' %}
+                      </a>
+                    {%- endif -%}
+                  </div>
+                </figure>
+              </li>
+            {%- elsif request.design_mode -%}
+              <li class="reviews__item" {{ block.shopify_attributes }}>
+                <figure class="review-quote review-quote--empty">
+                  <div class="review-quote__body">
+                    {% render 'stars', rating: 5 %}
+                    <p class="review-quote__text">Paste a real customer review into this block. Empty review blocks are only visible here in the editor, never on your live store.</p>
+                  </div>
+                </figure>
+              </li>
+            {%- endif -%}
+          {%- endfor -%}
+        </ul>
+        <div class="scroller__nav">
+          <button class="scroller__button" type="button" data-scroller-prev aria-label="{{ 'general.previous' | t }}">{% render 'icon', name: 'chevron-left' %}</button>
+          <button class="scroller__button" type="button" data-scroller-next aria-label="{{ 'general.next' | t }}">{% render 'icon', name: 'chevron-right' %}</button>
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- for block in section.blocks -%}
+    {%- if block.type == '@app' -%}
+      <div class="page-width reviews__app">{% render block %}</div>
+    {%- endif -%}
+  {%- endfor -%}
+</section>
+
+{% schema %}
+{
+  "name": "Customer reviews",
+  "settings": [
+    { "type": "paragraph", "content": "The score comes from Theme settings → Reviews and trust. Add review blocks by pasting real reviews, or add your review app's widget as an app block." },
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Reviews" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What our customers say" },
+    { "type": "text", "id": "subheading", "label": "Heading (muted part)" },
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour scheme",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "surface", "label": "Grey" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "light"
+    }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "review",
+      "name": "Review",
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "text", "id": "title", "label": "Headline" },
+        { "type": "textarea", "id": "text", "label": "Review", "info": "Paste the customer's own words. Blocks left empty are not shown on the live store." },
+        { "type": "text", "id": "author", "label": "Customer name" },
+        { "type": "text", "id": "detail", "label": "Detail", "info": "e.g. the product, or the date." },
+        { "type": "checkbox", "id": "verified", "label": "Show “Verified buyer”", "info": "Only tick this for reviews collected through a verified-purchase review platform.", "default": false },
+        { "type": "image_picker", "id": "image", "label": "Customer photo" },
+        { "type": "product", "id": "product", "label": "Product reviewed" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Customer reviews",
+      "blocks": [{ "type": "review" }, { "type": "review" }, { "type": "review" }]
+    }
+  ]
+}
+{% endschema %}

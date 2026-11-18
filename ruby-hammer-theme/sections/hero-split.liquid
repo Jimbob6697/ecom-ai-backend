@@ -1,0 +1,101 @@
+{%- liquid
+  assign s = section.settings
+  assign heading_tag = 'h2'
+  assign loading = 'lazy'
+  if section.index == 1
+    assign heading_tag = 'h1'
+    assign loading = 'eager'
+  endif
+-%}
+<section class="hero-split{% if s.flip %} hero-split--flip{% endif %}">
+  <div class="hero-split__copy">
+    <div class="hero-split__inner">
+      {%- if s.eyebrow != blank -%}
+        <p class="eyebrow" data-hero-line style="--i: 0">{{ s.eyebrow | escape }}</p>
+      {%- endif -%}
+      <{{ heading_tag }} class="hero-split__heading" data-hero-line style="--i: 1">
+        {{- s.heading | escape -}}
+        {%- if s.heading_accent != blank %}
+          <em>{{ s.heading_accent | escape }}</em>
+        {%- endif -%}
+      </{{ heading_tag }}>
+      {%- if s.text != blank -%}
+        <p class="hero-split__text" data-hero-line style="--i: 2">{{ s.text | escape }}</p>
+      {%- endif -%}
+      <div class="hero-split__actions" data-hero-line style="--i: 3">
+        {%- if s.button_label != blank -%}
+          <a class="button button--large" href="{{ s.button_link | default: routes.all_products_collection_url }}">{{ s.button_label | escape }}</a>
+        {%- endif -%}
+        {%- if s.link_label != blank and s.link != blank -%}
+          <a class="button button--large button--outline" href="{{ s.link }}">{{ s.link_label | escape }}</a>
+        {%- endif -%}
+      </div>
+      {%- if s.show_reviews -%}
+        <div class="hero-split__reviews" data-hero-line style="--i: 4">{% render 'review-summary' %}</div>
+      {%- endif -%}
+      {%- if section.blocks.size > 0 -%}
+        <ul class="hero-split__points" role="list" data-hero-line style="--i: 5">
+          {%- for block in section.blocks -%}
+            <li {{ block.shopify_attributes }}>{% render 'icon', name: 'check' %}{{ block.settings.text | escape }}</li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+  <div class="hero-split__media">
+    {%- if s.image != blank -%}
+      {{
+        s.image
+        | image_url: width: 2400
+        | image_tag: widths: '600, 900, 1200, 1600, 2000, 2400', sizes: '(min-width: 990px) 55vw, 100vw', loading: loading, alt: s.image.alt, style: s.focus
+      }}
+    {%- else -%}
+      {% render 'art', index: 2, icon: 'heart' %}
+    {%- endif -%}
+    {%- if s.caption != blank -%}
+      <p class="hero-split__caption">{{ s.caption | escape }}</p>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Hero",
+  "tag": "div",
+  "max_blocks": 3,
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "Ruby Hammer MBE" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "What's age got to do with it?" },
+    { "type": "text", "id": "heading_accent", "label": "Heading, second line", "info": "Shown in italics, in your accent colour." },
+    { "type": "textarea", "id": "text", "label": "Text", "default": "Designed by an artist, made for you." },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Shop bestsellers" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "text", "id": "link_label", "label": "Second button label" },
+    { "type": "url", "id": "link", "label": "Second button link" },
+    { "type": "checkbox", "id": "show_reviews", "label": "Show review score", "info": "Set the score in Theme settings → Reviews and trust.", "default": false },
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    {
+      "type": "select",
+      "id": "focus",
+      "label": "Keep this part of the photo in view",
+      "options": [
+        { "value": "object-position: center", "label": "Centre" },
+        { "value": "object-position: top", "label": "Top" },
+        { "value": "object-position: right top", "label": "Top right" },
+        { "value": "object-position: left top", "label": "Top left" }
+      ],
+      "default": "object-position: top"
+    },
+    { "type": "text", "id": "caption", "label": "Photo caption" },
+    { "type": "checkbox", "id": "flip", "label": "Photo on the left", "default": false }
+  ],
+  "blocks": [
+    {
+      "type": "point",
+      "name": "Reassurance",
+      "settings": [{ "type": "text", "id": "text", "label": "Text", "default": "Vegan and cruelty free" }]
+    }
+  ],
+  "presets": [{ "name": "Hero", "blocks": [{ "type": "point" }] }]
+}
+{% endschema %}

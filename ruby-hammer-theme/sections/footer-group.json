@@ -1,0 +1,47 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu-1": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu",
+            "limit": 10
+          }
+        },
+        "menu-2": {
+          "type": "menu",
+          "settings": {
+            "heading": "Help",
+            "menu": "footer",
+            "limit": 8
+          }
+        },
+        "text-3": {
+          "type": "text",
+          "settings": {
+            "heading": "About the shop",
+            "text": "<p>Ruby Hammer MBE has distilled her knowledge and expertise into an edited line of routine enhancing essentials designed to simplify beauty.</p><p>Brand promise: if we make it, it’s one of the best you can buy.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "menu-1",
+        "menu-2",
+        "text-3"
+      ],
+      "settings": {
+        "tagline": "Designed by an artist, made for you.",
+        "show_payment": true,
+        "show_wordmark": false
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

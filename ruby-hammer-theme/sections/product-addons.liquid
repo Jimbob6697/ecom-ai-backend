@@ -1,0 +1,22 @@
+{%- comment -%}
+  Rendered on request by the product page to load Shopify's complementary
+  products (set per product in the Search & Discovery app). It is not added to
+  a template directly.
+{%- endcomment -%}
+{%- if recommendations.performed and recommendations.products_count > 0 -%}
+  <div class="addons" data-addons-content>
+    <p class="addons__heading">{{ section.settings.heading | escape }}</p>
+    <ul class="addons__list" role="list">
+      {%- for item in recommendations.products -%}
+        {% render 'addon-row', product: item %}
+      {%- endfor -%}
+    </ul>
+  </div>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Product add-ons",
+  "settings": [{ "type": "text", "id": "heading", "label": "Heading", "default": "Pairs well with" }]
+}
+{% endschema %}

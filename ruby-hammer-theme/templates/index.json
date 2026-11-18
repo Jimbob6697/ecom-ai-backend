@@ -1,0 +1,370 @@
+{
+  "sections": {
+    "hero": {
+      "type": "hero-split",
+      "settings": {
+        "eyebrow": "Ruby Hammer MBE",
+        "heading": "What’s age got to do with it?",
+        "heading_accent": "There’s a privilege in ageing.",
+        "text": "Four decades of professional expertise, distilled into effortless, versatile products that simplify beauty without compromising on results.",
+        "button_label": "Shop bestsellers",
+        "button_link": "shopify://collections/bestsellers",
+        "link_label": "Meet Ruby",
+        "link": "shopify://pages/about-ruby-hammer",
+        "image": "shopify://shop_images/Ruby_Alt_mobile.png",
+        "focus": "object-position: top",
+        "flip": false
+      },
+      "blocks": {
+        "point-1": {
+          "type": "point",
+          "settings": {
+            "text": "Free UK delivery when you spend £35"
+          }
+        },
+        "point-2": {
+          "type": "point",
+          "settings": {
+            "text": "Vegan and cruelty free"
+          }
+        },
+        "point-3": {
+          "type": "point",
+          "settings": {
+            "text": "Designed by a makeup artist"
+          }
+        }
+      },
+      "block_order": [
+        "point-1",
+        "point-2",
+        "point-3"
+      ]
+    },
+    "press": {
+      "type": "press",
+      "settings": {
+        "heading": "As seen in"
+      },
+      "blocks": {
+        "logo-1": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/VOGUE_LOGO.png",
+            "name": "Vogue"
+          }
+        },
+        "logo-2": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/Harper_s_Bazaar_Logo.png",
+            "name": "Harper’s Bazaar"
+          }
+        },
+        "logo-3": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/glamour.png",
+            "name": "Glamour"
+          }
+        },
+        "logo-4": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/red.png",
+            "name": "Red"
+          }
+        },
+        "logo-5": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/Grazia-Logo_svg.png",
+            "name": "Grazia"
+          }
+        },
+        "logo-6": {
+          "type": "logo",
+          "settings": {
+            "logo": "shopify://shop_images/hellologo.jpg",
+            "name": "Hello! Fashion"
+          }
+        }
+      },
+      "block_order": [
+        "logo-1",
+        "logo-2",
+        "logo-3",
+        "logo-4",
+        "logo-5",
+        "logo-6"
+      ]
+    },
+    "best": {
+      "type": "product-shelf",
+      "settings": {
+        "eyebrow": "Loved by our customers",
+        "heading": "The",
+        "subheading": "bestsellers",
+        "collection": "bestsellers",
+        "limit": 8,
+        "show_view_all": true,
+        "surface": false
+      }
+    },
+    "categories": {
+      "type": "collection-tiles",
+      "settings": {
+        "heading": "Shop by category",
+        "columns": "4"
+      },
+      "blocks": {
+        "collection-1": {
+          "type": "collection",
+          "settings": {
+            "collection": "cheeks",
+            "title": "Cheeks"
+          }
+        },
+        "collection-2": {
+          "type": "collection",
+          "settings": {
+            "collection": "lips",
+            "title": "Lips"
+          }
+        },
+        "collection-3": {
+          "type": "collection",
+          "settings": {
+            "collection": "eyes",
+            "title": "Eyes"
+          }
+        },
+        "collection-4": {
+          "type": "collection",
+          "settings": {
+            "collection": "tools",
+            "title": "Tools"
+          }
+        }
+      },
+      "block_order": [
+        "collection-1",
+        "collection-2",
+        "collection-3",
+        "collection-4"
+      ]
+    },
+    "ruby": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/Untitled_2000_x_1400px.png",
+        "eyebrow": "The eponymous line by Ruby Hammer MBE",
+        "heading": "Designed by an artist, made for you",
+        "text": "<p>Ruby Hammer Beauty brings together four decades of expertise in effortless, versatile products that simplify beauty without compromising on results.</p><p>Discover straightforward techniques, celebrate your individuality, and embrace beauty with confidence. No gimmicks, no shortcuts, just beauty at its best.</p>",
+        "link_label": "Meet Ruby",
+        "link": "shopify://pages/about-ruby-hammer",
+        "shape": "rect",
+        "flip": true,
+        "surface": true
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "eyebrow": "Designed by an artist, made for you",
+        "heading": "Reviews",
+        "subheading": "",
+        "scheme": "dark"
+      },
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "I’ve just added the red and Gold FX to my make up bag. I just want to say WOW! It’s like wearing a really moisturise lip balm with the fantastic colour of a rich coloured lipstick.",
+            "author": "Tricia N",
+            "verified": false,
+            "product": "lip-serum-balm"
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "As someone who constantly hunts for the best lip product - these are magical for me. I have spent so much £ on a variety of lipsticks & products, only to find that they dry out my lips. These lip balm serums are perfect!",
+            "author": "Aditi",
+            "verified": false,
+            "product": "lip-serum-balm"
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "I have been using eyeliner for 30+ years and this precision eyeliner is by far the best it’s intense black very smooth very precise and doesn’t dry up.",
+            "author": "Karen",
+            "verified": false,
+            "product": "liquid-eyeliner"
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3"
+      ]
+    },
+    "features": {
+      "type": "promo-tiles",
+      "settings": {},
+      "blocks": {
+        "tile-1": {
+          "type": "tile",
+          "settings": {
+            "eyebrow": "Lip serum balms",
+            "heading": "Pigmented skincare for nourished lips",
+            "text": "",
+            "button_label": "Perfect your pout",
+            "link": "shopify://products/lip-serum-balm",
+            "image": "shopify://shop_images/Untitled_design_-_6.png",
+            "scheme": "dark",
+            "size": "half"
+          }
+        },
+        "tile-2": {
+          "type": "tile",
+          "settings": {
+            "eyebrow": "Tools of the trade",
+            "heading": "Made by an artist, customised by you",
+            "text": "",
+            "button_label": "Simplify your toolkit",
+            "link": "shopify://collections/tools",
+            "image": "shopify://shop_images/Untitled_design_-_7.png",
+            "scheme": "dark",
+            "size": "half"
+          }
+        }
+      },
+      "block_order": [
+        "tile-1",
+        "tile-2"
+      ]
+    },
+    "gifts": {
+      "type": "product-shelf",
+      "settings": {
+        "eyebrow": "Gifts and sets",
+        "heading": "Curated",
+        "subheading": "by Ruby",
+        "collection": "gift-sets",
+        "limit": 8,
+        "show_view_all": true,
+        "surface": true
+      }
+    },
+    "statement": {
+      "type": "statement",
+      "settings": {
+        "eyebrow": "What is true beauty?",
+        "text": "True beauty is not defined by age, colour, size or sex, it is reflected by the spirit within.",
+        "link_label": "Learn more",
+        "link": "shopify://pages/about-ruby-hammer",
+        "scheme": "light"
+      }
+    },
+    "trust": {
+      "type": "trust-bar",
+      "settings": {
+        "label": "",
+        "scheme": "surface"
+      },
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free UK delivery",
+            "text": "When you spend £35"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "icon": "heart",
+            "title": "Vegan and cruelty free",
+            "text": "Across the range"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "Responsibly sourced",
+            "text": "Considered ingredients"
+          }
+        },
+        "badge-4": {
+          "type": "badge",
+          "settings": {
+            "icon": "award",
+            "title": "Designed by an artist",
+            "text": "Ruby Hammer MBE"
+          }
+        }
+      },
+      "block_order": [
+        "badge-1",
+        "badge-2",
+        "badge-3",
+        "badge-4"
+      ]
+    },
+    "blog": {
+      "type": "blog-posts",
+      "settings": {
+        "blog": "news",
+        "eyebrow": "From Ruby",
+        "heading": "Mini masterclasses",
+        "limit": 3,
+        "link_label": "Read more",
+        "view_all_label": "View all articles",
+        "surface": false
+      }
+    },
+    "bwb": {
+      "type": "image-with-text",
+      "settings": {
+        "image": "shopify://shop_images/logo_colour_small_3b7fe91c-8271-4ebb-8523-73bd1d54a55e.png",
+        "eyebrow": "Buy Women Built",
+        "heading": "Only 1 in 3 UK entrepreneurs is female",
+        "text": "<p>By shining a light on women-built brands, the Buy Women Built movement brings choice to consumers who want to empower and support women, while inspiring future female entrepreneurs that they can do it too.</p>",
+        "shape": "rect",
+        "flip": false,
+        "surface": false
+      }
+    },
+    "newsletter": {
+      "type": "newsletter",
+      "settings": {
+        "heading": "Join my mailing list",
+        "text": "Enjoy 15% off your first order when you sign up to my mailing list.",
+        "scheme": "accent"
+      }
+    }
+  },
+  "order": [
+    "hero",
+    "press",
+    "best",
+    "categories",
+    "ruby",
+    "reviews",
+    "features",
+    "gifts",
+    "statement",
+    "trust",
+    "blog",
+    "bwb",
+    "newsletter"
+  ]
+}

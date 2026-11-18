@@ -1,0 +1,42 @@
+<section class="section statement statement--{{ section.settings.scheme }}">
+  <div class="page-width page-width--narrow">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="eyebrow" data-reveal>{{ section.settings.eyebrow | escape }}</p>
+    {%- endif -%}
+    <p class="statement__text" data-word-reveal>{{ section.settings.text | escape }}</p>
+    {%- if section.settings.link_label != blank -%}
+      <a class="link-arrow statement__link" href="{{ section.settings.link | default: routes.all_products_collection_url }}" data-reveal>
+        {{- section.settings.link_label | escape -}}
+      </a>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Scrolling statement",
+  "settings": [
+    { "type": "text", "id": "eyebrow", "label": "Eyebrow", "default": "Our aim" },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "info": "Words light up one by one as the visitor scrolls.",
+      "default": "True beauty is not defined by age, colour, size or sex, it is reflected by the spirit within."
+    },
+    { "type": "text", "id": "link_label", "label": "Link label", "default": "Read our story" },
+    { "type": "url", "id": "link", "label": "Link" },
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour scheme",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "dark", "label": "Dark" }
+      ],
+      "default": "dark"
+    }
+  ],
+  "presets": [{ "name": "Scrolling statement" }]
+}
+{% endschema %}
