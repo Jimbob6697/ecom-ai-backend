@@ -1,0 +1,48 @@
+{
+  "type": "footer",
+  "name": "Footer group",
+  "sections": {
+    "footer": {
+      "type": "footer",
+      "blocks": {
+        "menu-1": {
+          "type": "menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "main-menu",
+            "limit": 10
+          }
+        },
+        "menu-2": {
+          "type": "menu",
+          "settings": {
+            "heading": "Customer care",
+            "menu": "footer",
+            "limit": 8
+          }
+        },
+        "text-3": {
+          "type": "text",
+          "settings": {
+            "heading": "Say hello",
+            "text": "<p>Email <a href=\"mailto:hello@untameable.co.uk\">hello@untameable.co.uk</a>. We aim to get back to you within 1–2 working days.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "menu-1",
+        "menu-2",
+        "text-3"
+      ],
+      "settings": {
+        "logo": "shopify://shop_images/Untameable_vertical_logo_rays_yellow.png",
+        "tagline": "Good hair. Great stories.",
+        "show_payment": true,
+        "show_wordmark": true
+      }
+    }
+  },
+  "order": [
+    "footer"
+  ]
+}

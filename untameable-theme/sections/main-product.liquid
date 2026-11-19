@@ -1,0 +1,225 @@
+{%- liquid
+  assign s = section.settings
+  assign current = product.selected_or_first_available_variant
+  assign form_id = 'product-form-' | append: section.id
+-%}
+<section class="section product" data-product>
+  <div class="page-width product__grid">
+    <div class="product__gallery" data-gallery>
+      <div class="product__stage" data-gallery-track>
+        {%- for media in product.media -%}
+          <div class="product__slide" data-media-id="{{ media.id }}">
+            {%- case media.media_type -%}
+              {%- when 'image' -%}
+                {%- liquid
+                  assign loading = 'lazy'
+                  if forloop.first
+                    assign loading = 'eager'
+                  endif
+                -%}
+                {{
+                  media
+                  | image_url: width: 2000
+                  | image_tag: widths: '500, 800, 1100, 1500, 2000', sizes: '(min-width: 990px) 55vw, 100vw', loading: loading, alt: media.alt
+                }}
+              {%- when 'video' -%}
+                {{ media | video_tag: controls: true, image_size: '1500x' }}
+              {%- when 'external_video' -%}
+                {{ media | external_video_tag: loading: 'lazy' }}
+              {%- when 'model' -%}
+                {{ media | model_viewer_tag: reveal: 'interaction', toggleable: true }}
+            {%- endcase -%}
+          </div>
+        {%- else -%}
+          <div class="product__slide">{% render 'art', index: 1, icon: 'leaf' %}</div>
+        {%- endfor -%}
+      </div>
+      {%- if product.media.size > 1 -%}
+        <div class="product__thumbs" role="tablist" aria-label="Gallery">
+          {%- for media in product.media -%}
+            <button
+              class="product__thumb{% if forloop.first %} is-active{% endif %}"
+              type="button"
+              role="tab"
+              aria-label="{{ 'products.view' | t }} {{ forloop.index }}"
+              data-gallery-thumb="{{ forloop.index0 }}"
+            >
+              {{ media.preview_image | image_url: width: 200 | image_tag: loading: 'lazy', alt: '' }}
+            </button>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="product__info">
+      {%- if s.show_reviews -%}
+        <div class="product__top" data-reveal>{% render 'rating', product: product, link: '#reviews' %}</div>
+      {%- endif -%}
+      <h1 class="product__title" data-reveal style="--i: 1">{{ s.heading | default: product.title | escape }}</h1>
+      {%- if s.claim != blank -%}
+        <p class="product__claim" data-reveal style="--i: 1">{{ s.claim | escape }}</p>
+      {%- endif -%}
+      {%- if s.text != blank -%}
+        <div class="product__intro rte" data-reveal style="--i: 2">{{ s.text }}</div>
+      {%- elsif product.description != blank -%}
+        <div class="product__intro rte" data-reveal style="--i: 2">{{ product.description }}</div>
+      {%- endif -%}
+
+      <div data-reveal style="--i: 3">
+        {% render 'buy-box', product: product, section_id: section.id, s: s %}
+      </div>
+
+      {%- if s.show_payment_icons -%}
+        <div class="product__secure" data-reveal style="--i: 4">
+          <p>{% render 'icon', name: 'lock' %}Secure checkout</p>
+          <ul role="list" aria-label="Payment methods">
+            {%- for type in shop.enabled_payment_types -%}
+              <li>{{ type | payment_type_svg_tag: class: 'payment-icon' }}</li>
+            {%- endfor -%}
+          </ul>
+        </div>
+      {%- endif -%}
+
+      <ul class="product__badges" role="list" data-reveal style="--i: 5">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'badge' -%}
+            <li class="trust-badge trust-badge--compact" {{ block.shopify_attributes }}>
+              <span class="trust-badge__icon">{% render 'icon', name: block.settings.icon %}</span>
+              <span class="trust-badge__text">
+                <strong>{{ block.settings.title | escape }}</strong>
+                {%- if block.settings.text != blank -%}
+                  <span>{{ block.settings.text | escape }}</span>
+                {%- endif -%}
+              </span>
+            </li>
+          {%- endif -%}
+        {%- endfor -%}
+      </ul>
+
+      {%- for block in section.blocks -%}
+        {%- case block.type -%}
+          {%- when '@app' -%}
+            <div class="product__app">{% render block %}</div>
+          {%- when 'review' -%}
+            {%- if block.settings.text != blank -%}
+              <figure class="product__quote" data-reveal {{ block.shopify_attributes }}>
+                {% render 'stars', rating: block.settings.rating %}
+                <blockquote>{{ block.settings.text | escape }}</blockquote>
+                {%- if block.settings.author != blank -%}
+                  <figcaption>{{ block.settings.author | escape }}</figcaption>
+                {%- endif -%}
+              </figure>
+            {%- elsif request.design_mode -%}
+              <figure class="product__quote product__quote--empty" {{ block.shopify_attributes }}>
+                <blockquote>Paste a real customer review here. An empty review is only visible in the editor.</blockquote>
+              </figure>
+            {%- endif -%}
+        {%- endcase -%}
+      {%- endfor -%}
+
+      <div class="accordion product__accordion" data-reveal style="--i: 6">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'collapsible' -%}
+            <details class="accordion__item" {{ block.shopify_attributes }}>
+              <summary class="accordion__summary">{{ block.settings.heading | escape }}{% render 'icon', name: 'plus' %}</summary>
+              <div class="accordion__content rte">
+                {{ block.settings.text }}
+                {{ block.settings.page.content }}
+              </div>
+            </details>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+
+  <div class="buy-bar" data-buy-bar aria-hidden="true">
+    <div class="page-width buy-bar__inner">
+      <p class="buy-bar__title">{{ product.title }}</p>
+      <div class="buy-bar__price" data-product-price>{% render 'price', product: product, variant: current %}</div>
+      <button class="button" type="submit" form="{{ form_id }}" tabindex="-1" data-add-button {% unless current.available %}disabled{% endunless %}>
+        <span data-add-label>
+          {%- if current.available -%}
+            {{ 'products.add_to_bag' | t }}
+          {%- else -%}
+            {{ 'products.sold_out' | t }}
+          {%- endif -%}
+        </span>
+      </button>
+    </div>
+  </div>
+
+  <script type="application/ld+json">
+    {{ product | structured_data }}
+  </script>
+</section>
+
+{% schema %}
+{
+  "name": "Product",
+  "settings": [
+    { "type": "checkbox", "id": "show_reviews", "label": "Show review rating", "info": "Uses the rating your reviews app saves on the product. Nothing shows until there are reviews.", "default": true },
+    { "type": "text", "id": "heading", "label": "Heading", "info": "Leave empty to use the product name." },
+    { "type": "text", "id": "claim", "label": "Bold line under the heading", "default": "Defined curls without crunch or heavy build-up." },
+    { "type": "richtext", "id": "text", "label": "Text", "info": "Leave empty to use the product description." },
+    { "type": "header", "content": "Buying" },
+    { "type": "checkbox", "id": "show_quantity", "label": "Show quantity selector", "default": true },
+    { "type": "checkbox", "id": "show_dynamic_checkout", "label": "Show dynamic checkout button", "info": "Shop Pay, Apple Pay and similar express options.", "default": true },
+    { "type": "text", "id": "highlight_value", "label": "Pack to highlight", "info": "The pack whose name contains this word gets the flag below.", "default": "Duo" },
+    { "type": "text", "id": "highlight_text", "label": "Flag on that pack", "default": "Free UK delivery" },
+    { "type": "text", "id": "guarantee_text", "label": "Guarantee line" },
+    { "type": "url", "id": "guarantee_link", "label": "Guarantee details link" },
+    { "type": "text", "id": "chips", "label": "Short claims", "info": "Separate with commas.", "default": "93% natural, Made in the UK, Light hold" },
+    { "type": "checkbox", "id": "show_payment_icons", "label": "Show secure checkout and payment icons", "default": true }
+  ],
+  "blocks": [
+    { "type": "@app" },
+    {
+      "type": "badge",
+      "name": "Trust badge",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "truck", "label": "Delivery" },
+            { "value": "return", "label": "Returns" },
+            { "value": "star", "label": "Star" },
+            { "value": "award", "label": "Award" },
+            { "value": "shield", "label": "Shield" },
+            { "value": "lock", "label": "Secure" },
+            { "value": "gift", "label": "Gift" },
+            { "value": "leaf", "label": "Leaf" },
+            { "value": "heart", "label": "Heart" },
+            { "value": "chat", "label": "Chat" }
+          ],
+          "default": "leaf"
+        },
+        { "type": "text", "id": "title", "label": "Title", "default": "Made in the UK" },
+        { "type": "text", "id": "text", "label": "Text" }
+      ]
+    },
+    {
+      "type": "collapsible",
+      "name": "Collapsible row",
+      "settings": [
+        { "type": "text", "id": "heading", "label": "Heading", "default": "How to use" },
+        { "type": "richtext", "id": "text", "label": "Text" },
+        { "type": "page", "id": "page", "label": "Or show content from a page" }
+      ]
+    },
+    {
+      "type": "review",
+      "name": "Featured review",
+      "limit": 1,
+      "settings": [
+        { "type": "range", "id": "rating", "label": "Stars", "min": 1, "max": 5, "step": 1, "default": 5 },
+        { "type": "textarea", "id": "text", "label": "Review", "info": "Paste a real customer's words. Left empty, nothing is shown on the live store." },
+        { "type": "text", "id": "author", "label": "Customer name" }
+      ]
+    }
+  ]
+}
+{% endschema %}

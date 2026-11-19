@@ -1,0 +1,546 @@
+{
+  "sections": {
+    "main": {
+      "type": "main-product",
+      "settings": {
+        "show_reviews": true,
+        "heading": "Curl cream",
+        "claim": "Defined curls without crunch or heavy build-up.",
+        "text": "<p><strong>Powered by rosemary. Boosted with kelp.</strong></p><p>A lightweight styling cream for waves and curls. Brings out your natural texture while keeping hair soft, touchable and full of movement.</p>",
+        "show_payment_icons": true,
+        "show_quantity": true,
+        "show_dynamic_checkout": true,
+        "highlight_value": "Duo",
+        "highlight_text": "Free UK delivery",
+        "guarantee_text": "30-day money-back guarantee",
+        "chips": "93% natural, Made in the UK, Light hold"
+      },
+      "blocks": {
+        "badge-1": {
+          "type": "badge",
+          "settings": {
+            "icon": "leaf",
+            "title": "93% natural",
+            "text": "Rosemary oil and kelp extract"
+          }
+        },
+        "badge-2": {
+          "type": "badge",
+          "settings": {
+            "icon": "award",
+            "title": "Made in the UK",
+            "text": "In a recyclable aluminium tube"
+          }
+        },
+        "badge-3": {
+          "type": "badge",
+          "settings": {
+            "icon": "truck",
+            "title": "Free UK delivery with Duo",
+            "text": "Royal Mail Tracked 48"
+          }
+        },
+        "badge-4": {
+          "type": "badge",
+          "settings": {
+            "icon": "heart",
+            "title": "1% for the Planet",
+            "text": "Proud member"
+          }
+        },
+        "review-5": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "text": "My curls stay defined, frizz-free, and hold up all day.",
+            "author": "Antonis A. · Untameable customer"
+          }
+        },
+        "collapsible-6": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "How to use",
+            "text": "<p>Work a small amount between your hands. Apply evenly through damp hair, from root to ends. Air dry or diffuse for added definition. Shape, scrunch, twist or leave it wild. Your call.</p>"
+          }
+        },
+        "collapsible-7": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Texture and finish",
+            "text": "<p>Lightweight cream texture. Soft, flexible hold. Touchable definition. Designed to enhance natural texture, reduce frizz, and leave hair feeling soft, refined and never overworked.</p>"
+          }
+        },
+        "collapsible-8": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Hair types",
+            "text": "<p>Suitable for wavy, curly and textured hair, and medium to thick hair. Ideal for those seeking soft definition, natural movement, and effortless styling.</p>"
+          }
+        },
+        "collapsible-9": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Scent",
+            "text": "<p>Lightly scented with sandalwood. Warm, clean, and understated.</p>"
+          }
+        },
+        "collapsible-10": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "How long it lasts",
+            "text": "<p>With regular use, one tube typically lasts around four weeks, depending on your hair length, thickness, and how much product you use.</p>"
+          }
+        },
+        "collapsible-11": {
+          "type": "collapsible",
+          "settings": {
+            "heading": "Thoughtfully made",
+            "text": "<p>Our hero botanicals, rosemary and sea kelp, are sourced here in the UK. Every tube is manufactured in the UK using aluminium, with recyclable cardboard packaging for every order. We're proud members of 1% for the Planet and support The Plastic Collective.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "badge-1",
+        "badge-2",
+        "badge-3",
+        "badge-4",
+        "review-5",
+        "collapsible-6",
+        "collapsible-7",
+        "collapsible-8",
+        "collapsible-9",
+        "collapsible-10",
+        "collapsible-11"
+      ]
+    },
+    "marquee": {
+      "type": "marquee",
+      "settings": {
+        "speed": 35,
+        "scheme": "dark"
+      },
+      "blocks": {
+        "text-1": {
+          "type": "text",
+          "settings": {
+            "text": "93% natural"
+          }
+        },
+        "text-2": {
+          "type": "text",
+          "settings": {
+            "text": "Made in the UK"
+          }
+        },
+        "text-3": {
+          "type": "text",
+          "settings": {
+            "text": "Light hold"
+          }
+        },
+        "text-4": {
+          "type": "text",
+          "settings": {
+            "text": "No crunch"
+          }
+        },
+        "text-5": {
+          "type": "text",
+          "settings": {
+            "text": "Sulphate-free"
+          }
+        },
+        "text-6": {
+          "type": "text",
+          "settings": {
+            "text": "1% for the Planet"
+          }
+        }
+      },
+      "block_order": [
+        "text-1",
+        "text-2",
+        "text-3",
+        "text-4",
+        "text-5",
+        "text-6"
+      ]
+    },
+    "before": {
+      "type": "before-after",
+      "settings": {
+        "image": "shopify://shop_images/BEN_-_approved_before_and_after_4x5_5b3a722f-ba93-4b56-bf36-d417aca2d0b3.jpg",
+        "eyebrow": "See the difference",
+        "heading": "Same curls. Better definition.",
+        "text": "<p>Before styling. After Untameable.</p>",
+        "quote": "My curls stay defined, frizz-free, and hold up all day.",
+        "quote_author": "Antonis A. · Untameable customer",
+        "button_label": "",
+        "scheme": "accent"
+      }
+    },
+    "science": {
+      "type": "science",
+      "settings": {
+        "eyebrow": "The formula",
+        "heading": "Powered by rosemary.",
+        "heading_2": "Boosted with kelp.",
+        "text": "<p>A lightweight botanical styling cream that defines curls while keeping them soft, touchable and full of movement. Designed to minimise build-up, residue and stiffness.</p>",
+        "image": "shopify://shop_images/Powered_by_rosemary.png",
+        "inci_label": "Full ingredients (INCI) list",
+        "inci": "Water (Aqua), Cetearyl Alcohol, Glycerin, VP/VA Copolymer, PVP, C15-19 Alkane, Distearoylethyl Hydroxyethylmonium Methosulfate, Hydroxypropyl Guar Hydroxypropyl Trimonium Chloride, Mangifera Indica (Mango) Seed Butter, Fragrance (Parfum), Benzyl Alcohol, Panthenol, Chlorphenesin, Cetearyl Nonanoate, Rosmarinus Officinalis (Rosemary) Leaf Oil, Citric Acid, Guar Hydroxypropyl Trimonium Chloride, Triticum Vulgare (Wheat) Bran Extract, Trisodium Ethylenediamine Disuccinate, Ethylhexyl Isononanoate, Biotin, Dehydroacetic Acid, Linoleic Acid, Laminaria Digitata Extract, Sodium Hydroxide, Camellia Oleifera Seed Oil.",
+        "scheme": "dark"
+      },
+      "blocks": {
+        "stat-1": {
+          "type": "stat",
+          "settings": {
+            "value": "93%",
+            "label": "Natural"
+          }
+        },
+        "stat-2": {
+          "type": "stat",
+          "settings": {
+            "value": "UK",
+            "label": "Made here, with UK-sourced rosemary and sea kelp"
+          }
+        },
+        "stat-3": {
+          "type": "stat",
+          "settings": {
+            "value": "0",
+            "label": "Sulphates"
+          }
+        },
+        "stat-4": {
+          "type": "stat",
+          "settings": {
+            "value": "1%",
+            "label": "For the Planet member"
+          }
+        },
+        "ingredient-5": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Rosemary oil",
+            "role": "to nourish",
+            "inci": "Rosmarinus Officinalis (Rosemary) Leaf Oil",
+            "text": "<p>Known for supporting healthier-looking hair and scalp, rosemary oil helps nourish from the root while promoting softness, strength and resilience.</p>"
+          }
+        },
+        "ingredient-6": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Kelp extract",
+            "role": "to hydrate",
+            "inci": "Laminaria Digitata Extract",
+            "text": "<p>Mineral-rich sea kelp delivers lightweight nourishment to support hydration, vitality and natural texture, without unnecessary heaviness.</p>"
+          }
+        },
+        "ingredient-7": {
+          "type": "ingredient",
+          "settings": {
+            "name": "Panthenol",
+            "role": "to strengthen",
+            "inci": "Panthenol (Pro-Vitamin B5)",
+            "text": "<p>A conditioning ingredient that helps improve softness, moisture retention and manageability while supporting stronger-feeling hair.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "stat-1",
+        "stat-2",
+        "stat-3",
+        "stat-4",
+        "ingredient-5",
+        "ingredient-6",
+        "ingredient-7"
+      ]
+    },
+    "howto": {
+      "type": "how-to",
+      "settings": {
+        "image": "shopify://shop_images/Scrunch_or_Twist.png",
+        "eyebrow": "How to use",
+        "heading": "Scrunch or twist.",
+        "note": "Shape, scrunch, twist or leave it wild. Your call.",
+        "scheme": "surface"
+      },
+      "blocks": {
+        "step-1": {
+          "type": "step",
+          "settings": {
+            "title": "Start with damp hair",
+            "text": "Work a small amount between your hands."
+          }
+        },
+        "step-2": {
+          "type": "step",
+          "settings": {
+            "title": "Roots to ends",
+            "text": "Apply evenly through damp hair, from root to ends."
+          }
+        },
+        "step-3": {
+          "type": "step",
+          "settings": {
+            "title": "Air dry or diffuse",
+            "text": "Diffuse for added definition, or let it dry on its own."
+          }
+        }
+      },
+      "block_order": [
+        "step-1",
+        "step-2",
+        "step-3"
+      ]
+    },
+    "movement": {
+      "type": "hero",
+      "settings": {
+        "heading": "Built for movement",
+        "subheading": "Not just for the mirror.",
+        "image": "shopify://shop_images/omid-armin-VGNDt5RV9J4-unsplash.jpg",
+        "show_reviews": false,
+        "button_label": ""
+      }
+    },
+    "apps": {
+      "type": "apps",
+      "settings": {
+        "heading": "",
+        "full_width": false
+      }
+    },
+    "reviews": {
+      "type": "reviews",
+      "settings": {
+        "rating_product": "curl-cream",
+        "eyebrow": "Reviews",
+        "heading": "Don’t take",
+        "subheading": "our word for it",
+        "scheme": "surface"
+      },
+      "blocks": {
+        "review-1": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "All in one curl product, all day long",
+            "text": "Finding a curl product that actually worked was a struggle. I'd been mixing several just to keep my curls defined and frizz-free. Untameable Cream does it all on its own: my curls stay defined, frizz-free, and hold up all day.",
+            "author": "Antonis A.",
+            "verified": false
+          }
+        },
+        "review-2": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Really natural looking hold",
+            "text": "Tried another brand from Instagram and was so disappointed. This has the right level of hold for my really wavy hair, looks super natural. Really pleased.",
+            "author": "Alex",
+            "verified": false
+          }
+        },
+        "review-3": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Obsessed with this product!",
+            "text": "It’s lightweight yet holds my curls without any crunchy texture. After trying dozens of products over the years have finally found the perfect one!",
+            "author": "Joe",
+            "verified": false
+          }
+        },
+        "review-4": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Ideal for fine, wavy hair",
+            "text": "I have quite fine wavy hair and this is perfect for keeping it under control without weighing it down or making it completely like concrete!",
+            "author": "Sam",
+            "verified": false
+          }
+        },
+        "review-5": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Perfect product for wavy hair",
+            "text": "This curl cream has become a staple. As someone with wavy hair, I get real definition and just enough hold to keep my waves intact through the day with none of that stiff crunch! Also smells great.",
+            "author": "Andrew08",
+            "verified": false
+          }
+        },
+        "review-6": {
+          "type": "review",
+          "settings": {
+            "rating": 5,
+            "title": "Stocked in my salon",
+            "text": "Have stocked the curl cream in my salon. Clients and staff love it! Smells amazing and has great longevity.",
+            "author": "Billy F.",
+            "verified": false
+          }
+        }
+      },
+      "block_order": [
+        "review-1",
+        "review-2",
+        "review-3",
+        "review-4",
+        "review-5",
+        "review-6"
+      ]
+    },
+    "ugc": {
+      "type": "ugc-videos",
+      "settings": {
+        "eyebrow": "@untameable",
+        "heading": "Seen in",
+        "subheading": "the wild",
+        "text": "Real curls, real stories. Tag us to be featured.",
+        "scheme": "dark"
+      },
+      "blocks": {
+        "video-1": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/28.jpg"
+          }
+        },
+        "video-2": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/10.jpg"
+          }
+        },
+        "video-3": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/6_f98b47cd-9098-4742-b56c-a65bfbc62239.jpg"
+          }
+        },
+        "video-4": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/8_5812473b-dfb5-426d-add6-0d5d6b2ab375.jpg"
+          }
+        },
+        "video-5": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/27.jpg"
+          }
+        },
+        "video-6": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/35.jpg"
+          }
+        },
+        "video-7": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/32.jpg"
+          }
+        },
+        "video-8": {
+          "type": "video",
+          "settings": {
+            "poster": "shopify://shop_images/5_9d666e8b-a29d-4b4b-b3c3-b3a38e70a6a8.jpg"
+          }
+        }
+      },
+      "block_order": [
+        "video-1",
+        "video-2",
+        "video-3",
+        "video-4",
+        "video-5",
+        "video-6",
+        "video-7",
+        "video-8"
+      ]
+    },
+    "faq": {
+      "type": "faq",
+      "settings": {
+        "heading": "Good questions",
+        "surface": false
+      },
+      "blocks": {
+        "question-1": {
+          "type": "question",
+          "settings": {
+            "question": "Is Untameable Curl Cream right for my hair?",
+            "answer": "<p>Untameable Curl Cream is made for waves, curls and textured hair that want definition, softness and movement without stiffness or crunch.</p>"
+          }
+        },
+        "question-2": {
+          "type": "question",
+          "settings": {
+            "question": "Will it work on fine hair?",
+            "answer": "<p>Yes. The formula is lightweight, so it can work well on fine waves or curls when used sparingly. Start with a small amount through damp hair, focusing on the mid-lengths and ends.</p>"
+          }
+        },
+        "question-3": {
+          "type": "question",
+          "settings": {
+            "question": "Will it work on thick or dry hair?",
+            "answer": "<p>Yes. Thick, dry or textured hair can benefit from the softening, nourishing feel of the formula.</p>"
+          }
+        },
+        "question-4": {
+          "type": "question",
+          "settings": {
+            "question": "Can I use it on colour-treated hair?",
+            "answer": "<p>Yes, it is sulphate-free and suitable for colour-treated hair. As always, follow any specific aftercare advice from your colourist.</p>"
+          }
+        },
+        "question-5": {
+          "type": "question",
+          "settings": {
+            "question": "What does it smell like?",
+            "answer": "<p>It is lightly scented with sandalwood. Warm, soft and refined. It's noticeable when you use it, but not overpowering once it is in the hair.</p>"
+          }
+        },
+        "question-6": {
+          "type": "question",
+          "settings": {
+            "question": "How long does one tube last?",
+            "answer": "<p>With regular use, one tube typically lasts around four weeks, depending on your hair length, thickness, and how much product you use.</p>"
+          }
+        },
+        "question-7": {
+          "type": "question",
+          "settings": {
+            "question": "How long does UK delivery take?",
+            "answer": "<p>We offer free UK delivery on every Duo order, shipped via Royal Mail Tracked 48. Orders are usually delivered within 2–4 working days from dispatch. We aim to dispatch within 1–2 working days.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "question-1",
+        "question-2",
+        "question-3",
+        "question-4",
+        "question-5",
+        "question-6",
+        "question-7"
+      ]
+    }
+  },
+  "order": [
+    "main",
+    "marquee",
+    "before",
+    "science",
+    "howto",
+    "movement",
+    "apps",
+    "reviews",
+    "ugc",
+    "faq"
+  ]
+}

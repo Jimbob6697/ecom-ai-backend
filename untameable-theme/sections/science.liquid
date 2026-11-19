@@ -1,0 +1,126 @@
+{%- liquid
+  assign s = section.settings
+  assign stats = section.blocks | where: 'type', 'stat'
+  assign ingredients = section.blocks | where: 'type', 'ingredient'
+-%}
+<section class="section science science--{{ s.scheme }}">
+  <div class="page-width">
+    <div class="science__head">
+      <div>
+        {%- if s.eyebrow != blank -%}
+          <p class="eyebrow" data-reveal>{{ s.eyebrow | escape }}</p>
+        {%- endif -%}
+        <h2 class="section-heading science__heading" data-reveal>
+          {{ s.heading | escape }}
+          {%- if s.heading_2 != blank %}
+            <span>{{ s.heading_2 | escape }}</span>
+          {%- endif -%}
+        </h2>
+      </div>
+      {%- if s.text != blank -%}
+        <div class="science__text rte" data-reveal style="--i: 1">{{ s.text }}</div>
+      {%- endif -%}
+    </div>
+
+    {%- if stats.size > 0 -%}
+      <ul class="science__stats" role="list">
+        {%- for block in stats -%}
+          <li class="science-stat" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+            <strong>{{ block.settings.value | escape }}</strong>
+            <span>{{ block.settings.label | escape }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+
+    <div class="science__body">
+      {%- if s.image != blank -%}
+        <div class="science__media" data-reveal>
+          {{ s.image | image_url: width: 1600 | image_tag: widths: '500, 800, 1200, 1600', sizes: '(min-width: 990px) 40vw, 100vw', loading: 'lazy', alt: s.image.alt }}
+        </div>
+      {%- endif -%}
+      <div class="science__list">
+        {%- for block in ingredients -%}
+          <details class="formula" data-reveal style="--i: {{ forloop.index0 }}" {% if forloop.first %}open{% endif %} {{ block.shopify_attributes }}>
+            <summary class="formula__summary">
+              <span class="formula__number">{{ forloop.index | prepend: '0' | slice: -2, 2 }}</span>
+              <span class="formula__name">
+                {{ block.settings.name | escape }}
+                {%- if block.settings.role != blank %}
+                  <em>{{ block.settings.role | escape }}</em>
+                {%- endif -%}
+              </span>
+              {% render 'icon', name: 'plus' %}
+            </summary>
+            <div class="formula__content">
+              {%- if block.settings.inci != blank -%}
+                <p class="formula__inci">{{ block.settings.inci | escape }}</p>
+              {%- endif -%}
+              <div class="rte">{{ block.settings.text }}</div>
+            </div>
+          </details>
+        {%- endfor -%}
+        {%- if s.inci != blank -%}
+          <details class="formula formula--inci" data-reveal>
+            <summary class="formula__summary">
+              <span class="formula__number">{% render 'icon', name: 'leaf' %}</span>
+              <span class="formula__name">{{ s.inci_label | escape }}</span>
+              {% render 'icon', name: 'plus' %}
+            </summary>
+            <div class="formula__content"><p class="formula__full">{{ s.inci | escape }}</p></div>
+          </details>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "The formula",
+  "tag": "div",
+  "max_blocks": 12,
+  "settings": [
+    { "type": "paragraph", "content": "Shows what is in the product and why. Add Fact blocks for the headline figures and Ingredient blocks for each key ingredient. Only state figures and benefits you can support." },
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "The formula" },
+    { "type": "text", "id": "heading", "label": "Heading, first line", "default": "Powered by rosemary." },
+    { "type": "text", "id": "heading_2", "label": "Heading, second line", "default": "Boosted with kelp." },
+    { "type": "richtext", "id": "text", "label": "Text" },
+    { "type": "image_picker", "id": "image", "label": "Photo" },
+    { "type": "text", "id": "inci_label", "label": "Full ingredients row title", "default": "Full ingredients (INCI) list" },
+    { "type": "textarea", "id": "inci", "label": "Full ingredients list" },
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour scheme",
+      "options": [
+        { "value": "dark", "label": "Dark" },
+        { "value": "accent", "label": "Accent" },
+        { "value": "light", "label": "Light" }
+      ],
+      "default": "dark"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Fact",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Figure", "default": "93%" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Natural" }
+      ]
+    },
+    {
+      "type": "ingredient",
+      "name": "Ingredient",
+      "settings": [
+        { "type": "text", "id": "name", "label": "Name", "default": "Rosemary oil" },
+        { "type": "text", "id": "role", "label": "What it does", "default": "to nourish" },
+        { "type": "text", "id": "inci", "label": "INCI name", "info": "Optional. The name as it appears on the ingredients list." },
+        { "type": "richtext", "id": "text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "The formula", "blocks": [{ "type": "stat" }, { "type": "ingredient" }] }]
+}
+{% endschema %}

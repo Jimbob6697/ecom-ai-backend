@@ -1,0 +1,48 @@
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section press">
+  <div class="page-width">
+    {%- if s.heading != blank -%}
+      <p class="press__heading eyebrow" data-reveal>{{ s.heading | escape }}</p>
+    {%- endif -%}
+    <ul class="press__list" role="list">
+      {%- for block in section.blocks -%}
+        <li class="press__item" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+          {%- if block.settings.link != blank -%}
+            <a href="{{ block.settings.link }}" target="_blank" rel="noopener">
+          {%- endif -%}
+          {%- if block.settings.logo != blank -%}
+            {{ block.settings.logo | image_url: width: 400 | image_tag: loading: 'lazy', alt: block.settings.name, sizes: '160px', widths: '160, 320, 400' }}
+          {%- else -%}
+            <span class="press__name">{{ block.settings.name | escape }}</span>
+          {%- endif -%}
+          {%- if block.settings.link != blank -%}
+            </a>
+          {%- endif -%}
+        </li>
+      {%- endfor -%}
+    </ul>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "As seen in",
+  "tag": "div",
+  "max_blocks": 8,
+  "settings": [{ "type": "text", "id": "heading", "label": "Heading", "default": "As seen in" }],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        { "type": "image_picker", "id": "logo", "label": "Logo" },
+        { "type": "text", "id": "name", "label": "Name", "info": "Shown when no logo is added, and read out by screen readers.", "default": "Publication" },
+        { "type": "url", "id": "link", "label": "Link" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "As seen in", "blocks": [{ "type": "logo" }, { "type": "logo" }, { "type": "logo" }] }]
+}
+{% endschema %}

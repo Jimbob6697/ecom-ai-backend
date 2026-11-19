@@ -1,0 +1,75 @@
+{%- liquid
+  assign s = section.settings
+-%}
+<section class="section how-to how-to--{{ s.scheme }}">
+  <div class="page-width how-to__grid">
+    <div class="how-to__media" data-reveal>
+      {%- if s.video != blank -%}
+        {{ s.video | video_tag: image_size: '900x', controls: true, playsinline: true, preload: 'metadata' }}
+      {%- elsif s.image != blank -%}
+        {{ s.image | image_url: width: 1400 | image_tag: widths: '500, 800, 1100, 1400', sizes: '(min-width: 990px) 40vw, 100vw', loading: 'lazy', alt: s.image.alt }}
+      {%- else -%}
+        {% render 'art', index: 4, icon: 'play' %}
+      {%- endif -%}
+    </div>
+    <div class="how-to__copy">
+      {%- if s.eyebrow != blank -%}
+        <p class="eyebrow" data-reveal>{{ s.eyebrow | escape }}</p>
+      {%- endif -%}
+      <h2 class="section-heading" data-reveal>{{ s.heading | escape }}</h2>
+      <ol class="how-to__steps" role="list">
+        {%- for block in section.blocks -%}
+          <li class="how-to__step" data-reveal style="--i: {{ forloop.index0 }}" {{ block.shopify_attributes }}>
+            <span class="how-to__number">{{ forloop.index }}</span>
+            <div>
+              <h3>{{ block.settings.title | escape }}</h3>
+              {%- if block.settings.text != blank -%}
+                <p>{{ block.settings.text | escape }}</p>
+              {%- endif -%}
+            </div>
+          </li>
+        {%- endfor -%}
+      </ol>
+      {%- if s.note != blank -%}
+        <p class="how-to__note" data-reveal>{{ s.note | escape }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "How to use",
+  "tag": "div",
+  "max_blocks": 5,
+  "settings": [
+    { "type": "video", "id": "video", "label": "Video" },
+    { "type": "image_picker", "id": "image", "label": "Photo", "info": "Shown when no video is added." },
+    { "type": "text", "id": "eyebrow", "label": "Small label", "default": "How to use" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Scrunch or twist." },
+    { "type": "text", "id": "note", "label": "Closing line" },
+    {
+      "type": "select",
+      "id": "scheme",
+      "label": "Colour scheme",
+      "options": [
+        { "value": "light", "label": "Light" },
+        { "value": "surface", "label": "Tinted" },
+        { "value": "accent", "label": "Accent" }
+      ],
+      "default": "surface"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        { "type": "text", "id": "title", "label": "Title", "default": "Start with damp hair" },
+        { "type": "textarea", "id": "text", "label": "Text" }
+      ]
+    }
+  ],
+  "presets": [{ "name": "How to use", "blocks": [{ "type": "step" }, { "type": "step", "settings": { "title": "Work it through" } }, { "type": "step", "settings": { "title": "Air dry or diffuse" } }] }]
+}
+{% endschema %}

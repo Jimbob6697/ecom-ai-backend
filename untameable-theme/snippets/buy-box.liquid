@@ -1,0 +1,147 @@
+{%- comment -%}
+  Price, pack choice and add to bag for one product. Used on the product page
+  and by the "Featured product" section, so both behave the same way.
+
+  Usage:
+    {% render 'buy-box', product: product, section_id: section.id, s: section.settings %}
+
+  Settings read from s: show_quantity, show_dynamic_checkout, highlight_value,
+  highlight_text, guarantee_text, guarantee_link, chips
+{%- endcomment -%}
+{%- liquid
+  assign current = product.selected_or_first_available_variant
+  assign form_id = 'product-form-' | append: section_id
+  assign highlight = s.highlight_value | downcase | strip
+-%}
+<div class="buy-box">
+  <div class="buy-box__price" data-product-price>
+    {% render 'price', product: product, variant: current %}
+  </div>
+
+  {%- unless product.has_only_default_variant -%}
+    <div class="buy-box__options">
+      {%- for option in product.options_with_values -%}
+        {%- assign option_key = 'option' | append: option.position -%}
+        <fieldset class="option option--pack" data-option-position="{{ option.position }}">
+          <legend class="option__legend">
+            <span>{{ option.name }}: <strong data-option-current>{{ option.selected_value }}</strong></span>
+          </legend>
+          <div class="option__values">
+            {%- for value in option.values -%}
+              {%- liquid
+                comment
+                  With a single option each choice is one variant, so its price can be shown on the tile.
+                endcomment
+                assign tile_variant = blank
+                if product.options.size == 1
+                  for variant in product.variants
+                    if variant[option_key] == value
+                      assign tile_variant = variant
+                      break
+                    endif
+                  endfor
+                endif
+                assign value_lower = value | downcase
+                assign is_highlight = false
+                if highlight != blank and value_lower contains highlight
+                  assign is_highlight = true
+                endif
+              -%}
+              <label class="option__tile pack{% if is_highlight %} pack--highlight{% endif %}">
+                <input
+                  type="radio"
+                  name="{{ section_id }}-option-{{ option.position }}"
+                  value="{{ value | escape }}"
+                  {% if option.selected_value == value %}
+                    checked
+                  {% endif %}
+                  data-option-input
+                >
+                <span class="pack__body">
+                  <span class="pack__name">{{ value }}</span>
+                  {%- if tile_variant != blank -%}
+                    <span class="pack__price">
+                      {{ tile_variant.price | money }}
+                      {%- if tile_variant.compare_at_price > tile_variant.price %}
+                        <s>{{ tile_variant.compare_at_price | money }}</s>
+                      {%- endif -%}
+                    </span>
+                  {%- endif -%}
+                  {%- if is_highlight and s.highlight_text != blank -%}
+                    <span class="pack__flag">{{ s.highlight_text | escape }}</span>
+                  {%- endif -%}
+                </span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </fieldset>
+      {%- endfor -%}
+    </div>
+  {%- endunless -%}
+
+  {%- form 'product', product, id: form_id, class: 'product__form', novalidate: 'novalidate', data-product-form: '' -%}
+    <input type="hidden" name="id" value="{{ current.id }}" data-variant-id>
+    <div class="product__buy">
+      {%- if s.show_quantity -%}
+        <div class="quantity" data-quantity>
+          <button type="button" aria-label="Decrease quantity" data-quantity-minus>{% render 'icon', name: 'minus' %}</button>
+          <input type="number" name="quantity" value="1" min="1" aria-label="{{ 'products.quantity' | t }}" inputmode="numeric">
+          <button type="button" aria-label="Increase quantity" data-quantity-plus>{% render 'icon', name: 'plus' %}</button>
+        </div>
+      {%- endif -%}
+      <button class="button button--large product__add" type="submit" data-add-button {% unless current.available %}disabled{% endunless %}>
+        <span data-add-label>
+          {%- if current.available -%}
+            {{ 'products.add_to_bag' | t }}
+          {%- else -%}
+            {{ 'products.sold_out' | t }}
+          {%- endif -%}
+        </span>
+        <span class="button__spinner" aria-hidden="true"></span>
+      </button>
+    </div>
+    <p class="form-message form-message--error" data-form-error hidden role="alert"></p>
+    {%- if s.show_dynamic_checkout -%}
+      <div class="product__dynamic">{{ form | payment_button }}</div>
+    {%- endif -%}
+  {%- endform -%}
+
+  {%- if s.guarantee_text != blank -%}
+    <p class="buy-box__guarantee">
+      {% render 'icon', name: 'shield' %}
+      <span>
+        {{ s.guarantee_text | escape }}
+        {%- if s.guarantee_link != blank %}
+          · <a href="{{ s.guarantee_link }}">{{ 'products.see_details' | t }}</a>
+        {%- endif -%}
+      </span>
+    </p>
+  {%- endif -%}
+
+  {%- if s.chips != blank -%}
+    <ul class="buy-box__chips" role="list">
+      {%- assign chip_list = s.chips | split: ',' -%}
+      {%- for chip in chip_list -%}
+        <li>{{ chip | strip | escape }}</li>
+      {%- endfor -%}
+    </ul>
+  {%- endif -%}
+
+  <script type="application/json" data-variants>
+    [
+      {%- for variant in product.variants -%}
+        {%- capture price_html -%}
+          {% render 'price', product: product, variant: variant %}
+        {%- endcapture -%}
+        {
+          "id": {{ variant.id }},
+          "options": {{ variant.options | json }},
+          "available": {{ variant.available | json }},
+          "media": {{ variant.featured_media.id | json }},
+          "price": {{ price_html | strip | json }}
+        }
+        {%- unless forloop.last -%},{%- endunless -%}
+      {%- endfor -%}
+    ]
+  </script>
+</div>

@@ -8,7 +8,8 @@
     "theme:zip": "mkdir -p dist && rm -f dist/voltline-theme.zip && cd shopify-theme && zip -rq ../dist/voltline-theme.zip assets config layout locales sections snippets templates",
     "theme:zip:dogbarn": "mkdir -p dist && rm -f dist/dog-barn-yorkshire-theme.zip && cd dog-barn-theme && zip -rq ../dist/dog-barn-yorkshire-theme.zip assets config layout locales sections snippets templates",
     "theme:zip:goodgrain": "mkdir -p dist && rm -f dist/good-grain-theme.zip && cd good-grain-theme && zip -rq ../dist/good-grain-theme.zip assets config layout locales sections snippets templates",
-    "theme:zip:rubyhammer": "mkdir -p dist && rm -f dist/ruby-hammer-theme.zip && cd ruby-hammer-theme && zip -rq ../dist/ruby-hammer-theme.zip assets config layout locales sections snippets templates"
+    "theme:zip:rubyhammer": "mkdir -p dist && rm -f dist/ruby-hammer-theme.zip && cd ruby-hammer-theme && zip -rq ../dist/ruby-hammer-theme.zip assets config layout locales sections snippets templates",
+    "theme:zip:untameable": "mkdir -p dist && rm -f dist/untameable-theme.zip && cd untameable-theme && zip -rq ../dist/untameable-theme.zip assets config layout locales sections snippets templates"
   },
   "author": "InHouseYork",
   "license": "MIT",

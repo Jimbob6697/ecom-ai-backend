@@ -1,0 +1,24 @@
+<section class="section apps"{% if template.name == 'product' %} id="reviews"{% endif %}>
+  <div class="{% if section.settings.full_width %}apps__full{% else %}page-width{% endif %}">
+    {%- if section.settings.heading != blank -%}
+      <h2 class="section-heading" data-reveal>{{ section.settings.heading | escape }}</h2>
+    {%- endif -%}
+    {%- for block in section.blocks -%}
+      {% render block %}
+    {%- endfor -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Apps",
+  "tag": "div",
+  "settings": [
+    { "type": "paragraph", "content": "Add app blocks here, such as your reviews widget. On product pages the star rating beside the title jumps to this section." },
+    { "type": "text", "id": "heading", "label": "Heading" },
+    { "type": "checkbox", "id": "full_width", "label": "Full width", "default": false }
+  ],
+  "blocks": [{ "type": "@app" }],
+  "presets": [{ "name": "Apps" }]
+}
+{% endschema %}

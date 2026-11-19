@@ -1,0 +1,39 @@
+{
+  "current": {
+    "type_builtin": true,
+    "font_heading_url": "https://cdn.shopify.com/s/files/1/0959/5191/3342/files/Wolgen-Regular_1.woff2",
+    "animations_reveal": true,
+    "animations_page": true,
+    "animations_hover": true,
+    "cart_type": "drawer",
+    "cart_note": false,
+    "card_show_type": false,
+    "color_background": "#f3f2e6",
+    "color_surface": "#dddbb6",
+    "color_text": "#192610",
+    "color_muted": "#4a5540",
+    "color_accent": "#992e11",
+    "color_dark": "#192610",
+    "color_on_dark": "#dddbb6",
+    "color_announcement": "#192610",
+    "color_footer": "#992e11",
+    "color_highlight": "#3f6b2a",
+    "color_brass": "#e0b33a",
+    "color_sale": "#992e11",
+    "page_width": 1440,
+    "card_radius": 12,
+    "card_ratio": "0.8",
+    "card_second_image": true,
+    "free_shipping_threshold": 0,
+    "sections": {
+      "cart-drawer": {
+        "type": "cart-drawer",
+        "settings": {
+          "upsell_heading": "Add a little extra",
+          "upsell_limit": 0,
+          "show_trust": true
+        }
+      }
+    }
+  }
+}

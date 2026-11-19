@@ -1,0 +1,323 @@
+[
+  {
+    "name": "theme_info",
+    "theme_name": "Untameable",
+    "theme_version": "1.0.0",
+    "theme_author": "In House",
+    "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
+    "theme_support_url": "https://help.shopify.com/manual/online-store/themes"
+  },
+  {
+    "name": "Colours",
+    "settings": [
+      {
+        "type": "color",
+        "id": "color_background",
+        "label": "Background",
+        "default": "#f3f2e6",
+        "info": "Brand white."
+      },
+      {
+        "type": "color",
+        "id": "color_surface",
+        "label": "Soft panels",
+        "default": "#dddbb6",
+        "info": "A light tint of brand Beige, used behind product photos and quiet bands."
+      },
+      {
+        "type": "color",
+        "id": "color_text",
+        "label": "Text",
+        "default": "#192610",
+        "info": "Brand Midnight."
+      },
+      {
+        "type": "color",
+        "id": "color_muted",
+        "label": "Secondary text",
+        "default": "#4a5540",
+        "info": "Brand Bark."
+      },
+      {
+        "type": "color",
+        "id": "color_accent",
+        "label": "Buttons",
+        "default": "#992e11",
+        "info": "Brand Midnight."
+      },
+      {
+        "type": "color",
+        "id": "color_dark",
+        "label": "Dark sections",
+        "default": "#192610",
+        "info": "Brand Midnight."
+      },
+      {
+        "type": "color",
+        "id": "color_on_dark",
+        "label": "Text on dark sections, footer and accent sections",
+        "default": "#dddbb6"
+      },
+      {
+        "type": "color",
+        "id": "color_announcement",
+        "label": "Announcement bar",
+        "default": "#192610",
+        "info": "Brand Beige."
+      },
+      {
+        "type": "color",
+        "id": "color_footer",
+        "label": "Footer",
+        "default": "#992e11",
+        "info": "Brand Bark."
+      },
+      {
+        "type": "color",
+        "id": "color_highlight",
+        "label": "Accent sections",
+        "default": "#3f6b2a",
+        "info": "Brand Lawn."
+      },
+      {
+        "type": "color",
+        "id": "color_brass",
+        "label": "Review stars",
+        "default": "#e0b33a",
+        "info": "Brand Lawn."
+      },
+      {
+        "type": "color",
+        "id": "color_sale",
+        "label": "Sale price and “New” label",
+        "default": "#992e11",
+        "info": "Brand Lawn."
+      }
+    ]
+  },
+  {
+    "name": "Typography",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "type_builtin",
+        "label": "Use the brand fonts",
+        "info": "Headings in your display font (or Archivo until its file is added), text in Manrope.",
+        "default": true
+      },
+      {
+        "type": "text",
+        "id": "font_heading_url",
+        "label": "Display font file URL",
+        "info": "Paste the URL of your licensed heading font (.woff2) from Content → Files. Leave empty to use Archivo."
+      },
+      {
+        "type": "header",
+        "content": "Or choose other fonts"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_heading_font",
+        "label": "Heading font",
+        "default": "alegreya_n4"
+      },
+      {
+        "type": "font_picker",
+        "id": "type_body_font",
+        "label": "Body font",
+        "default": "josefin_sans_n4"
+      }
+    ]
+  },
+  {
+    "name": "Layout and motion",
+    "settings": [
+      {
+        "type": "range",
+        "id": "page_width",
+        "label": "Page width",
+        "min": 980,
+        "max": 1600,
+        "step": 20,
+        "unit": "px",
+        "default": 1440
+      },
+      {
+        "type": "range",
+        "id": "card_radius",
+        "label": "Corner radius",
+        "min": 0,
+        "max": 40,
+        "step": 2,
+        "unit": "px",
+        "default": 12
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_reveal",
+        "label": "Reveal sections on scroll",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_page",
+        "label": "Smooth transitions between pages",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "animations_hover",
+        "label": "Hover effects on cards",
+        "default": true
+      }
+    ]
+  },
+  {
+    "name": "Reviews and trust",
+    "settings": [
+      {
+        "type": "paragraph",
+        "content": "Shown in the header bar, trust strip, reviews section and product pages. Keep these in line with your live review profile."
+      },
+      {
+        "type": "text",
+        "id": "review_score",
+        "label": "Review score"
+      },
+      {
+        "type": "text",
+        "id": "review_label",
+        "label": "Score label",
+        "default": "Excellent"
+      },
+      {
+        "type": "text",
+        "id": "review_count",
+        "label": "Number of reviews",
+        "info": "Optional, e.g. “312 reviews”."
+      },
+      {
+        "type": "text",
+        "id": "review_source",
+        "label": "Review platform"
+      },
+      {
+        "type": "url",
+        "id": "review_url",
+        "label": "Link to your review profile"
+      },
+      {
+        "type": "text",
+        "id": "pay_later_text",
+        "label": "Pay-later message",
+        "info": "Shown under the price on product pages. Leave empty to hide."
+      }
+    ]
+  },
+  {
+    "name": "Product cards",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "card_second_image",
+        "label": "Show second image on hover",
+        "default": true
+      },
+      {
+        "type": "checkbox",
+        "id": "card_show_type",
+        "label": "Show product type",
+        "default": false
+      },
+      {
+        "type": "select",
+        "id": "card_ratio",
+        "label": "Image shape",
+        "options": [
+          {
+            "value": "1",
+            "label": "Square"
+          },
+          {
+            "value": "0.8",
+            "label": "Portrait"
+          }
+        ],
+        "default": "0.8"
+      }
+    ]
+  },
+  {
+    "name": "Cart",
+    "settings": [
+      {
+        "type": "select",
+        "id": "cart_type",
+        "label": "Cart type",
+        "options": [
+          {
+            "value": "drawer",
+            "label": "Slide-out drawer"
+          },
+          {
+            "value": "page",
+            "label": "Cart page"
+          }
+        ],
+        "default": "drawer"
+      },
+      {
+        "type": "checkbox",
+        "id": "cart_note",
+        "label": "Allow order notes",
+        "default": false
+      },
+      {
+        "type": "range",
+        "id": "free_shipping_threshold",
+        "label": "Free delivery threshold",
+        "info": "In your store currency. Set to 0 to hide the progress bar.",
+        "min": 0,
+        "max": 300,
+        "step": 5,
+        "default": 0
+      }
+    ]
+  },
+  {
+    "name": "Social media",
+    "settings": [
+      {
+        "type": "text",
+        "id": "social_instagram",
+        "label": "Instagram URL"
+      },
+      {
+        "type": "text",
+        "id": "social_tiktok",
+        "label": "TikTok URL"
+      },
+      {
+        "type": "text",
+        "id": "social_facebook",
+        "label": "Facebook URL"
+      },
+      {
+        "type": "text",
+        "id": "social_youtube",
+        "label": "YouTube URL"
+      }
+    ]
+  },
+  {
+    "name": "Favicon",
+    "settings": [
+      {
+        "type": "image_picker",
+        "id": "favicon",
+        "label": "Favicon",
+        "info": "Scaled down to 32 × 32px"
+      }
+    ]
+  }
+]
